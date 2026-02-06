@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./images/banner.jpg" alt="MOC Studio Banner" width="100%">
+  <img src="./images/banner.jpeg" alt="MOC Studio Banner" width="100%">
 </div>
 
 <br>
