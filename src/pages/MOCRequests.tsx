@@ -25,6 +25,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { MOCFormWizard, type MOCFormData } from "@/components/moc/MOCFormWizard";
 
 const mocRequests = [
   {
@@ -110,6 +117,12 @@ export default function MOCRequests() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const handleFormSubmit = (data: MOCFormData) => {
+    console.log("MOC Request submitted:", data);
+    // In a real app, this would send the data to the backend
+  };
 
   const getStatusInfo = (status: string) => {
     switch (status) {
@@ -173,11 +186,29 @@ export default function MOCRequests() {
             Management of Change requests and approvals
           </p>
         </div>
-        <Button className="gradient-primary text-primary-foreground">
+        <Button 
+          className="gradient-primary text-primary-foreground"
+          onClick={() => setIsFormOpen(true)}
+        >
           <Plus className="h-4 w-4 mr-2" />
           New MOC Request
         </Button>
       </div>
+
+      {/* MOC Form Dialog */}
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
+          <DialogHeader className="px-6 pt-6 pb-0">
+            <DialogTitle className="text-xl font-semibold">
+              New MOC Request
+            </DialogTitle>
+          </DialogHeader>
+          <MOCFormWizard 
+            onClose={() => setIsFormOpen(false)} 
+            onSubmit={handleFormSubmit}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
