@@ -63,7 +63,7 @@ export function useMOCRequests() {
   });
 
   const createMOC = useMutation({
-    mutationFn: async (data: CreateMOCData) => {
+    mutationFn: async (data: CreateMOCData & { approverIds?: string[] }) => {
       if (!user) throw new Error("User not authenticated");
       
       // The database trigger will auto-generate request_number
@@ -94,6 +94,40 @@ export function useMOCRequests() {
         .single();
 
       if (error) throw error;
+
+      // Add approvers if provided
+      if (data.approverIds && data.approverIds.length > 0) {
+        // Get the roles for each approver
+        const { data: userRoles } = await supabase
+          .from("user_roles")
+          .select("user_id, role")
+          .in("user_id", data.approverIds);
+
+        // Create a map of user_id to their primary role for approval
+        const roleMap = new Map<string, Database["public"]["Enums"]["app_role"]>();
+        userRoles?.forEach(ur => {
+          // Use the first role found for each user (prioritize higher roles)
+          if (!roleMap.has(ur.user_id)) {
+            roleMap.set(ur.user_id, ur.role);
+          }
+        });
+
+        const approversToInsert = data.approverIds.map(userId => ({
+          moc_request_id: result.id,
+          user_id: userId,
+          role_required: roleMap.get(userId) || ("process_engineer" as Database["public"]["Enums"]["app_role"]),
+        }));
+
+        const { error: approverError } = await supabase
+          .from("moc_approvers")
+          .insert(approversToInsert);
+
+        if (approverError) {
+          console.error("Error adding approvers:", approverError);
+          // Don't throw - the MOC was created successfully
+        }
+      }
+
       return result;
     },
     onSuccess: () => {
