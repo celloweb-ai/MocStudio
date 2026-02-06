@@ -63,7 +63,7 @@ export default function MOCRequests() {
       "major-change": "major_change",
     };
 
-    const createData: CreateMOCData = {
+    const createData: CreateMOCData & { approverIds?: string[] } = {
       title: data.title,
       description: data.description,
       justification: data.justification,
@@ -81,6 +81,7 @@ export default function MOCRequests() {
       requires_hazop: data.requiresHazop,
       target_implementation_date: data.targetImplementationDate?.toISOString().split('T')[0],
       review_deadline: data.reviewDeadline?.toISOString().split('T')[0],
+      approverIds: data.requiredApprovers, // Pass the selected approver user IDs
     };
 
     createMOC.mutate(createData);

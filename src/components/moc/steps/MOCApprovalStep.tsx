@@ -1,6 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import {
   FormField,
   FormItem,
@@ -19,16 +19,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { useApproverCandidates } from "@/hooks/useProfiles";
 import type { MOCFormData } from "../MOCFormWizard";
+import type { Database } from "@/integrations/supabase/types";
 
-const APPROVERS = [
-  { id: "facility-manager", label: "Facility Manager", role: "Required for all changes" },
-  { id: "process-engineer", label: "Process Engineer", role: "Technical review" },
-  { id: "hse-coordinator", label: "HSE Coordinator", role: "Safety assessment" },
-  { id: "maintenance-lead", label: "Maintenance Lead", role: "Implementation planning" },
-  { id: "operations-manager", label: "Operations Manager", role: "Operational impact" },
-  { id: "approval-committee", label: "Approval Committee", role: "Major changes only" },
-];
+type AppRole = Database["public"]["Enums"]["app_role"];
 
 const STAKEHOLDERS = [
   { id: "production-team", label: "Production Team" },
@@ -39,11 +34,25 @@ const STAKEHOLDERS = [
   { id: "logistics-team", label: "Logistics Team" },
 ];
 
+const getRoleLabel = (role: AppRole) => {
+  const labels: Record<string, string> = {
+    administrator: "Administrator",
+    facility_manager: "Facility Manager",
+    process_engineer: "Process Engineer",
+    maintenance_technician: "Maintenance Technician",
+    hse_coordinator: "HSE Coordinator",
+    approval_committee: "Approval Committee",
+  };
+  return labels[role] || role;
+};
+
 interface MOCApprovalStepProps {
   form: UseFormReturn<MOCFormData>;
 }
 
 export function MOCApprovalStep({ form }: MOCApprovalStepProps) {
+  const { data: approverCandidates, isLoading } = useApproverCandidates();
+
   return (
     <div className="space-y-6">
       <div>
@@ -60,49 +69,67 @@ export function MOCApprovalStep({ form }: MOCApprovalStepProps) {
           <FormItem>
             <FormLabel>Required Approvers</FormLabel>
             <FormDescription>
-              Select all personnel who must approve this change request.
+              Select personnel who must approve this change request.
             </FormDescription>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-              {APPROVERS.map((approver) => (
-                <FormField
-                  key={approver.id}
-                  control={form.control}
-                  name="requiredApprovers"
-                  render={({ field }) => (
-                    <FormItem
-                      key={approver.id}
-                      className={cn(
-                        "flex items-start space-x-3 space-y-0 rounded-md border p-4 transition-colors",
-                        field.value?.includes(approver.id)
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:bg-muted/50"
-                      )}
-                    >
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value?.includes(approver.id)}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, approver.id])
-                              : field.onChange(
-                                  field.value?.filter((value) => value !== approver.id)
-                                );
-                          }}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <Label className="text-sm font-medium cursor-pointer">
-                          {approver.label}
-                        </Label>
-                        <p className="text-xs text-muted-foreground">
-                          {approver.role}
-                        </p>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            ) : approverCandidates && approverCandidates.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                {approverCandidates.map((candidate) => (
+                  <FormField
+                    key={candidate.id}
+                    control={form.control}
+                    name="requiredApprovers"
+                    render={({ field }) => (
+                      <FormItem
+                        key={candidate.id}
+                        className={cn(
+                          "flex items-start space-x-3 space-y-0 rounded-md border p-4 transition-colors",
+                          field.value?.includes(candidate.id)
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:bg-muted/50"
+                        )}
+                      >
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value?.includes(candidate.id)}
+                            onCheckedChange={(checked) => {
+                              return checked
+                                ? field.onChange([...field.value, candidate.id])
+                                : field.onChange(
+                                    field.value?.filter((value) => value !== candidate.id)
+                                  );
+                            }}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none flex-1">
+                          <Label className="text-sm font-medium cursor-pointer">
+                            {candidate.full_name || candidate.email}
+                          </Label>
+                          <p className="text-xs text-muted-foreground">
+                            {candidate.roles.map(r => getRoleLabel(r as AppRole)).join(", ")}
+                          </p>
+                          {candidate.department && (
+                            <p className="text-xs text-muted-foreground/70">
+                              {candidate.department}
+                            </p>
+                          )}
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground border rounded-md">
+                <p>No eligible approvers found.</p>
+                <p className="text-xs mt-1">
+                  Assign roles to users in User Management to enable approvals.
+                </p>
+              </div>
+            )}
             <FormMessage />
           </FormItem>
         )}

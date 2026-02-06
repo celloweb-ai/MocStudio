@@ -1,8 +1,20 @@
+import { useState } from "react";
 import { format } from "date-fns";
 import { Check, Clock, X, MessageSquare, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useMOCApprovers } from "@/hooks/useMOCApprovers";
+import { useAuth } from "@/contexts/AuthContext";
 import type { Database } from "@/integrations/supabase/types";
 
 type ApprovalStatus = Database["public"]["Enums"]["approval_status"];
@@ -24,7 +36,14 @@ const getRoleLabel = (role: Database["public"]["Enums"]["app_role"]) => {
 };
 
 export function MOCApprovalTimeline({ mocId }: MOCApprovalTimelineProps) {
-  const { approvers, isLoading } = useMOCApprovers(mocId);
+  const { user } = useAuth();
+  const { approvers, isLoading, respondToApproval } = useMOCApprovers(mocId);
+  const [responseDialog, setResponseDialog] = useState<{
+    open: boolean;
+    approverId: string;
+    action: "approved" | "rejected" | "changes_requested";
+  } | null>(null);
+  const [comments, setComments] = useState("");
 
   const getStatusIcon = (status: ApprovalStatus | null) => {
     switch (status) {
@@ -59,6 +78,34 @@ export function MOCApprovalTimeline({ mocId }: MOCApprovalTimelineProps) {
     return email.slice(0, 2).toUpperCase();
   };
 
+  const handleResponse = (approverId: string, action: "approved" | "rejected" | "changes_requested") => {
+    setResponseDialog({ open: true, approverId, action });
+  };
+
+  const submitResponse = () => {
+    if (!responseDialog) return;
+    
+    respondToApproval.mutate({
+      approverId: responseDialog.approverId,
+      status: responseDialog.action,
+      comments: comments || undefined,
+    }, {
+      onSuccess: () => {
+        setResponseDialog(null);
+        setComments("");
+      }
+    });
+  };
+
+  const getActionLabel = (action: string) => {
+    switch (action) {
+      case "approved": return "Approve";
+      case "rejected": return "Reject";
+      case "changes_requested": return "Request Changes";
+      default: return action;
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="glass-card rounded-xl p-6 flex items-center justify-center">
@@ -66,6 +113,9 @@ export function MOCApprovalTimeline({ mocId }: MOCApprovalTimelineProps) {
       </div>
     );
   }
+
+  // Find if current user is an approver with pending status
+  const currentUserApproval = approvers?.find(a => a.user_id === user?.id && a.status === "pending");
 
   return (
     <div className="glass-card rounded-xl p-6">
@@ -79,6 +129,9 @@ export function MOCApprovalTimeline({ mocId }: MOCApprovalTimelineProps) {
         <div className="space-y-6">
           {approvers.map((approval, index) => {
             const approver = approval.approver as { full_name: string | null; email: string; department: string | null } | null;
+            const isCurrentUser = approval.user_id === user?.id;
+            const isPending = approval.status === "pending";
+            
             return (
               <div key={approval.id} className="relative">
                 {index < approvers.length - 1 && (
@@ -102,6 +155,9 @@ export function MOCApprovalTimeline({ mocId }: MOCApprovalTimelineProps) {
                         <div>
                           <p className="font-medium text-sm">
                             {approver?.full_name || approver?.email || "Unknown"}
+                            {isCurrentUser && (
+                              <span className="ml-2 text-xs text-primary">(You)</span>
+                            )}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {getRoleLabel(approval.role_required)}
@@ -125,9 +181,40 @@ export function MOCApprovalTimeline({ mocId }: MOCApprovalTimelineProps) {
                         )}
                       </div>
                     </div>
+                    
                     {approval.comments && (
                       <div className="ml-11 p-3 rounded-lg bg-muted/50 text-sm">
                         {approval.comments}
+                      </div>
+                    )}
+                    
+                    {/* Show action buttons if current user is an approver with pending status */}
+                    {isCurrentUser && isPending && (
+                      <div className="ml-11 flex gap-2 mt-3">
+                        <Button
+                          size="sm"
+                          onClick={() => handleResponse(approval.id, "approved")}
+                          className="bg-primary hover:bg-primary/90"
+                        >
+                          <Check className="h-4 w-4 mr-1" />
+                          Approve
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleResponse(approval.id, "changes_requested")}
+                        >
+                          <MessageSquare className="h-4 w-4 mr-1" />
+                          Request Changes
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleResponse(approval.id, "rejected")}
+                        >
+                          <X className="h-4 w-4 mr-1" />
+                          Reject
+                        </Button>
                       </div>
                     )}
                   </div>
@@ -137,6 +224,51 @@ export function MOCApprovalTimeline({ mocId }: MOCApprovalTimelineProps) {
           })}
         </div>
       )}
+
+      {/* Response Dialog */}
+      <Dialog open={responseDialog?.open || false} onOpenChange={(open) => !open && setResponseDialog(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {responseDialog && getActionLabel(responseDialog.action)} Request
+            </DialogTitle>
+            <DialogDescription>
+              {responseDialog?.action === "approved" && "You are about to approve this MOC request."}
+              {responseDialog?.action === "rejected" && "You are about to reject this MOC request. Please provide a reason."}
+              {responseDialog?.action === "changes_requested" && "Please describe the changes you are requesting."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Textarea
+              placeholder={
+                responseDialog?.action === "approved" 
+                  ? "Add optional comments..." 
+                  : "Please provide details..."
+              }
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}
+              rows={4}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setResponseDialog(null)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={submitResponse}
+              disabled={respondToApproval.isPending || (responseDialog?.action !== "approved" && !comments.trim())}
+              className={cn(
+                responseDialog?.action === "approved" && "bg-primary",
+                responseDialog?.action === "rejected" && "bg-destructive hover:bg-destructive/90",
+                responseDialog?.action === "changes_requested" && "bg-warning hover:bg-warning/90"
+              )}
+            >
+              {respondToApproval.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+              {responseDialog && getActionLabel(responseDialog.action)}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
