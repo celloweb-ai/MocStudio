@@ -2,6 +2,8 @@
 
 > Modern React application built with TypeScript, Vite, and Shadcn UI
 
+🌐 **[Live Demo](https://mocstudio.lovable.app/)**
+
 ## 🚀 Overview
 
 MOC Studio is a full-stack web application leveraging cutting-edge technologies for building modern, responsive user interfaces with seamless backend integration through Supabase.
