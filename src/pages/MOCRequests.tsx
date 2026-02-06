@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Plus, Search, Filter, FileText, MoreVertical, Eye, Edit, Clock, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -114,6 +115,7 @@ const mocRequests = [
 ];
 
 export default function MOCRequests() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
@@ -122,6 +124,10 @@ export default function MOCRequests() {
   const handleFormSubmit = (data: MOCFormData) => {
     console.log("MOC Request submitted:", data);
     // In a real app, this would send the data to the backend
+  };
+
+  const handleViewDetails = (mocId: string) => {
+    navigate(`/moc-requests/${mocId}`);
   };
 
   const getStatusInfo = (status: string) => {
@@ -314,7 +320,7 @@ export default function MOCRequests() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewDetails(moc.id)}>
                               <Eye className="h-4 w-4 mr-2" />
                               View Details
                             </DropdownMenuItem>
