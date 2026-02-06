@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Facilities from "./pages/Facilities";
 import Assets from "./pages/Assets";
 import MOCRequests from "./pages/MOCRequests";
+import MOCDetail from "./pages/MOCDetail";
 import RiskAnalysis from "./pages/RiskAnalysis";
 import WorkOrders from "./pages/WorkOrders";
 import Standards from "./pages/Standards";
@@ -54,6 +55,14 @@ const App = () => (
             element={
               <AppLayout>
                 <MOCRequests />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/moc-requests/:id"
+            element={
+              <AppLayout>
+                <MOCDetail />
               </AppLayout>
             }
           />
