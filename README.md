@@ -1,8 +1,14 @@
-# MOC Studio
+<div align="center">
+  <img src="./images/banner.jpg" alt="MOC Studio Banner" width="100%">
+</div>
 
-> ⚡ Production-ready React TypeScript starter with Supabase backend | Beautiful UI components, dark mode, form validation & data visualization | Built for speed and developer experience
+<br>
+
+<div align="center">
 
 🌐 **[Live Demo](https://mocstudio.lovable.app/)**
+
+</div>
 
 ## 🚀 Overview
 
