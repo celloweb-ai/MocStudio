@@ -1,117 +1,142 @@
 import { format } from "date-fns";
-import { CheckCircle, XCircle, Clock, MessageSquare } from "lucide-react";
+import { Check, Clock, X, MessageSquare, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useMOCApprovers } from "@/hooks/useMOCApprovers";
+import type { Database } from "@/integrations/supabase/types";
 
-interface Approver {
-  id: string;
-  name: string;
-  role: string;
-  status: "Approved" | "Rejected" | "Pending";
-  date: string | null;
-  comment: string | null;
-}
+type ApprovalStatus = Database["public"]["Enums"]["approval_status"];
 
 interface MOCApprovalTimelineProps {
-  approvers: Approver[];
+  mocId: string;
 }
 
-export function MOCApprovalTimeline({ approvers }: MOCApprovalTimelineProps) {
+const getRoleLabel = (role: Database["public"]["Enums"]["app_role"]) => {
+  const labels: Record<string, string> = {
+    administrator: "Administrator",
+    facility_manager: "Facility Manager",
+    process_engineer: "Process Engineer",
+    maintenance_technician: "Maintenance Technician",
+    hse_coordinator: "HSE Coordinator",
+    approval_committee: "Approval Committee",
+  };
+  return labels[role] || role;
+};
+
+export function MOCApprovalTimeline({ mocId }: MOCApprovalTimelineProps) {
+  const { approvers, isLoading } = useMOCApprovers(mocId);
+
+  const getStatusIcon = (status: ApprovalStatus | null) => {
+    switch (status) {
+      case "approved":
+        return <Check className="h-4 w-4" />;
+      case "rejected":
+        return <X className="h-4 w-4" />;
+      case "changes_requested":
+        return <MessageSquare className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
+    }
+  };
+
+  const getStatusColor = (status: ApprovalStatus | null) => {
+    switch (status) {
+      case "approved":
+        return "bg-primary text-primary-foreground";
+      case "rejected":
+        return "bg-destructive text-destructive-foreground";
+      case "changes_requested":
+        return "bg-warning text-warning-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
+    }
+  };
+
+  const getInitials = (name: string | null, email: string) => {
+    if (name) {
+      return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    }
+    return email.slice(0, 2).toUpperCase();
+  };
+
+  if (isLoading) {
+    return (
+      <div className="glass-card rounded-xl p-6 flex items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="glass-card rounded-xl p-6">
       <h3 className="font-semibold mb-6">Approval Workflow</h3>
-      <div className="space-y-0">
-        {approvers.map((approver, index) => {
-          const isLast = index === approvers.length - 1;
-          const StatusIcon = approver.status === "Approved" 
-            ? CheckCircle 
-            : approver.status === "Rejected" 
-              ? XCircle 
-              : Clock;
-          
-          return (
-            <div key={approver.id} className="flex gap-4">
-              {/* Timeline line */}
-              <div className="flex flex-col items-center">
-                <div
-                  className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center shrink-0",
-                    approver.status === "Approved" && "bg-emerald-500/20",
-                    approver.status === "Rejected" && "bg-destructive/20",
-                    approver.status === "Pending" && "bg-muted"
-                  )}
-                >
-                  <StatusIcon
-                    className={cn(
-                      "h-5 w-5",
-                      approver.status === "Approved" && "text-emerald-500",
-                      approver.status === "Rejected" && "text-destructive",
-                      approver.status === "Pending" && "text-muted-foreground"
-                    )}
-                  />
-                </div>
-                {!isLast && (
-                  <div
-                    className={cn(
-                      "w-0.5 flex-1 min-h-[40px]",
-                      approver.status === "Approved" ? "bg-emerald-500/30" : "bg-border"
-                    )}
-                  />
+      
+      {(!approvers || approvers.length === 0) ? (
+        <p className="text-muted-foreground text-center py-8">
+          No approvers assigned yet.
+        </p>
+      ) : (
+        <div className="space-y-6">
+          {approvers.map((approval, index) => {
+            const approver = approval.approver as { full_name: string | null; email: string; department: string | null } | null;
+            return (
+              <div key={approval.id} className="relative">
+                {index < approvers.length - 1 && (
+                  <div className="absolute left-5 top-12 bottom-0 w-0.5 bg-border" />
                 )}
-              </div>
-
-              {/* Content */}
-              <div className={cn("flex-1 pb-6", isLast && "pb-0")}>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-primary/20 text-primary text-xs">
-                        {approver.name.split(" ").map(n => n[0]).join("")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium text-sm">{approver.name}</p>
-                      <p className="text-xs text-muted-foreground">{approver.role}</p>
-                    </div>
+                <div className="flex gap-4">
+                  <div className={cn(
+                    "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center",
+                    getStatusColor(approval.status)
+                  )}>
+                    {getStatusIcon(approval.status)}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        "text-xs",
-                        approver.status === "Approved" && "border-emerald-500/50 text-emerald-500",
-                        approver.status === "Rejected" && "border-destructive/50 text-destructive",
-                        approver.status === "Pending" && "border-muted-foreground/50 text-muted-foreground"
-                      )}
-                    >
-                      {approver.status}
-                    </Badge>
-                    {approver.date && (
-                      <span className="text-xs text-muted-foreground">
-                        {format(new Date(approver.date), "MMM d, yyyy")}
-                      </span>
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="text-xs bg-muted">
+                            {getInitials(approver?.full_name || null, approver?.email || "?")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-sm">
+                            {approver?.full_name || approver?.email || "Unknown"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {getRoleLabel(approval.role_required)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className={cn(
+                          "text-xs font-medium capitalize",
+                          approval.status === "approved" && "text-primary",
+                          approval.status === "rejected" && "text-destructive",
+                          approval.status === "changes_requested" && "text-warning",
+                          approval.status === "pending" && "text-muted-foreground"
+                        )}>
+                          {approval.status?.replace("_", " ") || "Pending"}
+                        </span>
+                        {approval.responded_at && (
+                          <p className="text-xs text-muted-foreground">
+                            {format(new Date(approval.responded_at), "MMM d, yyyy")}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    {approval.comments && (
+                      <div className="ml-11 p-3 rounded-lg bg-muted/50 text-sm">
+                        {approval.comments}
+                      </div>
                     )}
                   </div>
                 </div>
-                
-                {approver.comment && (
-                  <div className="mt-3 p-3 rounded-lg bg-muted/30 border border-border">
-                    <div className="flex items-start gap-2">
-                      <MessageSquare className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-                      <p className="text-sm text-muted-foreground">{approver.comment}</p>
-                    </div>
-                  </div>
-                )}
-
-                {approver.status === "Pending" && (
-                  <p className="text-xs text-muted-foreground mt-2">Awaiting review</p>
-                )}
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Search, Filter, FileText, MoreVertical, Eye, Edit, Clock, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import { Plus, Search, Filter, FileText, MoreVertical, Eye, Edit, Clock, CheckCircle, XCircle, AlertTriangle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -33,86 +33,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MOCFormWizard, type MOCFormData } from "@/components/moc/MOCFormWizard";
+import { useMOCRequests, type CreateMOCData } from "@/hooks/useMOCRequests";
+import { useFacilities } from "@/hooks/useFacilities";
+import { format } from "date-fns";
+import type { Database } from "@/integrations/supabase/types";
 
-const mocRequests = [
-  {
-    id: "MOC-2024-045",
-    title: "Fire Detection System Upgrade",
-    facility: "Platform Beta",
-    type: "Equipment Modification",
-    status: "Submitted",
-    priority: "High",
-    submittedBy: "Maria Santos",
-    submittedDate: "2024-02-08",
-    dueDate: "2024-02-22",
-  },
-  {
-    id: "MOC-2024-044",
-    title: "Process Control Logic Change",
-    facility: "FPSO Gamma",
-    type: "Procedure Change",
-    status: "In Review",
-    priority: "Medium",
-    submittedBy: "João Oliveira",
-    submittedDate: "2024-02-07",
-    dueDate: "2024-02-21",
-  },
-  {
-    id: "MOC-2024-043",
-    title: "Wellhead Platform Integration",
-    facility: "Platform Alpha",
-    type: "Major Change",
-    status: "In Review",
-    priority: "Critical",
-    submittedBy: "Carlos Silva",
-    submittedDate: "2024-02-05",
-    dueDate: "2024-02-19",
-  },
-  {
-    id: "MOC-2024-042",
-    title: "Compressor Replacement",
-    facility: "Platform Alpha",
-    type: "Equipment Replacement",
-    status: "Approved",
-    priority: "High",
-    submittedBy: "Ana Costa",
-    submittedDate: "2024-02-01",
-    dueDate: "2024-02-15",
-  },
-  {
-    id: "MOC-2024-041",
-    title: "Emergency Procedure Update",
-    facility: "Platform Delta",
-    type: "Procedure Change",
-    status: "Draft",
-    priority: "Medium",
-    submittedBy: "Pedro Almeida",
-    submittedDate: "2024-01-30",
-    dueDate: "2024-02-13",
-  },
-  {
-    id: "MOC-2024-040",
-    title: "Gas Detection Sensor Addition",
-    facility: "FPSO Gamma",
-    type: "Equipment Addition",
-    status: "Implemented",
-    priority: "High",
-    submittedBy: "João Oliveira",
-    submittedDate: "2024-01-25",
-    dueDate: "2024-02-08",
-  },
-  {
-    id: "MOC-2024-039",
-    title: "Valve Configuration Change",
-    facility: "Platform Beta",
-    type: "Equipment Modification",
-    status: "Rejected",
-    priority: "Low",
-    submittedBy: "Maria Santos",
-    submittedDate: "2024-01-22",
-    dueDate: "2024-02-05",
-  },
-];
+type MOCStatus = Database["public"]["Enums"]["moc_status"];
+type MOCPriority = Database["public"]["Enums"]["moc_priority"];
 
 export default function MOCRequests() {
   const navigate = useNavigate();
@@ -121,66 +48,120 @@ export default function MOCRequests() {
   const [activeTab, setActiveTab] = useState("all");
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  const { mocRequests, isLoading, createMOC } = useMOCRequests();
+  const { facilities } = useFacilities();
+
   const handleFormSubmit = (data: MOCFormData) => {
-    console.log("MOC Request submitted:", data);
-    // In a real app, this would send the data to the backend
+    const facilityId = facilities?.find(f => f.code === data.facility || f.name.toLowerCase().includes(data.facility.toLowerCase()))?.id;
+    
+    const changeTypeMap: Record<string, Database["public"]["Enums"]["moc_change_type"]> = {
+      "equipment-modification": "equipment_modification",
+      "equipment-replacement": "equipment_replacement",
+      "equipment-addition": "equipment_addition",
+      "procedure-change": "procedure_change",
+      "software-change": "software_change",
+      "major-change": "major_change",
+    };
+
+    const createData: CreateMOCData = {
+      title: data.title,
+      description: data.description,
+      justification: data.justification,
+      facility_id: facilityId || null,
+      change_type: changeTypeMap[data.changeType] || null,
+      priority: data.priority as MOCPriority,
+      is_temporary: data.temporaryOrPermanent === "temporary",
+      estimated_duration: data.estimatedDuration,
+      affected_systems: data.affectedSystems,
+      affected_areas: data.affectedAreas,
+      risk_probability: data.probability,
+      risk_severity: data.severity,
+      risk_category: data.riskCategory,
+      mitigation_measures: data.mitigationMeasures,
+      requires_hazop: data.requiresHazop,
+      target_implementation_date: data.targetImplementationDate?.toISOString().split('T')[0],
+      review_deadline: data.reviewDeadline?.toISOString().split('T')[0],
+    };
+
+    createMOC.mutate(createData);
+    setIsFormOpen(false);
   };
 
   const handleViewDetails = (mocId: string) => {
     navigate(`/moc-requests/${mocId}`);
   };
 
-  const getStatusInfo = (status: string) => {
+  const getStatusInfo = (status: MOCStatus | null) => {
     switch (status) {
-      case "Draft":
+      case "draft":
         return { icon: FileText, color: "status-draft", label: "Draft" };
-      case "Submitted":
+      case "submitted":
         return { icon: Clock, color: "status-submitted", label: "Submitted" };
-      case "In Review":
+      case "under_review":
         return { icon: AlertTriangle, color: "status-review", label: "In Review" };
-      case "Approved":
+      case "approved":
         return { icon: CheckCircle, color: "status-approved", label: "Approved" };
-      case "Rejected":
+      case "rejected":
         return { icon: XCircle, color: "status-rejected", label: "Rejected" };
-      case "Implemented":
+      case "implemented":
         return { icon: CheckCircle, color: "status-implemented", label: "Implemented" };
       default:
-        return { icon: FileText, color: "status-draft", label: status };
+        return { icon: FileText, color: "status-draft", label: status || "Unknown" };
     }
   };
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority: MOCPriority | null) => {
     switch (priority) {
-      case "Critical":
+      case "critical":
         return "bg-destructive/20 text-destructive";
-      case "High":
+      case "high":
         return "bg-warning/20 text-warning";
-      case "Medium":
+      case "medium":
         return "bg-accent/20 text-accent";
       default:
         return "bg-muted text-muted-foreground";
     }
   };
 
-  const filteredMocs = mocRequests.filter((moc) => {
+  const getChangeTypeLabel = (type: Database["public"]["Enums"]["moc_change_type"] | null) => {
+    const labels: Record<string, string> = {
+      equipment_modification: "Equipment Modification",
+      equipment_replacement: "Equipment Replacement",
+      equipment_addition: "Equipment Addition",
+      procedure_change: "Procedure Change",
+      software_change: "Software Change",
+      major_change: "Major Change",
+    };
+    return labels[type || ""] || type;
+  };
+
+  const filteredMocs = (mocRequests || []).filter((moc) => {
     const matchesSearch =
       moc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      moc.id.toLowerCase().includes(searchQuery.toLowerCase());
+      moc.request_number.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || moc.status === statusFilter;
     const matchesTab =
       activeTab === "all" ||
-      (activeTab === "pending" && ["Submitted", "In Review"].includes(moc.status)) ||
-      (activeTab === "approved" && moc.status === "Approved") ||
-      (activeTab === "draft" && moc.status === "Draft");
+      (activeTab === "pending" && ["submitted", "under_review"].includes(moc.status || "")) ||
+      (activeTab === "approved" && moc.status === "approved") ||
+      (activeTab === "draft" && moc.status === "draft");
     return matchesSearch && matchesStatus && matchesTab;
   });
 
   const counts = {
-    all: mocRequests.length,
-    pending: mocRequests.filter((m) => ["Submitted", "In Review"].includes(m.status)).length,
-    approved: mocRequests.filter((m) => m.status === "Approved").length,
-    draft: mocRequests.filter((m) => m.status === "Draft").length,
+    all: mocRequests?.length || 0,
+    pending: mocRequests?.filter((m) => ["submitted", "under_review"].includes(m.status || "")).length || 0,
+    approved: mocRequests?.filter((m) => m.status === "approved").length || 0,
+    draft: mocRequests?.filter((m) => m.status === "draft").length || 0,
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -252,12 +233,12 @@ export default function MOCRequests() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="Draft">Draft</SelectItem>
-                <SelectItem value="Submitted">Submitted</SelectItem>
-                <SelectItem value="In Review">In Review</SelectItem>
-                <SelectItem value="Approved">Approved</SelectItem>
-                <SelectItem value="Rejected">Rejected</SelectItem>
-                <SelectItem value="Implemented">Implemented</SelectItem>
+                <SelectItem value="draft">Draft</SelectItem>
+                <SelectItem value="submitted">Submitted</SelectItem>
+                <SelectItem value="under_review">In Review</SelectItem>
+                <SelectItem value="approved">Approved</SelectItem>
+                <SelectItem value="rejected">Rejected</SelectItem>
+                <SelectItem value="implemented">Implemented</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -273,67 +254,82 @@ export default function MOCRequests() {
                   <TableHead className="text-muted-foreground">Type</TableHead>
                   <TableHead className="text-muted-foreground">Priority</TableHead>
                   <TableHead className="text-muted-foreground">Status</TableHead>
-                  <TableHead className="text-muted-foreground">Due Date</TableHead>
+                  <TableHead className="text-muted-foreground">Created</TableHead>
                   <TableHead className="text-muted-foreground text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredMocs.map((moc) => {
-                  const statusInfo = getStatusInfo(moc.status);
-                  const StatusIcon = statusInfo.icon;
-                  return (
-                    <TableRow key={moc.id} className="border-border hover:bg-muted/30">
-                      <TableCell className="font-mono text-sm text-primary">
-                        {moc.id}
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{moc.title}</p>
-                          <p className="text-xs text-muted-foreground">
-                            by {moc.submittedBy}
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">{moc.facility}</TableCell>
-                      <TableCell className="text-muted-foreground text-sm">
-                        {moc.type}
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={getPriorityColor(moc.priority)}>
-                          {moc.priority}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}>
-                          <StatusIcon className="h-3 w-3" />
-                          {statusInfo.label}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">
-                        {new Date(moc.dueDate).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleViewDetails(moc.id)}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Edit className="h-4 w-4 mr-2" />
-                              Edit
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {filteredMocs.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                      {mocRequests?.length === 0 
+                        ? "No MOC requests yet. Click 'New MOC Request' to create one."
+                        : "No MOC requests match your filters."
+                      }
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredMocs.map((moc) => {
+                    const statusInfo = getStatusInfo(moc.status);
+                    const StatusIcon = statusInfo.icon;
+                    const facility = moc.facility as { name: string } | null;
+                    const creator = moc.creator as { full_name: string | null; email: string } | null;
+                    return (
+                      <TableRow key={moc.id} className="border-border hover:bg-muted/30">
+                        <TableCell className="font-mono text-sm text-primary">
+                          {moc.request_number}
+                        </TableCell>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{moc.title}</p>
+                            <p className="text-xs text-muted-foreground">
+                              by {creator?.full_name || creator?.email || "Unknown"}
+                            </p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {facility?.name || "-"}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground text-sm">
+                          {getChangeTypeLabel(moc.change_type)}
+                        </TableCell>
+                        <TableCell>
+                          <Badge className={getPriorityColor(moc.priority)}>
+                            {moc.priority || "medium"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}>
+                            <StatusIcon className="h-3 w-3" />
+                            {statusInfo.label}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground text-sm">
+                          {format(new Date(moc.created_at), "MMM d, yyyy")}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={() => handleViewDetails(moc.id)}>
+                                <Eye className="h-4 w-4 mr-2" />
+                                View Details
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Edit className="h-4 w-4 mr-2" />
+                                Edit
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
               </TableBody>
             </Table>
           </div>
