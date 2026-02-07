@@ -13,8 +13,8 @@ import {
   Edit,
   MoreVertical,
   Building2,
-  Wrench,
   Loader2,
+  ListTodo,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,9 +30,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { MOCApprovalTimeline } from "@/components/moc/MOCApprovalTimeline";
 import { MOCComments } from "@/components/moc/MOCComments";
+import { MOCTaskList } from "@/components/moc/MOCTaskList";
 import { useMOCRequest } from "@/hooks/useMOCRequests";
 import { useMOCHistory } from "@/hooks/useMOCHistory";
 import { useMOCApprovers } from "@/hooks/useMOCApprovers";
+import { useMOCTasks } from "@/hooks/useMOCTasks";
+import { generateMOCExportData, downloadCSV } from "@/hooks/useMOCReporting";
 import type { Database } from "@/integrations/supabase/types";
 
 type MOCStatus = Database["public"]["Enums"]["moc_status"];
@@ -98,6 +101,14 @@ export default function MOCDetail() {
   const { data: moc, isLoading: mocLoading } = useMOCRequest(id || "");
   const { data: history, isLoading: historyLoading } = useMOCHistory(id || "");
   const { approvers } = useMOCApprovers(id || "");
+  const { taskStats } = useMOCTasks(id || "");
+
+  const handleExportCSV = () => {
+    if (moc) {
+      const { headers, rows } = generateMOCExportData([moc]);
+      downloadCSV(headers, rows, `${moc.request_number}.csv`);
+    }
+  };
 
   if (mocLoading) {
     return (
@@ -173,9 +184,9 @@ export default function MOCDetail() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleExportCSV}>
             <Download className="h-4 w-4 mr-2" />
-            Export PDF
+            Export CSV
           </Button>
           <Button variant="outline" size="sm">
             <Edit className="h-4 w-4 mr-2" />
@@ -203,6 +214,15 @@ export default function MOCDetail() {
           <Tabs defaultValue="details" className="w-full">
             <TabsList className="bg-muted/50">
               <TabsTrigger value="details">Details</TabsTrigger>
+              <TabsTrigger value="tasks" className="flex items-center gap-1.5">
+                <ListTodo className="h-3.5 w-3.5" />
+                Tasks
+                {taskStats.total > 0 && (
+                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                    {taskStats.completed}/{taskStats.total}
+                  </Badge>
+                )}
+              </TabsTrigger>
               <TabsTrigger value="approvals">Approvals</TabsTrigger>
               <TabsTrigger value="comments">Comments</TabsTrigger>
               <TabsTrigger value="history">History</TabsTrigger>
@@ -311,6 +331,10 @@ export default function MOCDetail() {
                   </div>
                 </div>
               </div>
+            </TabsContent>
+
+            <TabsContent value="tasks" className="mt-6">
+              <MOCTaskList mocId={moc.id} />
             </TabsContent>
 
             <TabsContent value="approvals" className="mt-6">

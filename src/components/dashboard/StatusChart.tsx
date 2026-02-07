@@ -1,15 +1,55 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { useMOCReporting } from "@/hooks/useMOCReporting";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const data = [
-  { name: "Draft", value: 12, color: "hsl(217, 33%, 17%)" },
-  { name: "Submitted", value: 8, color: "hsl(217, 91%, 60%)" },
-  { name: "In Review", value: 15, color: "hsl(45, 93%, 47%)" },
-  { name: "Approved", value: 28, color: "hsl(142, 76%, 36%)" },
-  { name: "Rejected", value: 4, color: "hsl(0, 72%, 51%)" },
-  { name: "Implemented", value: 33, color: "hsl(32, 95%, 55%)" },
-];
+const statusColors: Record<string, string> = {
+  draft: "hsl(217, 33%, 40%)",
+  submitted: "hsl(217, 91%, 60%)",
+  under_review: "hsl(45, 93%, 47%)",
+  approved: "hsl(142, 76%, 36%)",
+  rejected: "hsl(0, 72%, 51%)",
+  implemented: "hsl(32, 95%, 55%)",
+};
+
+const statusLabels: Record<string, string> = {
+  draft: "Draft",
+  submitted: "Submitted",
+  under_review: "In Review",
+  approved: "Approved",
+  rejected: "Rejected",
+  implemented: "Implemented",
+};
 
 export function StatusChart() {
+  const { mocStats, isLoading } = useMOCReporting();
+
+  if (isLoading) {
+    return (
+      <div className="glass-card rounded-xl p-6 animate-slide-up">
+        <h3 className="text-lg font-semibold text-foreground mb-4">MOC Status Distribution</h3>
+        <Skeleton className="h-[300px] w-full" />
+      </div>
+    );
+  }
+
+  const data = Object.entries(mocStats?.byStatus || {}).map(([status, count]) => ({
+    name: statusLabels[status] || status,
+    value: count,
+    color: statusColors[status] || "hsl(217, 33%, 40%)",
+  }));
+
+  // If no data, show placeholder
+  if (data.length === 0) {
+    return (
+      <div className="glass-card rounded-xl p-6 animate-slide-up">
+        <h3 className="text-lg font-semibold text-foreground mb-4">MOC Status Distribution</h3>
+        <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+          No MOC data available yet
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="glass-card rounded-xl p-6 animate-slide-up">
       <h3 className="text-lg font-semibold text-foreground mb-4">MOC Status Distribution</h3>
