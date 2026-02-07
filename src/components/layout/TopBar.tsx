@@ -1,4 +1,4 @@
-import { Bell, Search, User, LogOut } from "lucide-react";
+import { Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,10 +9,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfiles";
 
 export function TopBar() {
+  const { user, signOut } = useAuth();
+  const { data: profile } = useProfile();
+
+  const getInitials = () => {
+    if (profile?.full_name) {
+      return profile.full_name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    }
+    if (user?.email) {
+      return user.email.slice(0, 2).toUpperCase();
+    }
+    return "U";
+  };
+
   return (
     <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
       <div className="h-full px-6 flex items-center justify-between">
@@ -30,38 +45,7 @@ export function TopBar() {
         {/* Right Section */}
         <div className="flex items-center gap-4">
           {/* Notifications */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5 text-muted-foreground" />
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-primary text-primary-foreground">
-                  3
-                </Badge>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
-                <span className="font-medium text-sm">MOC-2024-042 Approved</span>
-                <span className="text-xs text-muted-foreground">
-                  Your change request has been approved by the committee
-                </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
-                <span className="font-medium text-sm">New Risk Assessment Required</span>
-                <span className="text-xs text-muted-foreground">
-                  Platform Alpha requires updated risk matrix
-                </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
-                <span className="font-medium text-sm">Work Order WO-1847 Completed</span>
-                <span className="text-xs text-muted-foreground">
-                  Maintenance task finished ahead of schedule
-                </span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <NotificationBell />
 
           {/* User Menu */}
           <DropdownMenu>
@@ -69,12 +53,16 @@ export function TopBar() {
               <Button variant="ghost" className="gap-3 px-2">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary/20 text-primary text-sm font-medium">
-                    JD
+                    {getInitials()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col items-start">
-                  <span className="text-sm font-medium">John Doe</span>
-                  <span className="text-xs text-muted-foreground">Process Engineer</span>
+                  <span className="text-sm font-medium">
+                    {profile?.full_name || user?.email || "User"}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {profile?.department || "Team Member"}
+                  </span>
                 </div>
               </Button>
             </DropdownMenuTrigger>
@@ -86,7 +74,7 @@ export function TopBar() {
                 Profile Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem className="text-destructive" onClick={() => signOut()}>
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
               </DropdownMenuItem>

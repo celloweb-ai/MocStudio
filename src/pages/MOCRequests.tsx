@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Search, Filter, FileText, MoreVertical, Eye, Edit, Clock, CheckCircle, XCircle, AlertTriangle, Loader2 } from "lucide-react";
+import { Plus, Search, Filter, FileText, MoreVertical, Eye, Edit, Clock, CheckCircle, XCircle, AlertTriangle, Loader2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +35,7 @@ import {
 import { MOCFormWizard, type MOCFormData } from "@/components/moc/MOCFormWizard";
 import { useMOCRequests, type CreateMOCData } from "@/hooks/useMOCRequests";
 import { useFacilities } from "@/hooks/useFacilities";
+import { generateMOCExportData, downloadCSV } from "@/hooks/useMOCReporting";
 import { format } from "date-fns";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -164,6 +165,13 @@ export default function MOCRequests() {
     );
   }
 
+  const handleExportAll = () => {
+    if (filteredMocs.length > 0) {
+      const { headers, rows } = generateMOCExportData(filteredMocs);
+      downloadCSV(headers, rows, `moc-requests-${format(new Date(), "yyyy-MM-dd")}.csv`);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -174,13 +182,19 @@ export default function MOCRequests() {
             Management of Change requests and approvals
           </p>
         </div>
-        <Button 
-          className="gradient-primary text-primary-foreground"
-          onClick={() => setIsFormOpen(true)}
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          New MOC Request
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={handleExportAll} disabled={filteredMocs.length === 0}>
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
+          </Button>
+          <Button 
+            className="gradient-primary text-primary-foreground"
+            onClick={() => setIsFormOpen(true)}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            New MOC Request
+          </Button>
+        </div>
       </div>
 
       {/* MOC Form Dialog */}
