@@ -15,6 +15,7 @@ import RiskAnalysis from "./pages/RiskAnalysis";
 import WorkOrders from "./pages/WorkOrders";
 import Standards from "./pages/Standards";
 import UserManagement from "./pages/UserManagement";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
 
@@ -128,6 +129,16 @@ function AppRoutes() {
           <ProtectedRoute>
             <AppLayout>
               <UserManagement />
+            </AppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reports"
+        element={
+          <ProtectedRoute>
+            <AppLayout>
+              <Reports />
             </AppLayout>
           </ProtectedRoute>
         }

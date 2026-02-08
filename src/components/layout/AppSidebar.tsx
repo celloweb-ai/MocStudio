@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Flame,
+  BarChart3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -28,6 +29,7 @@ const navigationItems = [
   { name: "MOC Requests", href: "/moc-requests", icon: FileText },
   { name: "Risk Analysis", href: "/risk-analysis", icon: AlertTriangle },
   { name: "Work Orders", href: "/work-orders", icon: ClipboardList },
+  { name: "Reports", href: "/reports", icon: BarChart3 },
   { name: "Standards & Links", href: "/standards", icon: Link2 },
 ];
 
