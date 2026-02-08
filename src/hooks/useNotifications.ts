@@ -16,6 +16,26 @@ interface Notification {
   created_at: string;
 }
 
+interface SendEmailParams {
+  notificationId?: string;
+  toEmail: string;
+  toName?: string;
+  subject: string;
+  notificationType: Notification["category"];
+  data: {
+    moc_title?: string;
+    moc_number?: string;
+    moc_id?: string;
+    task_title?: string;
+    task_id?: string;
+    old_status?: string;
+    new_status?: string;
+    due_date?: string;
+    assigned_by?: string;
+    action_url?: string;
+  };
+}
+
 export function useNotifications() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -66,6 +86,25 @@ export function useNotifications() {
     },
   });
 
+  // Manual email sending for cases where you want to trigger emails directly
+  const sendEmail = useMutation({
+    mutationFn: async (params: SendEmailParams) => {
+      const { data, error } = await supabase.functions.invoke("send-notification-email", {
+        body: {
+          notification_id: params.notificationId,
+          to_email: params.toEmail,
+          to_name: params.toName,
+          subject: params.subject,
+          notification_type: params.notificationType,
+          data: params.data,
+        },
+      });
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return {
     notifications,
     isLoading,
@@ -73,7 +112,8 @@ export function useNotifications() {
     unreadCount,
     markAsRead,
     markAllAsRead,
+    sendEmail,
   };
 }
 
-export type { Notification };
+export type { Notification, SendEmailParams };

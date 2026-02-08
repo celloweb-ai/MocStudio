@@ -207,8 +207,10 @@ const handler = async (req: Request): Promise<Response> => {
     const html = generateEmailHtml(notification_type, data, to_name);
 
     // Send the email
+    // Note: Replace onboarding@resend.dev with your verified domain once set up
+    // e.g., "MOC Studio <notifications@yourdomain.com>"
     const emailResponse = await resend.emails.send({
-      from: "MOC Studio <notifications@mocstudio.lovable.app>",
+      from: "MOC Studio <onboarding@resend.dev>",
       to: [to_email],
       subject: subject,
       html: html,
