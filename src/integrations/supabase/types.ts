@@ -520,6 +520,75 @@ export type Database = {
         }
         Relationships: []
       }
+      work_orders: {
+        Row: {
+          assignee: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string | null
+          facility_id: string | null
+          id: string
+          moc_request_id: string | null
+          order_number: string | null
+          priority: string
+          progress: number
+          status: string
+          title: string
+          updated_at: string
+          work_type: string
+        }
+        Insert: {
+          assignee?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          due_date?: string | null
+          facility_id?: string | null
+          id?: string
+          moc_request_id?: string | null
+          order_number?: string | null
+          priority?: string
+          progress?: number
+          status?: string
+          title: string
+          updated_at?: string
+          work_type?: string
+        }
+        Update: {
+          assignee?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          due_date?: string | null
+          facility_id?: string | null
+          id?: string
+          moc_request_id?: string | null
+          order_number?: string | null
+          priority?: string
+          progress?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          work_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_orders_facility_id_fkey"
+            columns: ["facility_id"]
+            isOneToOne: false
+            referencedRelation: "facilities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_orders_moc_request_id_fkey"
+            columns: ["moc_request_id"]
+            isOneToOne: false
+            referencedRelation: "moc_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
