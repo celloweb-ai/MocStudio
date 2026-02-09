@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      assets: {
+        Row: {
+          asset_code: string | null
+          asset_type: string
+          created_at: string
+          created_by: string
+          criticality: string
+          description: string | null
+          facility_id: string | null
+          id: string
+          last_maintenance: string | null
+          location: string | null
+          name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          asset_code?: string | null
+          asset_type: string
+          created_at?: string
+          created_by: string
+          criticality?: string
+          description?: string | null
+          facility_id?: string | null
+          id?: string
+          last_maintenance?: string | null
+          location?: string | null
+          name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          asset_code?: string | null
+          asset_type?: string
+          created_at?: string
+          created_by?: string
+          criticality?: string
+          description?: string | null
+          facility_id?: string | null
+          id?: string
+          last_maintenance?: string | null
+          location?: string | null
+          name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assets_facility_id_fkey"
+            columns: ["facility_id"]
+            isOneToOne: false
+            referencedRelation: "facilities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       facilities: {
         Row: {
           code: string | null
