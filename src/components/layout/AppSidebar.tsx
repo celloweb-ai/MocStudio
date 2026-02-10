@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
+import logoImg from "@/assets/logo.png";
 import {
   LayoutDashboard,
   Building2,
@@ -10,7 +11,6 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
-  Flame,
   BarChart3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -93,8 +93,8 @@ export function AppSidebar() {
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-            <Flame className="h-5 w-5 text-primary-foreground" />
+          <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center">
+            <img src={logoImg} alt="MOC Studio" className="w-8 h-8 object-contain" />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
