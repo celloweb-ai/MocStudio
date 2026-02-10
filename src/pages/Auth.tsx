@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Shield, Mail, Lock, User, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Lock, User, AlertCircle, Loader2 } from "lucide-react";
+import loginLogo from "@/assets/login-logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -107,8 +108,8 @@ export default function Auth() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Shield className="h-8 w-8 text-primary" />
+            <div className="flex items-center justify-center">
+              <img src={loginLogo} alt="MOC Studio" className="h-12 w-12 object-contain" />
             </div>
             <h1 className="text-2xl font-bold text-foreground">MOC Studio</h1>
           </div>

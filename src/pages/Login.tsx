@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Flame, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import loginLogo from "@/assets/login-logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,8 +36,8 @@ export default function Login() {
         <div className="relative z-10 flex flex-col justify-between p-12">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center glow-primary">
-              <Flame className="h-7 w-7 text-primary-foreground" />
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center">
+              <img src={loginLogo} alt="MOC Studio" className="h-12 w-12 object-contain" />
             </div>
             <div>
               <span className="text-2xl font-bold text-foreground">MOC Studio</span>
@@ -90,8 +91,8 @@ export default function Login() {
         <div className="w-full max-w-md space-y-8">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-              <Flame className="h-6 w-6 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+              <img src={loginLogo} alt="MOC Studio" className="h-10 w-10 object-contain" />
             </div>
             <span className="text-xl font-bold text-foreground">MOC Studio</span>
           </div>
