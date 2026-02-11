@@ -14,8 +14,8 @@ import {
   BarChart3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useSidebarContext } from "@/contexts/SidebarContext";
 import {
   Tooltip,
   TooltipContent,
@@ -38,7 +38,7 @@ const adminItems = [
 ];
 
 export function AppSidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed, toggle } = useSidebarContext();
   const location = useLocation();
 
   const NavItem = ({ item }: { item: typeof navigationItems[0] }) => {
@@ -135,7 +135,7 @@ export function AppSidebar() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={toggle}
           className="w-full justify-center text-muted-foreground hover:text-foreground"
         >
           {collapsed ? (
