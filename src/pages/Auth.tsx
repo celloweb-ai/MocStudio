@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, User, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Lock, User, AlertCircle, Loader2, ArrowLeft } from "lucide-react";
 import loginLogo from "@/assets/login-logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,21 +28,45 @@ const signupSchema = z.object({
   path: ["confirmPassword"],
 });
 
+const forgotPasswordSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
+
+const resetPasswordSchema = z.object({
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 type LoginFormData = z.infer<typeof loginSchema>;
 type SignupFormData = z.infer<typeof signupSchema>;
+type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+
+type AuthView = "main" | "forgot-password" | "reset-password";
 
 export default function Auth() {
   const navigate = useNavigate();
-  const { user, signIn, signUp, loading: authLoading } = useAuth();
+  const [searchParams] = useSearchParams();
+  const { user, signIn, signUp, resetPassword, updatePassword, loading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [view, setView] = useState<AuthView>("main");
 
   useEffect(() => {
-    if (user) {
+    if (searchParams.get("type") === "recovery") {
+      setView("reset-password");
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (user && view !== "reset-password") {
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [user, navigate, view]);
 
   const loginForm = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -54,12 +78,20 @@ export default function Auth() {
     defaultValues: { fullName: "", email: "", password: "", confirmPassword: "" },
   });
 
+  const forgotForm = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: { email: "" },
+  });
+
+  const resetForm = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: { password: "", confirmPassword: "" },
+  });
+
   const handleLogin = async (data: LoginFormData) => {
     setIsLoading(true);
     setError(null);
-
     const { error } = await signIn(data.email, data.password);
-
     if (error) {
       if (error.message.includes("Invalid login credentials")) {
         setError("Invalid email or password. Please try again.");
@@ -69,7 +101,6 @@ export default function Auth() {
         setError(error.message);
       }
     }
-
     setIsLoading(false);
   };
 
@@ -77,9 +108,7 @@ export default function Auth() {
     setIsLoading(true);
     setError(null);
     setSuccessMessage(null);
-
     const { error } = await signUp(data.email, data.password, data.fullName);
-
     if (error) {
       if (error.message.includes("already registered")) {
         setError("This email is already registered. Please sign in instead.");
@@ -90,7 +119,33 @@ export default function Auth() {
       setSuccessMessage("Account created! Please check your email to verify your account before signing in.");
       signupForm.reset();
     }
+    setIsLoading(false);
+  };
 
+  const handleForgotPassword = async (data: ForgotPasswordFormData) => {
+    setIsLoading(true);
+    setError(null);
+    setSuccessMessage(null);
+    const { error } = await resetPassword(data.email);
+    if (error) {
+      setError(error.message);
+    } else {
+      setSuccessMessage("Password reset link sent! Please check your email.");
+    }
+    setIsLoading(false);
+  };
+
+  const handleResetPassword = async (data: ResetPasswordFormData) => {
+    setIsLoading(true);
+    setError(null);
+    setSuccessMessage(null);
+    const { error } = await updatePassword(data.password);
+    if (error) {
+      setError(error.message);
+    } else {
+      setSuccessMessage("Password updated successfully! Redirecting...");
+      setTimeout(() => navigate("/"), 2000);
+    }
     setIsLoading(false);
   };
 
@@ -117,35 +172,29 @@ export default function Auth() {
         </div>
 
         <Card className="border-border/50 shadow-xl">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-xl">Welcome</CardTitle>
-            <CardDescription>Sign in to your account or create a new one</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="login">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
-              </TabsList>
-
-              {error && (
-                <Alert variant="destructive" className="mb-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-
-              {successMessage && (
-                <Alert className="mb-4 border-primary/50 bg-primary/10">
-                  <AlertDescription className="text-primary">{successMessage}</AlertDescription>
-                </Alert>
-              )}
-
-              <TabsContent value="login">
-                <Form {...loginForm}>
-                  <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
+          {/* Forgot Password View */}
+          {view === "forgot-password" && (
+            <>
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-xl">Forgot Password</CardTitle>
+                <CardDescription>Enter your email and we'll send you a reset link</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {error && (
+                  <Alert variant="destructive" className="mb-4">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+                {successMessage && (
+                  <Alert className="mb-4 border-primary/50 bg-primary/10">
+                    <AlertDescription className="text-primary">{successMessage}</AlertDescription>
+                  </Alert>
+                )}
+                <Form {...forgotForm}>
+                  <form onSubmit={forgotForm.handleSubmit(handleForgotPassword)} className="space-y-4">
                     <FormField
-                      control={loginForm.control}
+                      control={forgotForm.control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
@@ -153,121 +202,63 @@ export default function Auth() {
                           <FormControl>
                             <div className="relative">
                               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                {...field}
-                                type="email"
-                                placeholder="Enter your email"
-                                className="pl-10"
-                                disabled={isLoading}
-                              />
+                              <Input {...field} type="email" placeholder="Enter your email" className="pl-10" disabled={isLoading} />
                             </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={loginForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                {...field}
-                                type="password"
-                                placeholder="Enter your password"
-                                className="pl-10"
-                                disabled={isLoading}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button
-                      type="submit"
-                      className="w-full gradient-primary"
-                      disabled={isLoading}
-                    >
+                    <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
                       {isLoading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Signing in...
-                        </>
-                      ) : (
-                        "Sign In"
-                      )}
+                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Sending...</>
+                      ) : "Send Reset Link"}
                     </Button>
                   </form>
                 </Form>
-              </TabsContent>
+                <Button
+                  variant="ghost"
+                  className="w-full mt-4 text-muted-foreground"
+                  onClick={() => { setView("main"); setError(null); setSuccessMessage(null); }}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Sign In
+                </Button>
+              </CardContent>
+            </>
+          )}
 
-              <TabsContent value="signup">
-                <Form {...signupForm}>
-                  <form onSubmit={signupForm.handleSubmit(handleSignup)} className="space-y-4">
+          {/* Reset Password View */}
+          {view === "reset-password" && (
+            <>
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-xl">Set New Password</CardTitle>
+                <CardDescription>Enter your new password below</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {error && (
+                  <Alert variant="destructive" className="mb-4">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+                {successMessage && (
+                  <Alert className="mb-4 border-primary/50 bg-primary/10">
+                    <AlertDescription className="text-primary">{successMessage}</AlertDescription>
+                  </Alert>
+                )}
+                <Form {...resetForm}>
+                  <form onSubmit={resetForm.handleSubmit(handleResetPassword)} className="space-y-4">
                     <FormField
-                      control={signupForm.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                {...field}
-                                placeholder="Enter your full name"
-                                className="pl-10"
-                                disabled={isLoading}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={signupForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                {...field}
-                                type="email"
-                                placeholder="Enter your email"
-                                className="pl-10"
-                                disabled={isLoading}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={signupForm.control}
+                      control={resetForm.control}
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel>New Password</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                {...field}
-                                type="password"
-                                placeholder="Create a password"
-                                className="pl-10"
-                                disabled={isLoading}
-                              />
+                              <Input {...field} type="password" placeholder="Enter new password" className="pl-10" disabled={isLoading} />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -275,7 +266,7 @@ export default function Auth() {
                       )}
                     />
                     <FormField
-                      control={signupForm.control}
+                      control={resetForm.control}
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem>
@@ -283,43 +274,189 @@ export default function Auth() {
                           <FormControl>
                             <div className="relative">
                               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                {...field}
-                                type="password"
-                                placeholder="Confirm your password"
-                                className="pl-10"
-                                disabled={isLoading}
-                              />
+                              <Input {...field} type="password" placeholder="Confirm new password" className="pl-10" disabled={isLoading} />
                             </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <Button
-                      type="submit"
-                      className="w-full gradient-primary"
-                      disabled={isLoading}
-                    >
+                    <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
                       {isLoading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Creating account...
-                        </>
-                      ) : (
-                        "Create Account"
-                      )}
+                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Updating...</>
+                      ) : "Update Password"}
                     </Button>
                   </form>
                 </Form>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-          <CardFooter className="text-center text-xs text-muted-foreground">
-            <p className="w-full">
-              By continuing, you agree to our Terms of Service and Privacy Policy.
-            </p>
-          </CardFooter>
+              </CardContent>
+            </>
+          )}
+
+          {/* Main Login/Signup View */}
+          {view === "main" && (
+            <>
+              <CardHeader className="text-center pb-4">
+                <CardTitle className="text-xl">Welcome</CardTitle>
+                <CardDescription>Sign in to your account or create a new one</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="login" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2 mb-6">
+                    <TabsTrigger value="login">Sign In</TabsTrigger>
+                    <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                  </TabsList>
+
+                  {error && (
+                    <Alert variant="destructive" className="mb-4">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  {successMessage && (
+                    <Alert className="mb-4 border-primary/50 bg-primary/10">
+                      <AlertDescription className="text-primary">{successMessage}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <TabsContent value="login">
+                    <Form {...loginForm}>
+                      <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
+                        <FormField
+                          control={loginForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                  <Input {...field} type="email" placeholder="Enter your email" className="pl-10" disabled={isLoading} />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={loginForm.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <div className="flex items-center justify-between">
+                                <FormLabel>Password</FormLabel>
+                                <Button
+                                  type="button"
+                                  variant="link"
+                                  className="px-0 h-auto text-xs text-muted-foreground hover:text-primary"
+                                  onClick={() => { setView("forgot-password"); setError(null); setSuccessMessage(null); }}
+                                >
+                                  Forgot password?
+                                </Button>
+                              </div>
+                              <FormControl>
+                                <div className="relative">
+                                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                  <Input {...field} type="password" placeholder="Enter your password" className="pl-10" disabled={isLoading} />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
+                          {isLoading ? (
+                            <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Signing in...</>
+                          ) : "Sign In"}
+                        </Button>
+                      </form>
+                    </Form>
+                  </TabsContent>
+
+                  <TabsContent value="signup">
+                    <Form {...signupForm}>
+                      <form onSubmit={signupForm.handleSubmit(handleSignup)} className="space-y-4">
+                        <FormField
+                          control={signupForm.control}
+                          name="fullName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Full Name</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                  <Input {...field} placeholder="Enter your full name" className="pl-10" disabled={isLoading} />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={signupForm.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                  <Input {...field} type="email" placeholder="Enter your email" className="pl-10" disabled={isLoading} />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={signupForm.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Password</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                  <Input {...field} type="password" placeholder="Create a password" className="pl-10" disabled={isLoading} />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={signupForm.control}
+                          name="confirmPassword"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Confirm Password</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                  <Input {...field} type="password" placeholder="Confirm your password" className="pl-10" disabled={isLoading} />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
+                          {isLoading ? (
+                            <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating account...</>
+                          ) : "Create Account"}
+                        </Button>
+                      </form>
+                    </Form>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+              <CardFooter className="text-center text-xs text-muted-foreground">
+                <p className="w-full">
+                  By continuing, you agree to our Terms of Service and Privacy Policy.
+                </p>
+              </CardFooter>
+            </>
+          )}
         </Card>
       </div>
     </div>
