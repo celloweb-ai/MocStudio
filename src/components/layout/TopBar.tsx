@@ -1,5 +1,6 @@
-import { Search, User, LogOut, Menu } from "lucide-react";
+import { Search, User, LogOut, Menu, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -18,6 +19,7 @@ import { useSidebarContext } from "@/contexts/SidebarContext";
 export function TopBar() {
   const { user, signOut } = useAuth();
   const { toggle } = useSidebarContext();
+  const { theme, toggleTheme } = useTheme();
   const { data: profile } = useProfile();
 
   const getInitials = () => {
@@ -51,6 +53,11 @@ export function TopBar() {
 
         {/* Right Section */}
         <div className="flex items-center gap-4">
+          {/* Theme Toggle */}
+          <Button variant="ghost" size="icon" onClick={toggleTheme} className="text-muted-foreground hover:text-foreground">
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
+
           {/* Notifications */}
           <NotificationBell />
 
