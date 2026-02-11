@@ -12,7 +12,7 @@ function AppLayoutInner({ children }: AppLayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       <AppSidebar />
-      <div className={cn("transition-all duration-300", collapsed ? "pl-16" : "pl-64")}>
+      <div className={cn("transition-all duration-300 md:pl-16", collapsed ? "md:pl-16" : "md:pl-64", "pl-0")}>
         <TopBar />
         <main className="p-6 animate-fade-in">{children}</main>
       </div>

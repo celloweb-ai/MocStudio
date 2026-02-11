@@ -83,13 +83,21 @@ export function AppSidebar() {
   };
 
   return (
-    <aside
-      className={cn(
-        "fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border",
-        "flex flex-col transition-all duration-300 z-50",
-        collapsed ? "w-16" : "w-64"
+    <>
+      {/* Mobile overlay */}
+      {!collapsed && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={toggle}
+        />
       )}
-    >
+      <aside
+        className={cn(
+          "fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border",
+          "flex flex-col transition-all duration-300 z-50",
+          collapsed ? "w-16 -translate-x-full md:translate-x-0" : "w-64"
+        )}
+      >
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
@@ -149,5 +157,6 @@ export function AppSidebar() {
         </Button>
       </div>
     </aside>
+    </>
   );
 }

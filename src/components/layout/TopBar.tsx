@@ -1,4 +1,4 @@
-import { Search, User, LogOut } from "lucide-react";
+import { Search, User, LogOut, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,9 +13,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfiles";
+import { useSidebarContext } from "@/contexts/SidebarContext";
 
 export function TopBar() {
   const { user, signOut } = useAuth();
+  const { toggle } = useSidebarContext();
   const { data: profile } = useProfile();
 
   const getInitials = () => {
@@ -31,6 +33,11 @@ export function TopBar() {
   return (
     <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
       <div className="h-full px-6 flex items-center justify-between">
+        {/* Mobile hamburger */}
+        <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={toggle}>
+          <Menu className="h-5 w-5" />
+        </Button>
+
         {/* Search */}
         <div className="flex-1 max-w-md">
           <div className="relative">
