@@ -18,11 +18,10 @@ import { Plus } from "lucide-react";
 import { useFacilities } from "@/hooks/useFacilities";
 import { useMOCRequests } from "@/hooks/useMOCRequests";
 import { useWorkOrders, type WorkOrderInsert } from "@/hooks/useWorkOrders";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const WORK_TYPES = ["Corrective", "Preventive", "Installation", "Modification", "Inspection"];
 const PRIORITIES = ["Critical", "High", "Medium", "Low"];
-const STATUSES = ["Scheduled", "In Progress", "On Hold", "Completed"];
-
 const formSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),
   work_type: z.string().min(1, "Type is required"),
@@ -38,6 +37,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export function AddWorkOrderDialog() {
+  const { language } = useLanguage();
   const [open, setOpen] = useState(false);
   const { facilities } = useFacilities();
   const { mocRequests } = useMOCRequests();
@@ -68,24 +68,39 @@ export function AddWorkOrderDialog() {
     });
   };
 
+  const priorityLabel: Record<string, string> = {
+    Critical: language === "pt" ? "Crítica" : "Critical",
+    High: language === "pt" ? "Alta" : "High",
+    Medium: language === "pt" ? "Média" : "Medium",
+    Low: language === "pt" ? "Baixa" : "Low",
+  };
+
+  const workTypeLabel: Record<string, string> = {
+    Corrective: language === "pt" ? "Corretiva" : "Corrective",
+    Preventive: language === "pt" ? "Preventiva" : "Preventive",
+    Installation: language === "pt" ? "Instalação" : "Installation",
+    Modification: language === "pt" ? "Modificação" : "Modification",
+    Inspection: language === "pt" ? "Inspeção" : "Inspection",
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="gradient-primary text-primary-foreground">
           <Plus className="h-4 w-4 mr-2" />
-          Create Work Order
+          {language === "pt" ? "Criar Ordem de Serviço" : "Create Work Order"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create Work Order</DialogTitle>
+          <DialogTitle>{language === "pt" ? "Criar Ordem de Serviço" : "Create Work Order"}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField control={form.control} name="title" render={({ field }) => (
               <FormItem>
-                <FormLabel>Title *</FormLabel>
-                <FormControl><Input placeholder="e.g., Valve Replacement - V-105" {...field} /></FormControl>
+                <FormLabel>{language === "pt" ? "Título *" : "Title *"}</FormLabel>
+                <FormControl><Input placeholder={language === "pt" ? "ex.: Troca de válvula - V-105" : "e.g., Valve Replacement - V-105"} {...field} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
@@ -93,11 +108,11 @@ export function AddWorkOrderDialog() {
             <div className="grid grid-cols-2 gap-4">
               <FormField control={form.control} name="work_type" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type *</FormLabel>
+                  <FormLabel>{language === "pt" ? "Tipo *" : "Type *"}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
+                    <FormControl><SelectTrigger><SelectValue placeholder={language === "pt" ? "Selecione o tipo" : "Select type"} /></SelectTrigger></FormControl>
                     <SelectContent>
-                      {WORK_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                      {WORK_TYPES.map((t) => <SelectItem key={t} value={t}>{workTypeLabel[t]}</SelectItem>)}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -106,11 +121,11 @@ export function AddWorkOrderDialog() {
 
               <FormField control={form.control} name="priority" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Priority</FormLabel>
+                  <FormLabel>{language === "pt" ? "Prioridade" : "Priority"}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
                     <SelectContent>
-                      {PRIORITIES.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                      {PRIORITIES.map((p) => <SelectItem key={p} value={p}>{priorityLabel[p]}</SelectItem>)}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -121,9 +136,9 @@ export function AddWorkOrderDialog() {
             <div className="grid grid-cols-2 gap-4">
               <FormField control={form.control} name="facility_id" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Facility</FormLabel>
+                  <FormLabel>{language === "pt" ? "Instalação" : "Facility"}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl><SelectTrigger><SelectValue placeholder="Select facility" /></SelectTrigger></FormControl>
+                    <FormControl><SelectTrigger><SelectValue placeholder={language === "pt" ? "Selecione a instalação" : "Select facility"} /></SelectTrigger></FormControl>
                     <SelectContent>
                       {facilities?.map((f) => <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>)}
                     </SelectContent>
@@ -134,9 +149,9 @@ export function AddWorkOrderDialog() {
 
               <FormField control={form.control} name="moc_request_id" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Related MOC</FormLabel>
+                  <FormLabel>{language === "pt" ? "MOC relacionado" : "Related MOC"}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl><SelectTrigger><SelectValue placeholder="Select MOC (optional)" /></SelectTrigger></FormControl>
+                    <FormControl><SelectTrigger><SelectValue placeholder={language === "pt" ? "Selecione o MOC (opcional)" : "Select MOC (optional)"} /></SelectTrigger></FormControl>
                     <SelectContent>
                       {mocRequests?.map((m) => (
                         <SelectItem key={m.id} value={m.id}>{m.request_number} - {m.title}</SelectItem>
@@ -151,15 +166,15 @@ export function AddWorkOrderDialog() {
             <div className="grid grid-cols-2 gap-4">
               <FormField control={form.control} name="assignee" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Assignee</FormLabel>
-                  <FormControl><Input placeholder="e.g., Team Alpha" {...field} /></FormControl>
+                  <FormLabel>{language === "pt" ? "Responsável" : "Assignee"}</FormLabel>
+                  <FormControl><Input placeholder={language === "pt" ? "ex.: Equipe Alfa" : "e.g., Team Alpha"} {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
 
               <FormField control={form.control} name="due_date" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Due Date</FormLabel>
+                  <FormLabel>{language === "pt" ? "Prazo" : "Due Date"}</FormLabel>
                   <FormControl><Input type="date" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
@@ -168,16 +183,18 @@ export function AddWorkOrderDialog() {
 
             <FormField control={form.control} name="description" render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl><Textarea placeholder="Optional description..." {...field} /></FormControl>
+                <FormLabel>{language === "pt" ? "Descrição" : "Description"}</FormLabel>
+                <FormControl><Textarea placeholder={language === "pt" ? "Descrição opcional..." : "Optional description..."} {...field} /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
 
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>{language === "pt" ? "Cancelar" : "Cancel"}</Button>
               <Button type="submit" disabled={createWorkOrder.isPending}>
-                {createWorkOrder.isPending ? "Creating..." : "Create Work Order"}
+                {createWorkOrder.isPending
+                  ? (language === "pt" ? "Criando..." : "Creating...")
+                  : (language === "pt" ? "Criar Ordem de Serviço" : "Create Work Order")}
               </Button>
             </div>
           </form>

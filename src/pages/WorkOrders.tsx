@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/select";
 import { useWorkOrders } from "@/hooks/useWorkOrders";
 import { AddWorkOrderDialog } from "@/components/workorders/AddWorkOrderDialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function WorkOrders() {
+  const { language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const { workOrders, isLoading } = useWorkOrders();
@@ -49,18 +51,32 @@ export default function WorkOrders() {
   });
 
   const stats = [
-    { label: "Total Open", value: orders.filter((o) => o.status !== "Completed").length, color: "text-foreground" },
-    { label: "In Progress", value: orders.filter((o) => o.status === "In Progress").length, color: "text-accent" },
-    { label: "On Hold", value: orders.filter((o) => o.status === "On Hold").length, color: "text-warning" },
-    { label: "Completed", value: orders.filter((o) => o.status === "Completed").length, color: "text-success" },
+    { label: language === "pt" ? "Total em aberto" : "Total Open", value: orders.filter((o) => o.status !== "Completed").length, color: "text-foreground" },
+    { label: language === "pt" ? "Em andamento" : "In Progress", value: orders.filter((o) => o.status === "In Progress").length, color: "text-accent" },
+    { label: language === "pt" ? "Em espera" : "On Hold", value: orders.filter((o) => o.status === "On Hold").length, color: "text-warning" },
+    { label: language === "pt" ? "Concluídas" : "Completed", value: orders.filter((o) => o.status === "Completed").length, color: "text-success" },
   ];
+
+  const statusLabel: Record<string, string> = {
+    Scheduled: language === "pt" ? "Agendada" : "Scheduled",
+    "In Progress": language === "pt" ? "Em andamento" : "In Progress",
+    "On Hold": language === "pt" ? "Em espera" : "On Hold",
+    Completed: language === "pt" ? "Concluída" : "Completed",
+  };
+
+  const priorityLabel: Record<string, string> = {
+    Critical: language === "pt" ? "Crítica" : "Critical",
+    High: language === "pt" ? "Alta" : "High",
+    Medium: language === "pt" ? "Média" : "Medium",
+    Low: language === "pt" ? "Baixa" : "Low",
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Work Orders</h1>
-          <p className="text-muted-foreground">Maintenance and implementation tasks</p>
+          <h1 className="text-2xl font-bold text-foreground">{language === "pt" ? "Ordens de Serviço" : "Work Orders"}</h1>
+          <p className="text-muted-foreground">{language === "pt" ? "Tarefas de manutenção e implementação" : "Maintenance and implementation tasks"}</p>
         </div>
         <AddWorkOrderDialog />
       </div>
@@ -77,19 +93,19 @@ export default function WorkOrders() {
       <div className="flex gap-4 flex-wrap">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search work orders..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10" />
+          <Input placeholder={language === "pt" ? "Buscar ordens de serviço..." : "Search work orders..."} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-[180px]">
             <Filter className="h-4 w-4 mr-2" />
-            <SelectValue placeholder="Filter by status" />
+            <SelectValue placeholder={language === "pt" ? "Filtrar por status" : "Filter by status"} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="Scheduled">Scheduled</SelectItem>
-            <SelectItem value="In Progress">In Progress</SelectItem>
-            <SelectItem value="On Hold">On Hold</SelectItem>
-            <SelectItem value="Completed">Completed</SelectItem>
+            <SelectItem value="all">{language === "pt" ? "Todos os status" : "All Statuses"}</SelectItem>
+            <SelectItem value="Scheduled">{statusLabel.Scheduled}</SelectItem>
+            <SelectItem value="In Progress">{statusLabel["In Progress"]}</SelectItem>
+            <SelectItem value="On Hold">{statusLabel["On Hold"]}</SelectItem>
+            <SelectItem value="Completed">{statusLabel.Completed}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -105,7 +121,7 @@ export default function WorkOrders() {
           ))
         ) : filteredOrders.length === 0 ? (
           <div className="col-span-2 text-center text-muted-foreground py-12">
-            No work orders found. Click "Create Work Order" to add one.
+            {language === "pt" ? 'Nenhuma ordem de serviço encontrada. Clique em "Criar Ordem de Serviço" para adicionar.' : 'No work orders found. Click "Create Work Order" to add one.'}
           </div>
         ) : (
           filteredOrders.map((order) => (
@@ -118,7 +134,7 @@ export default function WorkOrders() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-sm text-primary">{order.order_number}</span>
-                      <Badge className={getPriorityColor(order.priority)}>{order.priority}</Badge>
+                      <Badge className={getPriorityColor(order.priority)}>{priorityLabel[order.priority] || order.priority}</Badge>
                     </div>
                     <h3 className="font-semibold text-foreground mt-1">{order.title}</h3>
                   </div>
@@ -128,9 +144,9 @@ export default function WorkOrders() {
                     <Button variant="ghost" size="icon" className="h-8 w-8"><MoreVertical className="h-4 w-4" /></Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem><Eye className="h-4 w-4 mr-2" />View Details</DropdownMenuItem>
-                    <DropdownMenuItem><Edit className="h-4 w-4 mr-2" />Edit</DropdownMenuItem>
-                    <DropdownMenuItem><CheckCircle className="h-4 w-4 mr-2" />Mark Complete</DropdownMenuItem>
+                    <DropdownMenuItem><Eye className="h-4 w-4 mr-2" />{language === "pt" ? "Ver detalhes" : "View Details"}</DropdownMenuItem>
+                    <DropdownMenuItem><Edit className="h-4 w-4 mr-2" />{language === "pt" ? "Editar" : "Edit"}</DropdownMenuItem>
+                    <DropdownMenuItem><CheckCircle className="h-4 w-4 mr-2" />{language === "pt" ? "Marcar como concluída" : "Mark Complete"}</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -143,7 +159,7 @@ export default function WorkOrders() {
 
                 {order.moc_requests && (
                   <div className="text-sm">
-                    <span className="text-muted-foreground">Related MOC: </span>
+                    <span className="text-muted-foreground">{language === "pt" ? "MOC relacionado: " : "Related MOC: "}</span>
                     <span className="text-primary font-mono">{order.moc_requests.request_number}</span>
                   </div>
                 )}
@@ -159,7 +175,7 @@ export default function WorkOrders() {
 
                 <div className="pt-3 border-t border-border">
                   <div className="flex items-center justify-between mb-2">
-                    <Badge className={getStatusColor(order.status)}>{order.status}</Badge>
+                    <Badge className={getStatusColor(order.status)}>{statusLabel[order.status] || order.status}</Badge>
                     <span className="text-sm font-medium text-foreground">{order.progress}%</span>
                   </div>
                   <Progress value={order.progress} className="h-2" />
