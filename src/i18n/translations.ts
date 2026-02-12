@@ -16,6 +16,7 @@ export const translations = {
 
   // Sidebar
   "sidebar.collapse": { en: "Collapse", pt: "Recolher" },
+  "sidebar.expand": { en: "Expand", pt: "Expandir" },
   "sidebar.lightMode": { en: "Light Mode", pt: "Modo Claro" },
   "sidebar.darkMode": { en: "Dark Mode", pt: "Modo Escuro" },
   "sidebar.managementOfChange": { en: "Management of Change", pt: "Gestão de Mudanças" },
