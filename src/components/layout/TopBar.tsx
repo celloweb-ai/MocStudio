@@ -1,6 +1,7 @@
-import { Search, User, LogOut, Menu, Sun, Moon } from "lucide-react";
+import { Search, User, LogOut, Menu, Sun, Moon, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -20,6 +21,7 @@ export function TopBar() {
   const { user, signOut } = useAuth();
   const { toggle } = useSidebarContext();
   const { theme, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
   const { data: profile } = useProfile();
 
   const getInitials = () => {
@@ -45,7 +47,7 @@ export function TopBar() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search facilities, assets, MOCs..."
+              placeholder={t("topbar.search")}
               className="pl-10 bg-muted/50 border-border focus:bg-background"
             />
           </div>
@@ -53,6 +55,11 @@ export function TopBar() {
 
         {/* Right Section */}
         <div className="flex items-center gap-4">
+          {/* Language Toggle */}
+          <Button variant="ghost" size="icon" onClick={toggleLanguage} className="text-muted-foreground hover:text-foreground" title={language === "en" ? "Português" : "English"}>
+            <Globe className="h-5 w-5" />
+          </Button>
+
           {/* Theme Toggle */}
           <Button variant="ghost" size="icon" onClick={toggleTheme} className="text-muted-foreground hover:text-foreground">
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -75,22 +82,22 @@ export function TopBar() {
                     {profile?.full_name || user?.email || "User"}
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    {profile?.department || "Team Member"}
+                    {profile?.department || t("topbar.teamMember")}
                   </span>
                 </div>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("topbar.myAccount")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <User className="mr-2 h-4 w-4" />
-                Profile Settings
+                {t("topbar.profileSettings")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive" onClick={() => signOut()}>
                 <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
+                {t("topbar.signOut")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
