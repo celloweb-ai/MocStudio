@@ -28,6 +28,24 @@ export const translations = {
   "topbar.signOut": { en: "Sign Out", pt: "Sair" },
   "topbar.teamMember": { en: "Team Member", pt: "Membro da Equipe" },
 
+  // Profile Settings
+  "profile.accountInformation": { en: "Account Information", pt: "Informações da Conta" },
+  "profile.accountDesc": { en: "Your account email and authentication details", pt: "Seu e-mail e detalhes de autenticação" },
+  "profile.emailCannotChange": { en: "Email address cannot be changed", pt: "O endereço de e-mail não pode ser alterado" },
+  "profile.personalInformation": { en: "Personal Information", pt: "Informações Pessoais" },
+  "profile.personalDesc": { en: "Update your personal details and profile information", pt: "Atualize seus detalhes pessoais e informações do perfil" },
+  "profile.phone": { en: "Phone", pt: "Telefone" },
+  "profile.position": { en: "Position", pt: "Cargo" },
+  "profile.enterDepartment": { en: "Enter department", pt: "Digite o departamento" },
+  "profile.enterPosition": { en: "Enter position", pt: "Digite o cargo" },
+  "profile.bio": { en: "Bio", pt: "Biografia" },
+  "profile.enterBio": { en: "Tell us about yourself...", pt: "Conte-nos sobre você..." },
+  "profile.bioDesc": { en: "Brief description for your profile. Max 500 characters.", pt: "Breve descrição para seu perfil. Máximo 500 caracteres." },
+  "profile.security": { en: "Security", pt: "Segurança" },
+  "profile.securityDesc": { en: "Manage your password and security settings", pt: "Gerencie sua senha e configurações de segurança" },
+  "profile.changePassword": { en: "Change Password", pt: "Alterar Senha" },
+  "common.updateYourProfile": { en: "Update your profile information and preferences", pt: "Atualize suas informações e preferências de perfil" },
+
   // Auth page
   "auth.welcome": { en: "Welcome", pt: "Bem-vindo" },
   "auth.subtitle": { en: "Sign in to your account or create a new one", pt: "Entre na sua conta ou crie uma nova" },

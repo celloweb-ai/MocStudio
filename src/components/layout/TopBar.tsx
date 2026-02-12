@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfiles";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { BrazilFlag, UKFlag } from "@/components/ui/flag-icons";
+import { useNavigate } from "react-router-dom";
 
 export function TopBar() {
   const { user, signOut } = useAuth();
@@ -24,6 +25,7 @@ export function TopBar() {
   const { theme, toggleTheme } = useTheme();
   const { language, toggleLanguage, t } = useLanguage();
   const { data: profile } = useProfile();
+  const navigate = useNavigate();
 
   const getInitials = () => {
     if (profile?.full_name) {
@@ -101,7 +103,7 @@ export function TopBar() {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>{t("topbar.myAccount")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/profile-settings')}>
                 <User className="mr-2 h-4 w-4" />
                 {t("topbar.profileSettings")}
               </DropdownMenuItem>
