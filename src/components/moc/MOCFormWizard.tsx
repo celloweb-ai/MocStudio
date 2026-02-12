@@ -54,6 +54,34 @@ const STEPS = [
   { id: 5, title: "Review", icon: Check },
 ];
 
+const stepValidationSchemas = {
+  1: mocFormSchema.pick({
+    title: true,
+    facility: true,
+    changeType: true,
+    priority: true,
+    description: true,
+    justification: true,
+  }),
+  2: mocFormSchema.pick({
+    affectedSystems: true,
+    affectedAreas: true,
+    estimatedDuration: true,
+    temporaryOrPermanent: true,
+  }),
+  3: mocFormSchema.pick({
+    probability: true,
+    severity: true,
+    riskCategory: true,
+    mitigationMeasures: true,
+  }),
+  4: mocFormSchema.pick({
+    requiredApprovers: true,
+    targetImplementationDate: true,
+    reviewDeadline: true,
+  }),
+} as const;
+
 interface MOCFormWizardProps {
   onClose: () => void;
   onSubmit: (data: MOCFormData) => void;
@@ -90,25 +118,24 @@ export function MOCFormWizard({ onClose, onSubmit }: MOCFormWizardProps) {
   });
 
   const validateCurrentStep = async () => {
-    let fieldsToValidate: (keyof MOCFormData)[] = [];
-    
-    switch (currentStep) {
-      case 1:
-        fieldsToValidate = ["title", "facility", "changeType", "priority", "description", "justification"];
-        break;
-      case 2:
-        fieldsToValidate = ["affectedSystems", "affectedAreas", "estimatedDuration", "temporaryOrPermanent"];
-        break;
-      case 3:
-        fieldsToValidate = ["probability", "severity", "riskCategory", "mitigationMeasures"];
-        break;
-      case 4:
-        fieldsToValidate = ["requiredApprovers", "targetImplementationDate", "reviewDeadline"];
-        break;
+    const schema = stepValidationSchemas[currentStep as keyof typeof stepValidationSchemas];
+
+    if (!schema) {
+      return true;
     }
 
-    const result = await form.trigger(fieldsToValidate);
-    return result;
+    const validationResult = schema.safeParse(form.getValues());
+    if (validationResult.success) {
+      return true;
+    }
+
+    form.clearErrors();
+    validationResult.error.issues.forEach((issue) => {
+      const fieldName = issue.path[0] as keyof MOCFormData;
+      form.setError(fieldName, { message: issue.message });
+    });
+
+    return false;
   };
 
   const handleNext = async () => {
