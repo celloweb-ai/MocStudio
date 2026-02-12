@@ -187,11 +187,8 @@ export default function Auth() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="flex items-center justify-center">
-              <img src={loginLogo} alt="MOC Studio" className="h-12 w-12 object-contain" />
-            </div>
-            <h1 className="text-2xl font-bold text-foreground">MOC Studio</h1>
+          <div className="flex items-center justify-center mb-2">
+            <img src={loginLogo} alt="MOC Studio" className="h-28 w-auto object-contain" />
           </div>
           <p className="text-muted-foreground text-sm">{t("auth.platform")}</p>
         </div>
