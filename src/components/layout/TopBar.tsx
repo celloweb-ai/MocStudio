@@ -1,4 +1,4 @@
-import { Search, User, LogOut, Menu, Sun, Moon, Globe } from "lucide-react";
+import { Search, User, LogOut, Menu, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -16,6 +16,7 @@ import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfiles";
 import { useSidebarContext } from "@/contexts/SidebarContext";
+import { BrazilFlag, UKFlag } from "@/components/ui/flag-icons";
 
 export function TopBar() {
   const { user, signOut } = useAuth();
@@ -55,9 +56,19 @@ export function TopBar() {
 
         {/* Right Section */}
         <div className="flex items-center gap-4">
-          {/* Language Toggle */}
-          <Button variant="ghost" size="icon" onClick={toggleLanguage} className="text-muted-foreground hover:text-foreground" title={language === "en" ? "Português" : "English"}>
-            <Globe className="h-5 w-5" />
+          {/* Language Toggle with Flags */}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleLanguage} 
+            className="text-muted-foreground hover:text-foreground" 
+            title={language === "en" ? "Mudar para Português" : "Switch to English"}
+          >
+            {language === "en" ? (
+              <BrazilFlag className="h-5 w-5" />
+            ) : (
+              <UKFlag className="h-5 w-5" />
+            )}
           </Button>
 
           {/* Theme Toggle */}
