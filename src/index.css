@@ -6,121 +6,121 @@
 
 @layer base {
   :root {
-    /* Aurora Light Theme - Inspired by Northern Lights */
-    --background: 220 25% 97%;
-    --foreground: 230 20% 12%;
+    /* Tailwind Starter Kit Light Theme - Classic Tailwind Colors */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 230 20% 12%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 230 20% 12%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Primary: Aurora Green/Teal - Main northern lights color */
-    --primary: 165 85% 45%;
+    /* Primary: Indigo - Classic Tailwind primary color */
+    --primary: 239 84% 67%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 20% 94%;
-    --secondary-foreground: 230 20% 12%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 220 20% 94%;
-    --muted-foreground: 220 15% 50%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
 
-    /* Accent: Aurora Purple/Magenta */
-    --accent: 280 75% 60%;
+    /* Accent: Blue */
+    --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 75% 55%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Success: Aurora Green */
-    --success: 145 80% 42%;
+    /* Success: Emerald */
+    --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning: Aurora Yellow/Gold */
-    --warning: 45 95% 55%;
-    --warning-foreground: 230 20% 12%;
+    /* Warning: Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
 
-    --border: 220 20% 88%;
-    --input: 220 20% 88%;
-    --ring: 165 85% 45%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 239 84% 67%;
 
     --radius: 0.5rem;
 
-    /* Sidebar with Aurora gradient feel */
-    --sidebar-background: 220 30% 98%;
-    --sidebar-foreground: 220 20% 40%;
-    --sidebar-primary: 165 85% 45%;
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 5% 34%;
+    --sidebar-primary: 239 84% 67%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 25% 95%;
-    --sidebar-accent-foreground: 230 20% 12%;
-    --sidebar-border: 220 20% 92%;
-    --sidebar-ring: 165 85% 45%;
+    --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 240 6% 90%;
+    --sidebar-ring: 239 84% 67%;
 
-    /* Chart colors - Aurora palette */
-    --chart-1: 165 85% 45%; /* Teal */
-    --chart-2: 280 75% 60%; /* Purple */
-    --chart-3: 210 90% 55%; /* Blue */
-    --chart-4: 145 80% 42%; /* Green */
-    --chart-5: 320 70% 58%; /* Pink */
+    /* Chart colors - Classic Tailwind palette */
+    --chart-1: 221 83% 53%; /* Blue */
+    --chart-2: 262 83% 58%; /* Violet */
+    --chart-3: 142 76% 36%; /* Emerald */
+    --chart-4: 38 92% 50%; /* Amber */
+    --chart-5: 346 77% 50%; /* Rose */
   }
 
   .dark {
-    /* Aurora Dark Theme - Night sky with northern lights */
-    --background: 230 25% 8%;
-    --foreground: 210 40% 96%;
+    /* Tailwind Starter Kit Dark Theme */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    --card: 230 25% 10%;
-    --card-foreground: 210 40% 96%;
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 230 25% 12%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
 
-    /* Primary: Brighter Aurora Green for dark mode */
-    --primary: 165 85% 50%;
-    --primary-foreground: 230 25% 8%;
+    /* Primary: Indigo - Lighter for dark mode */
+    --primary: 239 84% 67%;
+    --primary-foreground: 222 47% 11%;
 
-    --secondary: 230 20% 16%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 230 20% 14%;
-    --muted-foreground: 220 20% 60%;
+    --muted: 223 47% 11%;
+    --muted-foreground: 215 20% 65%;
 
-    /* Accent: Aurora Purple/Magenta - brighter for dark */
-    --accent: 280 80% 65%;
-    --accent-foreground: 210 40% 96%;
+    /* Accent: Blue */
+    --accent: 217 91% 60%;
+    --accent-foreground: 222 47% 11%;
 
-    --destructive: 0 75% 58%;
-    --destructive-foreground: 210 40% 96%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 210 40% 98%;
 
-    /* Success: Aurora Green */
-    --success: 145 80% 45%;
-    --success-foreground: 210 40% 96%;
+    /* Success: Emerald */
+    --success: 142 71% 45%;
+    --success-foreground: 210 40% 98%;
 
-    /* Warning: Aurora Yellow/Gold */
-    --warning: 45 95% 60%;
-    --warning-foreground: 230 25% 8%;
+    /* Warning: Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
 
-    --border: 230 20% 18%;
-    --input: 230 20% 18%;
-    --ring: 165 85% 50%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 239 84% 67%;
 
-    /* Sidebar - Deep space with aurora glow */
-    --sidebar-background: 230 30% 6%;
-    --sidebar-foreground: 220 20% 70%;
-    --sidebar-primary: 165 85% 50%;
-    --sidebar-primary-foreground: 230 25% 8%;
-    --sidebar-accent: 230 25% 12%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 230 25% 14%;
-    --sidebar-ring: 165 85% 50%;
+    /* Sidebar */
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 215 20% 65%;
+    --sidebar-primary: 239 84% 67%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 239 84% 67%;
 
-    /* Chart colors - Vibrant Aurora palette for dark mode */
-    --chart-1: 165 85% 50%; /* Teal */
-    --chart-2: 280 80% 65%; /* Purple */
-    --chart-3: 210 90% 60%; /* Blue */
-    --chart-4: 145 80% 45%; /* Green */
-    --chart-5: 320 75% 62%; /* Pink */
+    /* Chart colors - Brighter for dark mode */
+    --chart-1: 217 91% 60%; /* Blue */
+    --chart-2: 263 70% 50%; /* Violet */
+    --chart-3: 142 71% 45%; /* Emerald */
+    --chart-4: 38 92% 50%; /* Amber */
+    --chart-5: 346 87% 62%; /* Rose */
   }
 }
 
@@ -134,102 +134,94 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Custom scrollbar with Aurora colors */
+  /* Clean scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-muted/30;
+    @apply bg-muted;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
-    @apply rounded-full;
+    @apply bg-primary rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(280 80% 55%) 100%);
+    @apply bg-primary/80;
   }
 }
 
 @layer components {
-  /* Aurora-themed glass effect */
+  /* Glass card effect */
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border/50 shadow-xl;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 
-                0 0 20px hsl(var(--primary) / 0.1);
+    @apply bg-card/95 backdrop-blur-sm border border-border shadow-lg;
   }
 
-  /* Aurora gradient - Primary (Teal to Blue) */
+  /* Primary gradient */
   .gradient-primary {
     background: linear-gradient(135deg, 
-      hsl(165 85% 45%) 0%, 
-      hsl(210 90% 55%) 50%,
-      hsl(165 85% 50%) 100%);
+      hsl(239 84% 67%) 0%, 
+      hsl(221 83% 53%) 100%);
   }
 
-  /* Aurora gradient - Accent (Purple to Pink) */
+  /* Accent gradient */
   .gradient-accent {
     background: linear-gradient(135deg, 
-      hsl(280 75% 60%) 0%, 
-      hsl(320 70% 58%) 50%,
-      hsl(280 80% 65%) 100%);
+      hsl(221 83% 53%) 0%, 
+      hsl(262 83% 58%) 100%);
   }
 
-  /* Aurora text gradient - Northern lights colors */
+  /* Text gradient */
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background: linear-gradient(135deg, 
-      hsl(165 85% 45%) 0%, 
-      hsl(280 75% 60%) 50%, 
-      hsl(210 90% 55%) 100%);
+      hsl(239 84% 67%) 0%, 
+      hsl(221 83% 53%) 100%);
   }
 
-  /* Aurora glow effect */
+  /* Primary glow effect */
   .glow-primary {
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.4),
-                0 0 80px hsl(var(--accent) / 0.2);
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.3);
   }
 
   .glow-accent {
-    box-shadow: 0 0 40px hsl(var(--accent) / 0.4),
-                0 0 80px hsl(var(--primary) / 0.2);
+    box-shadow: 0 0 30px hsl(var(--accent) / 0.3);
   }
 
-  /* Status badges with Aurora colors */
+  /* Status badges */
   .status-draft {
-    @apply bg-muted text-muted-foreground;
+    @apply bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300;
   }
 
   .status-submitted {
-    @apply bg-accent/20 text-accent border border-accent/30;
+    @apply bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800;
   }
 
   .status-review {
-    @apply bg-warning/20 text-warning border border-warning/30;
+    @apply bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800;
   }
 
   .status-approved {
-    @apply bg-success/20 text-success border border-success/30;
+    @apply bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800;
   }
 
   .status-rejected {
-    @apply bg-destructive/20 text-destructive border border-destructive/30;
+    @apply bg-red-50 text-red-700 border border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800;
   }
 
   .status-implemented {
-    @apply bg-primary/20 text-primary border border-primary/30;
+    @apply bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800;
   }
 
-  /* Aurora shimmer effect */
-  .aurora-shimmer {
+  /* Shimmer effect */
+  .shimmer {
     position: relative;
     overflow: hidden;
   }
 
-  .aurora-shimmer::before {
+  .shimmer::before {
     content: '';
     position: absolute;
     top: 0;
@@ -238,14 +230,97 @@
     height: 100%;
     background: linear-gradient(90deg, 
       transparent 0%, 
-      hsl(var(--primary) / 0.2) 50%, 
+      hsl(var(--primary) / 0.1) 50%, 
       transparent 100%);
-    animation: shimmer 3s infinite;
+    animation: shimmer 2s infinite;
   }
 
   @keyframes shimmer {
     0% { left: -100%; }
     100% { left: 100%; }
+  }
+
+  /* Tailwind Starter Kit button styles */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 
+           shadow-md hover:shadow-lg transition-all duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 
+           border border-border transition-all duration-200;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary 
+           hover:text-primary-foreground transition-all duration-200;
+  }
+
+  /* Card styles */
+  .card-elevated {
+    @apply bg-card border border-border rounded-lg shadow-lg 
+           hover:shadow-xl transition-shadow duration-300;
+  }
+
+  .card-flat {
+    @apply bg-card border border-border rounded-lg;
+  }
+
+  /* Input styles */
+  .input-primary {
+    @apply w-full px-3 py-2 bg-background border border-input 
+           rounded-md focus:outline-none focus:ring-2 focus:ring-ring 
+           focus:border-transparent transition-all;
+  }
+
+  /* Badge styles */
+  .badge-primary {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
+           text-xs font-medium bg-primary/10 text-primary;
+  }
+
+  .badge-secondary {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
+           text-xs font-medium bg-secondary text-secondary-foreground;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
+           text-xs font-medium bg-emerald-50 text-emerald-700 
+           dark:bg-emerald-950 dark:text-emerald-300;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
+           text-xs font-medium bg-amber-50 text-amber-700 
+           dark:bg-amber-950 dark:text-amber-300;
+  }
+
+  .badge-danger {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
+           text-xs font-medium bg-red-50 text-red-700 
+           dark:bg-red-950 dark:text-red-300;
+  }
+
+  /* Alert styles */
+  .alert-info {
+    @apply p-4 rounded-lg bg-blue-50 border-l-4 border-blue-500 
+           text-blue-900 dark:bg-blue-950 dark:text-blue-100;
+  }
+
+  .alert-success {
+    @apply p-4 rounded-lg bg-emerald-50 border-l-4 border-emerald-500 
+           text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100;
+  }
+
+  .alert-warning {
+    @apply p-4 rounded-lg bg-amber-50 border-l-4 border-amber-500 
+           text-amber-900 dark:bg-amber-950 dark:text-amber-100;
+  }
+
+  .alert-danger {
+    @apply p-4 rounded-lg bg-red-50 border-l-4 border-red-500 
+           text-red-900 dark:bg-red-950 dark:text-red-100;
   }
 }
 
@@ -262,8 +337,8 @@
     animation: slideInLeft 0.3s ease-out;
   }
 
-  .animate-aurora-pulse {
-    animation: auroraPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .animate-bounce-in {
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
 
   @keyframes fadeIn {
@@ -281,14 +356,35 @@
     to { opacity: 1; transform: translateX(0); }
   }
 
-  @keyframes auroraPulse {
-    0%, 100% { 
-      opacity: 1; 
-      filter: brightness(1);
+  @keyframes bounceIn {
+    0% { 
+      opacity: 0; 
+      transform: scale(0.3);
     }
     50% { 
-      opacity: 0.8; 
-      filter: brightness(1.2);
+      opacity: 1; 
+      transform: scale(1.05);
     }
+    100% { 
+      transform: scale(1);
+    }
+  }
+
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Shadow utilities */
+  .shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .shadow-medium {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .shadow-strong {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   }
 }
