@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, User, Lock, Bell, Globe } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,18 +19,12 @@ const ProfileSettings = () => {
   
   // Profile form state
   const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '');
-  const [email] = useState(user?.email || '');
+  const [email, setEmail] = useState(user?.email || '');
   
   // Password form state
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  // Notification preferences
-  const [mocUpdates, setMocUpdates] = useState(true);
-  const [approvalRequests, setApprovalRequests] = useState(true);
-  const [systemAnnouncements, setSystemAnnouncements] = useState(true);
-  const [weeklySummary, setWeeklySummary] = useState(false);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -311,61 +304,49 @@ const ProfileSettings = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="flex-1">
+                    <div>
                       <p className="text-sm font-medium">MOC Updates</p>
                       <p className="text-sm text-muted-foreground">
                         Receive notifications about MOC request updates
                       </p>
                     </div>
-                    <Switch 
-                      checked={mocUpdates} 
-                      onCheckedChange={setMocUpdates}
-                    />
+                    <input type="checkbox" defaultChecked className="toggle" />
                   </div>
 
                   <div className="divider-glow" />
 
                   <div className="flex items-center justify-between">
-                    <div className="flex-1">
+                    <div>
                       <p className="text-sm font-medium">Approval Requests</p>
                       <p className="text-sm text-muted-foreground">
                         Get notified when approvals are required
                       </p>
                     </div>
-                    <Switch 
-                      checked={approvalRequests} 
-                      onCheckedChange={setApprovalRequests}
-                    />
+                    <input type="checkbox" defaultChecked className="toggle" />
                   </div>
 
                   <div className="divider-glow" />
 
                   <div className="flex items-center justify-between">
-                    <div className="flex-1">
+                    <div>
                       <p className="text-sm font-medium">System Announcements</p>
                       <p className="text-sm text-muted-foreground">
                         Important updates about the platform
                       </p>
                     </div>
-                    <Switch 
-                      checked={systemAnnouncements} 
-                      onCheckedChange={setSystemAnnouncements}
-                    />
+                    <input type="checkbox" defaultChecked className="toggle" />
                   </div>
 
                   <div className="divider-glow" />
 
                   <div className="flex items-center justify-between">
-                    <div className="flex-1">
+                    <div>
                       <p className="text-sm font-medium">Weekly Summary</p>
                       <p className="text-sm text-muted-foreground">
                         Receive a weekly summary of your activity
                       </p>
                     </div>
-                    <Switch 
-                      checked={weeklySummary} 
-                      onCheckedChange={setWeeklySummary}
-                    />
+                    <input type="checkbox" className="toggle" />
                   </div>
                 </CardContent>
               </Card>

@@ -19,7 +19,6 @@ import Standards from "./pages/Standards";
 import UserManagement from "./pages/UserManagement";
 import Reports from "./pages/Reports";
 import HelpCenter from "./pages/HelpCenter";
-import ProfileSettings from "./pages/ProfileSettings";
 import NotFound from "./pages/NotFound";
 import { Loader2 } from "lucide-react";
 
@@ -153,16 +152,6 @@ function AppRoutes() {
           <ProtectedRoute>
             <AppLayout>
               <Reports />
-            </AppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <AppLayout>
-              <ProfileSettings />
             </AppLayout>
           </ProtectedRoute>
         }
