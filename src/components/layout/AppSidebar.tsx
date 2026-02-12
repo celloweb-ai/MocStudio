@@ -14,35 +14,39 @@ import {
   BarChart3,
   Sun,
   Moon,
+  Globe,
 } from "lucide-react";
-import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useSidebarContext } from "@/contexts/SidebarContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { TranslationKey } from "@/i18n/translations";
 
-const navigationItems = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Facilities", href: "/facilities", icon: Building2 },
-  { name: "Assets", href: "/assets", icon: Cog },
-  { name: "MOC Requests", href: "/moc-requests", icon: FileText },
-  { name: "Risk Analysis", href: "/risk-analysis", icon: AlertTriangle },
-  { name: "Work Orders", href: "/work-orders", icon: ClipboardList },
-  { name: "Reports", href: "/reports", icon: BarChart3 },
-  { name: "Standards & Links", href: "/standards", icon: Link2 },
+const navigationItems: { name: TranslationKey; href: string; icon: typeof LayoutDashboard }[] = [
+  { name: "nav.dashboard", href: "/", icon: LayoutDashboard },
+  { name: "nav.facilities", href: "/facilities", icon: Building2 },
+  { name: "nav.assets", href: "/assets", icon: Cog },
+  { name: "nav.mocRequests", href: "/moc-requests", icon: FileText },
+  { name: "nav.riskAnalysis", href: "/risk-analysis", icon: AlertTriangle },
+  { name: "nav.workOrders", href: "/work-orders", icon: ClipboardList },
+  { name: "nav.reports", href: "/reports", icon: BarChart3 },
+  { name: "nav.standards", href: "/standards", icon: Link2 },
 ];
 
-const adminItems = [
-  { name: "User Management", href: "/admin/users", icon: Users },
+const adminItems: { name: TranslationKey; href: string; icon: typeof Users }[] = [
+  { name: "nav.userManagement", href: "/admin/users", icon: Users },
 ];
 
 export function AppSidebar() {
   const { collapsed, toggle } = useSidebarContext();
   const { theme, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
   const location = useLocation();
 
   const NavItem = ({ item }: { item: typeof navigationItems[0] }) => {
@@ -67,7 +71,7 @@ export function AppSidebar() {
           )}
         />
         {!collapsed && (
-          <span className="text-sm font-medium truncate">{item.name}</span>
+          <span className="text-sm font-medium truncate">{t(item.name)}</span>
         )}
       </NavLink>
     );
@@ -77,7 +81,7 @@ export function AppSidebar() {
         <Tooltip delayDuration={0}>
           <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
           <TooltipContent side="right" className="bg-popover border-border">
-            {item.name}
+            {t(item.name)}
           </TooltipContent>
         </Tooltip>
       );
@@ -112,7 +116,7 @@ export function AppSidebar() {
             <div className="flex flex-col">
               <span className="font-bold text-foreground">MOC Studio</span>
               <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                Management of Change
+                {t("sidebar.managementOfChange")}
               </span>
             </div>
           )}
@@ -131,7 +135,7 @@ export function AppSidebar() {
         <div className="pt-4 mt-4 border-t border-sidebar-border">
           {!collapsed && (
             <span className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Administration
+              {t("nav.administration")}
             </span>
           )}
           <div className="mt-2 space-y-1">
@@ -144,6 +148,17 @@ export function AppSidebar() {
 
       {/* Bottom Actions */}
       <div className="p-3 border-t border-sidebar-border space-y-1">
+        {/* Language Toggle */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={toggleLanguage}
+          className="w-full justify-center text-muted-foreground hover:text-foreground"
+        >
+          <Globe className="h-4 w-4" />
+          {!collapsed && <span className="text-xs ml-2">{language === "en" ? "Português" : "English"}</span>}
+        </Button>
+        {/* Theme Toggle */}
         <Button
           variant="ghost"
           size="sm"
@@ -153,15 +168,16 @@ export function AppSidebar() {
           {theme === "dark" ? (
             <>
               <Sun className="h-4 w-4" />
-              {!collapsed && <span className="text-xs ml-2">Light Mode</span>}
+              {!collapsed && <span className="text-xs ml-2">{t("sidebar.lightMode")}</span>}
             </>
           ) : (
             <>
               <Moon className="h-4 w-4" />
-              {!collapsed && <span className="text-xs ml-2">Dark Mode</span>}
+              {!collapsed && <span className="text-xs ml-2">{t("sidebar.darkMode")}</span>}
             </>
           )}
         </Button>
+        {/* Collapse Toggle */}
         <Button
           variant="ghost"
           size="sm"
@@ -173,7 +189,7 @@ export function AppSidebar() {
           ) : (
             <>
               <ChevronLeft className="h-4 w-4 mr-2" />
-              <span className="text-xs">Collapse</span>
+              <span className="text-xs">{t("sidebar.collapse")}</span>
             </>
           )}
         </Button>

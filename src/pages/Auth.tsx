@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, User, AlertCircle, Loader2, ArrowLeft, Sun, Moon } from "lucide-react";
+import { Mail, Lock, User, AlertCircle, Loader2, ArrowLeft, Sun, Moon, Globe } from "lucide-react";
 import loginLogo from "@/assets/login-logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -53,6 +54,7 @@ export default function Auth() {
   const [searchParams] = useSearchParams();
   const { user, signIn, signUp, resetPassword, updatePassword, loading: authLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -96,9 +98,9 @@ export default function Auth() {
     const { error } = await signIn(data.email, data.password);
     if (error) {
       if (error.message.includes("Invalid login credentials")) {
-        setError("Invalid email or password. Please try again.");
+        setError(t("auth.invalidCredentials"));
       } else if (error.message.includes("Email not confirmed")) {
-        setError("Please verify your email address before signing in.");
+        setError(t("auth.emailNotConfirmed"));
       } else {
         setError(error.message);
       }
@@ -113,12 +115,12 @@ export default function Auth() {
     const { error } = await signUp(data.email, data.password, data.fullName);
     if (error) {
       if (error.message.includes("already registered")) {
-        setError("This email is already registered. Please sign in instead.");
+        setError(t("auth.alreadyRegistered"));
       } else {
         setError(error.message);
       }
     } else {
-      setSuccessMessage("Account created! Please check your email to verify your account before signing in.");
+      setSuccessMessage(t("auth.accountCreated"));
       signupForm.reset();
     }
     setIsLoading(false);
@@ -132,7 +134,7 @@ export default function Auth() {
     if (error) {
       setError(error.message);
     } else {
-      setSuccessMessage("Password reset link sent! Please check your email.");
+      setSuccessMessage(t("auth.resetLinkSent"));
     }
     setIsLoading(false);
   };
@@ -145,7 +147,7 @@ export default function Auth() {
     if (error) {
       setError(error.message);
     } else {
-      setSuccessMessage("Password updated successfully! Redirecting...");
+      setSuccessMessage(t("auth.passwordUpdated"));
       setTimeout(() => navigate("/"), 2000);
     }
     setIsLoading(false);
@@ -161,15 +163,26 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative">
-      {/* Theme Toggle */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={toggleTheme}
-        className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
-      >
-        {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-      </Button>
+      {/* Top-right controls */}
+      <div className="absolute top-4 right-4 flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleLanguage}
+          className="text-muted-foreground hover:text-foreground"
+          title={language === "en" ? "Português" : "English"}
+        >
+          <Globe className="h-5 w-5" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </Button>
+      </div>
 
       <div className="w-full max-w-md">
         {/* Logo */}
@@ -180,7 +193,7 @@ export default function Auth() {
             </div>
             <h1 className="text-2xl font-bold text-foreground">MOC Studio</h1>
           </div>
-          <p className="text-muted-foreground text-sm">Management of Change Platform</p>
+          <p className="text-muted-foreground text-sm">{t("auth.platform")}</p>
         </div>
 
         <Card className="border-border/50 shadow-xl">
@@ -188,8 +201,8 @@ export default function Auth() {
           {view === "forgot-password" && (
             <>
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-xl">Forgot Password</CardTitle>
-                <CardDescription>Enter your email and we'll send you a reset link</CardDescription>
+                <CardTitle className="text-xl">{t("auth.forgotPasswordTitle")}</CardTitle>
+                <CardDescription>{t("auth.forgotPasswordDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 {error && (
@@ -210,11 +223,11 @@ export default function Auth() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>{t("auth.email")}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input {...field} type="email" placeholder="Enter your email" className="pl-10" disabled={isLoading} />
+                              <Input {...field} type="email" placeholder={t("auth.enterEmail")} className="pl-10" disabled={isLoading} />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -223,8 +236,8 @@ export default function Auth() {
                     />
                     <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
                       {isLoading ? (
-                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Sending...</>
-                      ) : "Send Reset Link"}
+                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("auth.sending")}</>
+                      ) : t("auth.sendResetLink")}
                     </Button>
                   </form>
                 </Form>
@@ -234,7 +247,7 @@ export default function Auth() {
                   onClick={() => { setView("main"); setError(null); setSuccessMessage(null); }}
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Sign In
+                  {t("auth.backToSignIn")}
                 </Button>
               </CardContent>
             </>
@@ -244,8 +257,8 @@ export default function Auth() {
           {view === "reset-password" && (
             <>
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-xl">Set New Password</CardTitle>
-                <CardDescription>Enter your new password below</CardDescription>
+                <CardTitle className="text-xl">{t("auth.setNewPassword")}</CardTitle>
+                <CardDescription>{t("auth.setNewPasswordDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 {error && (
@@ -266,11 +279,11 @@ export default function Auth() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>New Password</FormLabel>
+                          <FormLabel>{t("auth.newPassword")}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input {...field} type="password" placeholder="Enter new password" className="pl-10" disabled={isLoading} />
+                              <Input {...field} type="password" placeholder={t("auth.enterNewPassword")} className="pl-10" disabled={isLoading} />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -282,11 +295,11 @@ export default function Auth() {
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Confirm Password</FormLabel>
+                          <FormLabel>{t("auth.confirmPassword")}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input {...field} type="password" placeholder="Confirm new password" className="pl-10" disabled={isLoading} />
+                              <Input {...field} type="password" placeholder={t("auth.confirmNewPassword")} className="pl-10" disabled={isLoading} />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -295,8 +308,8 @@ export default function Auth() {
                     />
                     <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
                       {isLoading ? (
-                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Updating...</>
-                      ) : "Update Password"}
+                        <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("auth.updating")}</>
+                      ) : t("auth.updatePassword")}
                     </Button>
                   </form>
                 </Form>
@@ -308,14 +321,14 @@ export default function Auth() {
           {view === "main" && (
             <>
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-xl">Welcome</CardTitle>
-                <CardDescription>Sign in to your account or create a new one</CardDescription>
+                <CardTitle className="text-xl">{t("auth.welcome")}</CardTitle>
+                <CardDescription>{t("auth.subtitle")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="login" className="w-full">
                   <TabsList className="grid w-full grid-cols-2 mb-6">
-                    <TabsTrigger value="login">Sign In</TabsTrigger>
-                    <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                    <TabsTrigger value="login">{t("auth.signIn")}</TabsTrigger>
+                    <TabsTrigger value="signup">{t("auth.signUp")}</TabsTrigger>
                   </TabsList>
 
                   {error && (
@@ -339,11 +352,11 @@ export default function Auth() {
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email</FormLabel>
+                              <FormLabel>{t("auth.email")}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input {...field} type="email" placeholder="Enter your email" className="pl-10" disabled={isLoading} />
+                                  <Input {...field} type="email" placeholder={t("auth.enterEmail")} className="pl-10" disabled={isLoading} />
                                 </div>
                               </FormControl>
                               <FormMessage />
@@ -356,20 +369,20 @@ export default function Auth() {
                           render={({ field }) => (
                             <FormItem>
                               <div className="flex items-center justify-between">
-                                <FormLabel>Password</FormLabel>
+                                <FormLabel>{t("auth.password")}</FormLabel>
                                 <Button
                                   type="button"
                                   variant="link"
                                   className="px-0 h-auto text-xs text-muted-foreground hover:text-primary"
                                   onClick={() => { setView("forgot-password"); setError(null); setSuccessMessage(null); }}
                                 >
-                                  Forgot password?
+                                  {t("auth.forgotPassword")}
                                 </Button>
                               </div>
                               <FormControl>
                                 <div className="relative">
                                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input {...field} type="password" placeholder="Enter your password" className="pl-10" disabled={isLoading} />
+                                  <Input {...field} type="password" placeholder={t("auth.enterPassword")} className="pl-10" disabled={isLoading} />
                                 </div>
                               </FormControl>
                               <FormMessage />
@@ -378,8 +391,8 @@ export default function Auth() {
                         />
                         <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
                           {isLoading ? (
-                            <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Signing in...</>
-                          ) : "Sign In"}
+                            <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("auth.signingIn")}</>
+                          ) : t("auth.signIn")}
                         </Button>
                       </form>
                     </Form>
@@ -393,11 +406,11 @@ export default function Auth() {
                           name="fullName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Full Name</FormLabel>
+                              <FormLabel>{t("auth.fullName")}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input {...field} placeholder="Enter your full name" className="pl-10" disabled={isLoading} />
+                                  <Input {...field} placeholder={t("auth.enterFullName")} className="pl-10" disabled={isLoading} />
                                 </div>
                               </FormControl>
                               <FormMessage />
@@ -409,11 +422,11 @@ export default function Auth() {
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email</FormLabel>
+                              <FormLabel>{t("auth.email")}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input {...field} type="email" placeholder="Enter your email" className="pl-10" disabled={isLoading} />
+                                  <Input {...field} type="email" placeholder={t("auth.enterEmail")} className="pl-10" disabled={isLoading} />
                                 </div>
                               </FormControl>
                               <FormMessage />
@@ -425,11 +438,11 @@ export default function Auth() {
                           name="password"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Password</FormLabel>
+                              <FormLabel>{t("auth.password")}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input {...field} type="password" placeholder="Create a password" className="pl-10" disabled={isLoading} />
+                                  <Input {...field} type="password" placeholder={t("auth.createPassword")} className="pl-10" disabled={isLoading} />
                                 </div>
                               </FormControl>
                               <FormMessage />
@@ -441,11 +454,11 @@ export default function Auth() {
                           name="confirmPassword"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Confirm Password</FormLabel>
+                              <FormLabel>{t("auth.confirmPassword")}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                  <Input {...field} type="password" placeholder="Confirm your password" className="pl-10" disabled={isLoading} />
+                                  <Input {...field} type="password" placeholder={t("auth.confirmYourPassword")} className="pl-10" disabled={isLoading} />
                                 </div>
                               </FormControl>
                               <FormMessage />
@@ -454,8 +467,8 @@ export default function Auth() {
                         />
                         <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
                           {isLoading ? (
-                            <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating account...</>
-                          ) : "Create Account"}
+                            <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("auth.creatingAccount")}</>
+                          ) : t("auth.createAccount")}
                         </Button>
                       </form>
                     </Form>
@@ -464,7 +477,7 @@ export default function Auth() {
               </CardContent>
               <CardFooter className="text-center text-xs text-muted-foreground">
                 <p className="w-full">
-                  By continuing, you agree to our Terms of Service and Privacy Policy.
+                  {t("auth.termsNotice")}
                 </p>
               </CardFooter>
             </>
