@@ -28,6 +28,7 @@ type HelpArticle = {
   id: string;
   title: string;
   summary: string;
+  documentUrl: string;
   category: "Getting Started" | "MOC Workflow" | "Compliance" | "Troubleshooting";
   readTime: string;
 };
@@ -44,6 +45,7 @@ const quickStartGuides: HelpArticle[] = [
     id: "setup-profile",
     title: "Set up your MOC Studio profile",
     summary: "Complete your profile, department, and notification settings before creating your first request.",
+    documentUrl: "https://docs.company.com/moc-studio/setup-profile",
     category: "Getting Started",
     readTime: "4 min",
   },
@@ -51,6 +53,7 @@ const quickStartGuides: HelpArticle[] = [
     id: "create-moc",
     title: "Create and submit a new MOC request",
     summary: "Learn which fields are mandatory, how to classify risk, and how to attach supporting evidence.",
+    documentUrl: "https://docs.company.com/moc-studio/create-moc-request",
     category: "MOC Workflow",
     readTime: "7 min",
   },
@@ -58,6 +61,7 @@ const quickStartGuides: HelpArticle[] = [
     id: "approval-flow",
     title: "Understand approval routing",
     summary: "See how reviewer assignment works across operations, engineering, HSE, and leadership.",
+    documentUrl: "https://docs.company.com/moc-studio/approval-routing",
     category: "Compliance",
     readTime: "5 min",
   },
@@ -65,6 +69,7 @@ const quickStartGuides: HelpArticle[] = [
     id: "closeout",
     title: "Close out tasks and archive evidence",
     summary: "Track all open actions, complete closeout validation, and store final documentation.",
+    documentUrl: "https://docs.company.com/moc-studio/closeout-and-archive",
     category: "MOC Workflow",
     readTime: "6 min",
   },
@@ -157,6 +162,13 @@ const escalationChannels = [
 
 export default function HelpCenter() {
   const [query, setQuery] = useState("");
+  const [documentLinks, setDocumentLinks] = useState<Record<string, string>>(
+    () =>
+      quickStartGuides.reduce<Record<string, string>>((acc, guide) => {
+        acc[guide.id] = guide.documentUrl;
+        return acc;
+      }, {})
+  );
 
   const filteredArticles = useMemo(
     () =>
@@ -175,6 +187,13 @@ export default function HelpCenter() {
       }),
     [query]
   );
+
+  const handleDocumentLinkChange = (guideId: string, value: string) => {
+    setDocumentLinks((currentLinks) => ({
+      ...currentLinks,
+      [guideId]: value,
+    }));
+  };
 
   return (
     <div className="space-y-6">
@@ -261,8 +280,33 @@ export default function HelpCenter() {
                   <Badge variant="outline">{guide.readTime}</Badge>
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">{guide.summary}</p>
-                <div className="mt-3">
+                <div className="mt-3 space-y-3">
                   <Badge variant="secondary">{guide.category}</Badge>
+                  <div className="space-y-2">
+                    <label htmlFor={`document-link-${guide.id}`} className="text-xs font-medium text-muted-foreground">
+                      Link do documento
+                    </label>
+                    <Input
+                      id={`document-link-${guide.id}`}
+                      value={documentLinks[guide.id] ?? ""}
+                      onChange={(event) => handleDocumentLinkChange(guide.id, event.target.value)}
+                      placeholder="https://"
+                    />
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      disabled={!documentLinks[guide.id]?.trim()}
+                    >
+                      <a
+                        href={documentLinks[guide.id]?.trim() || "#"}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Abrir documento
+                      </a>
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}
