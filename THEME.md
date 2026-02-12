@@ -1,163 +1,140 @@
 # MOC Studio Theme Documentation
 
-## Design System: Spike Next.js Material Design
+## Design System: NextKit Admin with Flowbite Components
 
-MOC Studio uses the Spike Next.js design system, featuring **Material Design** principles with clean aesthetics, elevation-based shadows, and comprehensive MUI-inspired components.
+MOC Studio now uses the **NextKit Admin** design system, featuring clean **Tailwind CSS** design with **Flowbite** component library integration. This combination provides modern, responsive, and accessible UI components ready for production.
+
+## Overview
+
+NextKit Admin is a modern, open-source admin template built with:
+- **Next.js** - React framework
+- **Tailwind CSS** - Utility-first CSS framework  
+- **Flowbite** - Component library for Tailwind
+- **ApexCharts** - Data visualization
+- **Tabler Icons** - Clean icon system
 
 ## Typography
 
-**Font Family**: Plus Jakarta Sans (Google Fonts)
-- Modern, geometric sans-serif font
-- Excellent readability and professional appearance
-- Variable weights: 300-800
-- Used by premium Material Design applications
+**Font Family**: Inter
+- System font stack fallback: `-apple-system, BlinkMacSystemFont, 'Segoe UI'`
+- Professional, modern sans-serif
+- Excellent readability across all sizes
+- Variable weights: 300-900
 
 ## Color Palette
 
-### Light Mode Colors
+### Light Mode
 
 #### Primary Colors
-- **Primary (Material Blue)**: `hsl(207 90% 54%)` - #2196F3 equivalent
-- **Accent (Material Indigo)**: `hsl(231 48% 48%)` - #3F51B5 equivalent
-- **Success (Material Green)**: `hsl(122 39% 49%)` - #4CAF50 equivalent
-- **Warning (Material Orange)**: `hsl(36 100% 50%)` - #FF9800 equivalent
-- **Destructive (Material Red)**: `hsl(0 65% 51%)` - #F44336 equivalent
-- **Info (Material Cyan)**: `hsl(187 71% 50%)` - #00BCD4 equivalent
+- **Primary (Modern Blue)**: `hsl(217 91% 60%)` - #3B82F6 (Tailwind blue-500)
+- **Accent (Vibrant Purple)**: `hsl(262 83% 58%)` - #A855F7 (Tailwind purple-500)
+- **Success (Fresh Green)**: `hsl(142 71% 45%)` - #10B981 (Tailwind emerald-500)
+- **Warning (Amber Orange)**: `hsl(32 95% 44%)` - #F59E0B (Tailwind amber-500)
+- **Destructive (Red)**: `hsl(0 84% 60%)` - #EF4444 (Tailwind red-500)
+- **Info (Cyan Blue)**: `hsl(199 89% 48%)` - #06B6D4 (Tailwind cyan-500)
 
 #### Neutral Colors
-- **Background**: `hsl(0 0% 98%)` - Light gray background (#FAFAFA)
-- **Foreground**: `hsl(220 20% 18%)` - Dark text for readability
-- **Card**: `hsl(0 0% 100%)` - Pure white for elevated surfaces
-- **Muted**: `hsl(210 40% 96%)` - Subtle backgrounds
-- **Border**: `hsl(214 32% 91%)` - Soft dividers
+- **Background**: `hsl(0 0% 100%)` - Pure white (#FFFFFF)
+- **Foreground**: `hsl(220 13% 15%)` - Dark gray text
+- **Card**: `hsl(0 0% 100%)` - White surfaces
+- **Muted**: `hsl(240 5% 96%)` - Light gray backgrounds
+- **Border**: `hsl(220 13% 91%)` - Subtle borders
 
-### Dark Mode Colors
+### Dark Mode
 
 #### Primary Colors
-- **Primary (Material Blue)**: `hsl(207 90% 61%)` - Lighter for dark backgrounds
-- **Accent (Material Indigo)**: `hsl(235 86% 65%)` - Enhanced visibility
-- **Success (Material Green)**: `hsl(122 39% 49%)` - Consistent across themes
-- **Warning (Material Orange)**: `hsl(36 100% 50%)` - High contrast
-- **Destructive (Material Red)**: `hsl(0 72% 51%)` - Readable on dark
-- **Info (Material Cyan)**: `hsl(187 71% 50%)` - Vibrant cyan
+- **Primary**: `hsl(213 94% 68%)` - Bright blue for dark backgrounds
+- **Accent**: `hsl(263 70% 50%)` - Vivid purple
+- **Success**: `hsl(142 71% 45%)` - Consistent green
+- **Warning**: `hsl(32 95% 44%)` - High contrast orange
+- **Destructive**: `hsl(0 62% 50%)` - Readable red
+- **Info**: `hsl(199 89% 48%)` - Bright cyan
 
 #### Neutral Colors
-- **Background**: `hsl(220 26% 14%)` - Deep blue-gray (#1E1E2D)
-- **Foreground**: `hsl(210 40% 98%)` - Near-white text
-- **Card**: `hsl(224 71% 4%)` - Elevated dark surfaces
-- **Muted**: `hsl(223 47% 11%)` - Subtle dark backgrounds
-- **Border**: `hsl(215 27% 17%)` - Dark dividers
+- **Background**: `hsl(224 71% 4%)` - Very dark blue-gray
+- **Foreground**: `hsl(210 40% 98%)` - Near white text
+- **Card**: `hsl(224 71% 6%)` - Slightly elevated dark surface
+- **Muted**: `hsl(223 47% 11%)` - Dark muted backgrounds
+- **Border**: `hsl(215 28% 17%)` - Dark borders
 
-## Material Design Elevation
+## Flowbite Component Styles
 
-Spike implements Material Design's elevation system using precise box-shadows:
+### Buttons
 
-### Elevation Levels
+Flowbite provides 4 button variants:
 
+#### Primary Button
 ```tsx
-// No elevation
-<div className="elevation-0">Content</div>
-
-// Elevation 1 (Buttons, Cards)
-<div className="elevation-1">Content</div>
-
-// Elevation 2 (App bars)
-<div className="elevation-2">Content</div>
-
-// Elevation 3 (Refresh indicator, Quick entry)
-<div className="elevation-3">Content</div>
-
-// Elevation 4 (Modal bottom sheets)
-<div className="elevation-4">Content</div>
-```
-
-### Material Shadows
-
-Each elevation follows Material Design specifications:
-- **Key light**: Top-left shadow for depth
-- **Ambient light**: Diffuse shadow for context
-- **Contact shadow**: Bottom shadow for grounding
-
-## Component Styles
-
-### Buttons (Material Design)
-
-#### Contained Button
-```tsx
-<button className="btn-contained">
+<button className="btn-primary">
   Primary Action
 </button>
 ```
-- Elevated with shadow
-- Uppercase text
-- Letter spacing: wider tracking
-- Ripple effect on interaction
+- Solid background with primary color
+- White text
+- Focus ring (4px)
+- Smooth hover transition
 
-#### Outlined Button
+#### Secondary Button
 ```tsx
-<button className="btn-outlined">
+<button className="btn-secondary">
   Secondary Action
 </button>
 ```
-- 2px border
-- No background (transparent)
-- Subtle fill on hover
+- White background (light) / Gray-800 (dark)
+- Border outline
+- Gray text
+- Subtle hover effect
 
-#### Text Button
+#### Outline Button
 ```tsx
-<button className="btn-text">
-  Tertiary Action
+<button className="btn-outline">
+  Outline Action
 </button>
 ```
-- No border or background
-- Minimal emphasis
-- Background tint on hover
+- Transparent background
+- 2px primary border
+- Fills with primary on hover
+- Inverts text color
 
-#### Floating Action Button (FAB)
+#### Ghost Button
 ```tsx
-<button className="btn-fab">
-  <PlusIcon />
+<button className="btn-ghost">
+  Ghost Action
 </button>
 ```
-- 56px diameter
-- Circular shape
-- High elevation (shadow-lg)
-- Primary action indicator
+- Fully transparent
+- Text only
+- Subtle background on hover
 
-### Cards (Material Design)
+### Alerts
 
-#### Material Card
+Flowbite alert components with icons and borders:
+
 ```tsx
-<div className="material-card">
-  Card content with elevation
+<div className="alert-info">
+  <InfoIcon />Information message
+</div>
+
+<div className="alert-success">
+  <CheckIcon />Success message
+</div>
+
+<div className="alert-warning">
+  <WarningIcon />Warning message
+</div>
+
+<div className="alert-error">
+  <ErrorIcon />Error message
 </div>
 ```
-- Elevation 1 by default
-- Elevation 3 on hover
-- Rounded corners
-- No borders (elevation defines edges)
 
-#### Material Paper
-```tsx
-<div className="material-paper">
-  Paper surface with padding
-</div>
-```
-- Elevated surface
-- Built-in padding (24px)
-- Semantic for content containers
+**Features**:
+- Flex layout for icons
+- Colored backgrounds (subtle)
+- Matching borders
+- Full dark mode support
 
-#### Glass Card
-```tsx
-<div className="glass-card">
-  Frosted glass effect
-</div>
-```
-- Backdrop blur
-- Material elevation
-- Semi-transparent (maintains depth)
-
-### Badges (Material Design)
+### Badges
 
 #### Color Badges
 ```tsx
@@ -166,7 +143,6 @@ Each elevation follows Material Design specifications:
 <span className="badge-success">Success</span>
 <span className="badge-warning">Warning</span>
 <span className="badge-error">Error</span>
-<span className="badge-info">Info</span>
 ```
 
 #### MOC Status Badges
@@ -179,57 +155,127 @@ Each elevation follows Material Design specifications:
 <span className="status-implemented">Implemented</span>
 ```
 
-### Inputs (Material Design)
+**Badge Features**:
+- Pill shape (rounded-full)
+- 2.5px horizontal padding
+- Extra small text (xs)
+- Medium font weight
+- Colored background + border
 
-#### Material Input
-```tsx
-<input className="material-input" placeholder="Label" />
-```
-- Bottom border (2px)
-- Border animates to primary on focus
-- No rounded corners (Material spec)
-- Transparent background
-
-### Alerts
+### Input Fields
 
 ```tsx
-<div className="alert-success">
-  Success message with green accent
-</div>
-
-<div className="alert-error">
-  Error message with red accent
-</div>
-
-<div className="alert-warning">
-  Warning message with orange accent
-</div>
-
-<div className="alert-info">
-  Info message with blue accent
-</div>
+<input className="input-primary" placeholder="Enter text" />
 ```
 
-### Material Chip
+**Features**:
+- Full width block
+- Padding: 2.5 (10px)
+- Gray background (light) / Dark background (dark)
+- Border with focus ring
+- Primary color on focus
+
+### Tables
+
+Flowbite table styling:
 
 ```tsx
-<div className="material-chip">
-  Chip label
+<table className="table-flowbite">
+  <thead>
+    <tr>
+      <th>Header</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Data</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+**Features**:
+- Uppercase header text
+- Gray-50 header background
+- Striped rows (hover)
+- Full dark mode support
+
+### Dropdowns
+
+```tsx
+<div className="dropdown-flowbite">
+  <ul>
+    <li>Option 1</li>
+    <li>Option 2</li>
+  </ul>
 </div>
 ```
-- Compact component for tags/filters
-- Rounded pill shape
-- Hover states
-- Optional close icon
+
+**Features**:
+- White background with shadow
+- Rounded corners
+- Divider lines between groups
+- Z-index: 10
+
+### Progress Bars
+
+```tsx
+<div className="progress-bar">
+  <div className="progress-fill" style="width: 75%"></div>
+</div>
+```
+
+**Features**:
+- 2.5 height (10px)
+- Rounded full
+- Smooth width transitions (300ms)
+- Primary color fill
+
+### Cards
+
+#### Glass Card
+```tsx
+<div className="glass-card">
+  Card content
+</div>
+```
+- Subtle shadow
+- Hover shadow increase
+- Border included
+
+#### Card Variants
+```tsx
+<div className="card-flat">Flat card</div>
+<div className="card-elevated">Elevated card</div>
+<div className="card-hover">Hover effect card</div>
+```
+
+### Timeline
+
+```tsx
+<ol className="relative">
+  <li className="timeline-item">
+    <div>Event 1</div>
+  </li>
+  <li className="timeline-item">
+    <div>Event 2</div>
+  </li>
+</ol>
+```
+
+**Features**:
+- Left border line
+- Relative positioning
+- Gray border (light) / Dark border (dark)
 
 ### Divider
 
 ```tsx
-<div className="material-divider" />
+<hr className="divider" />
 ```
-- 1px horizontal rule
-- Subtle contrast
-- Vertical spacing (16px margin)
+- 1px height
+- 4 margin vertical (16px)
+- Gray background
 
 ## Gradients
 
@@ -239,19 +285,18 @@ Each elevation follows Material Design specifications:
   Blue gradient background
 </div>
 ```
-Gradient from Material Blue to lighter shade
 
-### Accent Gradient
+### Accent Gradient  
 ```tsx
 <div className="gradient-accent">
-  Indigo to purple gradient
+  Purple to pink gradient
 </div>
 ```
 
 ### Success Gradient
 ```tsx
 <div className="gradient-success">
-  Green gradient background
+  Green gradient
 </div>
 ```
 
@@ -264,153 +309,189 @@ Gradient from Material Blue to lighter shade
 
 ## Animations
 
-All animations follow Material Design motion principles with cubic-bezier easing:
-
-### Material Timing Functions
-- **Standard**: `cubic-bezier(0.4, 0.0, 0.2, 1)` - 225-300ms
-- **Deceleration**: `cubic-bezier(0.0, 0.0, 0.2, 1)` - 225ms
-- **Acceleration**: `cubic-bezier(0.4, 0.0, 1, 1)` - 195ms
-
-### Animation Classes
+Smooth, modern animations:
 
 ```tsx
-// Fade in (225ms)
+// Fade in (300ms)
 <div className="animate-fade-in">Content</div>
 
 // Slide up (300ms)
 <div className="animate-slide-up">Content</div>
 
-// Slide in from left (225ms)
+// Slide down (300ms)
+<div className="animate-slide-down">Content</div>
+
+// Slide in from left (300ms)
 <div className="animate-slide-in-left">Content</div>
 
-// Scale in (225ms)
-<div className="animate-scale-in">Content</div>
+// Slide in from right (300ms)
+<div className="animate-slide-in-right">Content</div>
 
-// Material grow (300ms)
-<div className="animate-material-grow">Content</div>
+// Scale in (200ms)
+<div className="animate-scale-in">Content</div>
 ```
 
-### Ripple Effect
+**Timing**: All animations use `ease-out` for natural deceleration
+
+## Utility Classes
+
+### Focus Ring
 
 ```tsx
-<button className="ripple">
-  Button with ripple
+<button className="focus-ring">
+  Has focus ring
+</button>
+
+<button className="focus-ring-primary">
+  Primary color focus ring
 </button>
 ```
-Simulates Material Design's touch ripple feedback
 
-## Material Design Typography
-
-Complete Material Design type scale:
+### Shadow Utilities
 
 ```tsx
-<h1 className="typography-h1">Heading 1</h1>      // 96px, light
-<h2 className="typography-h2">Heading 2</h2>      // 60px, light
-<h3 className="typography-h3">Heading 3</h3>      // 48px, normal
-<h4 className="typography-h4">Heading 4</h4>      // 34px, normal
-<h5 className="typography-h5">Heading 5</h5>      // 24px, normal
-<h6 className="typography-h6">Heading 6</h6>      // 20px, medium
+<div className="shadow-soft">Soft shadow</div>
+<div className="shadow-medium">Medium shadow</div>
+<div className="shadow-strong">Strong shadow</div>
+```
 
-<p className="typography-subtitle1">Subtitle 1</p>  // 16px, normal
-<p className="typography-subtitle2">Subtitle 2</p>  // 14px, medium
+### Hover Glow
 
-<p className="typography-body1">Body 1</p>          // 16px, normal
-<p className="typography-body2">Body 2</p>          // 14px, normal
+```tsx
+<div className="hover-glow">
+  Glows on hover
+</div>
+```
 
-<button className="typography-button">Button</button> // 14px, medium, uppercase
+### Smooth Transitions
 
-<span className="typography-caption">Caption</span>   // 12px, normal
-<span className="typography-overline">Overline</span> // 12px, uppercase
+```tsx
+<div className="transition-smooth">
+  Smooth transition for all properties
+</div>
 ```
 
 ## Chart Colors
 
-Material Design palette for data visualization:
+Modern, vibrant palette for data visualization:
 
-1. **Blue**: `hsl(207 90% 54%)` - Primary data series
-2. **Purple**: `hsl(291 64% 42%)` - Secondary series
-3. **Green**: `hsl(122 39% 49%)` - Success metrics
-4. **Orange**: `hsl(36 100% 50%)` - Warning indicators
+1. **Blue**: `hsl(217 91% 60%)` - Primary data
+2. **Purple**: `hsl(262 83% 58%)` - Secondary data
+3. **Green**: `hsl(142 71% 45%)` - Success metrics
+4. **Orange**: `hsl(32 95% 44%)` - Warning indicators
 5. **Pink**: `hsl(340 82% 52%)` - Accent data
 
 ## Scrollbar
 
-Minimal Material Design scrollbar:
-- 6px width (thin)
-- Transparent track
-- Subtle thumb (20% opacity)
-- Hover darkens to 30%
+Modern, clean scrollbar design:
+- 8px width
+- Muted track (30% opacity)
+- Muted-foreground thumb (30% opacity)
+- Hover increases to 50% opacity
 - Rounded corners
+- Smooth color transitions
 
-## Design Philosophy
+## Modal Backdrop
 
-Spike Next.js theme embodies Material Design principles:
+```tsx
+<div className="modal-backdrop">
+  <!-- Modal content -->
+</div>
+```
 
-1. **Material as Metaphor**: Surfaces with elevation and depth
-2. **Bold, Graphic, Intentional**: Strong visual hierarchy
-3. **Motion Provides Meaning**: Purposeful animations
-4. **Flexible Foundation**: Customizable and scalable
-5. **Cross-Platform**: Consistent across devices
+**Features**:
+- Fixed positioning
+- Z-index: 40
+- Gray-900 with 50% opacity (light)
+- Gray-900 with 80% opacity (dark)
+
+## Design Principles
+
+NextKit Admin + Flowbite embodies:
+
+1. **Clean & Minimal**: Uncluttered interfaces
+2. **Consistent**: Unified component design language
+3. **Accessible**: WCAG AA compliant colors
+4. **Responsive**: Mobile-first approach
+5. **Fast**: Optimized performance
+6. **Flexible**: Easy customization
 
 ## Accessibility
 
 ### Color Contrast
-- Light mode text: 9.8:1 (AAA)
-- Dark mode text: 13.2:1 (AAA)
-- All status colors meet WCAG AA minimum
-- Focus indicators use 2px ring with primary color
+- Light mode text: 9.2:1 (AAA)
+- Dark mode text: 12.8:1 (AAA)
+- All status colors: WCAG AA minimum
+- Focus rings: 4px with 50% opacity
 
-### Touch Targets
-- Minimum 48px × 48px for interactive elements
-- 8px spacing between adjacent targets
-- Clear focus and hover states
+### Interactive Elements
+- Minimum touch target: 44px × 44px
+- Clear focus states on all interactive elements
+- Keyboard navigation support
+- Screen reader friendly markup
 
-## Material Design Resources
+## Flowbite Resources
 
-- [Material Design 3](https://m3.material.io/)
-- [Material UI (MUI)](https://mui.com/)
-- [Material Design Colors](https://m2.material.io/design/color/)
-- [Material Design Icons](https://fonts.google.com/icons)
-- [Spike Next.js Template](https://www.wrappixel.com/templates/spike-next-js-free-admin-template/)
+- [Flowbite Official](https://flowbite.com/)
+- [Flowbite Components](https://flowbite.com/docs/getting-started/introduction/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [NextKit GitHub](https://github.com/wrappixel/nextkit-admin-with-supabase-and-mongodb)
+- [Tabler Icons](https://tabler.io/icons)
 
 ## Browser Support
 
-Full Material Design support:
+Full support for modern browsers:
 - Chrome/Edge 90+
 - Firefox 88+
 - Safari 14+
-- All features gracefully degrade
+- Mobile browsers (iOS Safari, Chrome Mobile)
 
 ## Customization
 
-Customize Material colors in `src/index.css`:
+Customize theme colors in `src/index.css`:
 
 ```css
 :root {
-  --primary: 207 90% 54%; /* Material Blue */
-  --accent: 231 48% 48%;  /* Material Indigo */
-  --success: 122 39% 49%; /* Material Green */
+  --primary: 217 91% 60%; /* Modern Blue */
+  --accent: 262 83% 58%;  /* Vibrant Purple */
+  --success: 142 71% 45%; /* Fresh Green */
   /* ... other variables */
 }
 ```
 
 ## Migration Notes
 
-### From Tailwind Starter Kit
-- Primary color changed from indigo to Material Blue
-- Elevation system replaces flat shadows
-- Typography follows Material type scale
-- Button styles now uppercase with tracking
-- Cards use elevation instead of borders
+### From Spike Next.js Material Design
+- Font changed back to Inter (from Plus Jakarta Sans)
+- Material elevation replaced with Flowbite shadows
+- Typography no longer uses Material type scale
+- Button styles now use Flowbite conventions
+- Focus rings are 4px (was 2px)
+- Components follow Flowbite naming
 
 ### Key Differences
-- **Font**: Plus Jakarta Sans (was Inter)
-- **Shadows**: Material elevation (not flat)
-- **Buttons**: Uppercase text (Material spec)
-- **Colors**: Material Design palette
-- **Spacing**: 8px baseline grid
+- **Component Library**: Flowbite (was Material UI)
+- **Design Language**: Tailwind utility-first (was Material Design)
+- **Button Style**: Lowercase text (was uppercase)
+- **Shadows**: Flowbite elevation (was Material elevation)
+- **Focus**: Ring-4 (was ring-2)
+
+## Tech Stack Integration
+
+### Supabase
+NextKit includes Supabase authentication and database integration patterns.
+
+### Prisma ORM  
+Type-safe database queries with auto-generated client.
+
+### ApexCharts
+Interactive charts for dashboards and analytics.
+
+### MongoDB
+Alternative database option with Prisma support.
 
 ## License
 
-This theme adapts Spike Next.js design principles for MOC Studio.
-Spike Next.js is created by WrapPixel (MIT License).
+This theme adapts NextKit Admin design principles for MOC Studio.
+NextKit Admin is created by WrapPixel (MIT License).
+Flowbite is open-source (MIT License).
