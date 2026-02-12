@@ -2,83 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
-    /* Tailwind Starter Kit Light Theme - Classic Tailwind Colors */
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    /* Spike Next.js Material Design Theme - Light Mode */
+    --background: 0 0% 98%;
+    --foreground: 220 20% 18%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 220 20% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 220 20% 18%;
 
-    /* Primary: Indigo - Classic Tailwind primary color */
-    --primary: 239 84% 67%;
+    /* Primary: Material Blue (MUI Default) */
+    --primary: 207 90% 54%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 220 20% 18%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    /* Accent: Blue */
-    --accent: 221 83% 53%;
+    /* Accent: Material Indigo */
+    --accent: 231 48% 48%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 65% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Success: Emerald */
-    --success: 142 76% 36%;
+    /* Success: Material Green */
+    --success: 122 39% 49%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning: Amber */
-    --warning: 38 92% 50%;
+    /* Warning: Material Orange */
+    --warning: 36 100% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 239 84% 67%;
+    /* Info: Material Cyan */
+    --info: 187 71% 50%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 207 90% 54%;
 
     --radius: 0.5rem;
 
-    /* Sidebar */
+    /* Sidebar - Material Design */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 5% 34%;
-    --sidebar-primary: 239 84% 67%;
+    --sidebar-foreground: 220 20% 40%;
+    --sidebar-primary: 207 90% 54%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 5% 96%;
-    --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 240 6% 90%;
-    --sidebar-ring: 239 84% 67%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 220 20% 18%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 207 90% 54%;
 
-    /* Chart colors - Classic Tailwind palette */
-    --chart-1: 221 83% 53%; /* Blue */
-    --chart-2: 262 83% 58%; /* Violet */
-    --chart-3: 142 76% 36%; /* Emerald */
-    --chart-4: 38 92% 50%; /* Amber */
-    --chart-5: 346 77% 50%; /* Rose */
+    /* Chart colors - Material Design palette */
+    --chart-1: 207 90% 54%; /* Blue */
+    --chart-2: 291 64% 42%; /* Purple */
+    --chart-3: 122 39% 49%; /* Green */
+    --chart-4: 36 100% 50%; /* Orange */
+    --chart-5: 340 82% 52%; /* Pink */
   }
 
   .dark {
-    /* Tailwind Starter Kit Dark Theme */
-    --background: 222 47% 11%;
+    /* Spike Next.js Material Design Theme - Dark Mode */
+    --background: 220 26% 14%;
     --foreground: 210 40% 98%;
 
-    --card: 217 33% 17%;
+    --card: 224 71% 4%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 217 33% 17%;
+    --popover: 224 71% 4%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary: Indigo - Lighter for dark mode */
-    --primary: 239 84% 67%;
-    --primary-foreground: 222 47% 11%;
+    /* Primary: Material Blue (lighter for dark) */
+    --primary: 207 90% 61%;
+    --primary-foreground: 220 26% 14%;
 
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
@@ -86,41 +90,45 @@
     --muted: 223 47% 11%;
     --muted-foreground: 215 20% 65%;
 
-    /* Accent: Blue */
-    --accent: 217 91% 60%;
-    --accent-foreground: 222 47% 11%;
+    /* Accent: Material Indigo */
+    --accent: 235 86% 65%;
+    --accent-foreground: 220 26% 14%;
 
-    --destructive: 0 62% 50%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Success: Emerald */
-    --success: 142 71% 45%;
+    /* Success: Material Green */
+    --success: 122 39% 49%;
     --success-foreground: 210 40% 98%;
 
-    /* Warning: Amber */
-    --warning: 38 92% 50%;
-    --warning-foreground: 222 47% 11%;
+    /* Warning: Material Orange */
+    --warning: 36 100% 50%;
+    --warning-foreground: 220 26% 14%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 239 84% 67%;
+    /* Info: Material Cyan */
+    --info: 187 71% 50%;
+    --info-foreground: 220 26% 14%;
 
-    /* Sidebar */
-    --sidebar-background: 222 47% 11%;
+    --border: 215 27% 17%;
+    --input: 215 27% 17%;
+    --ring: 207 90% 61%;
+
+    /* Sidebar - Dark mode */
+    --sidebar-background: 220 26% 14%;
     --sidebar-foreground: 215 20% 65%;
-    --sidebar-primary: 239 84% 67%;
-    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-primary: 207 90% 61%;
+    --sidebar-primary-foreground: 220 26% 14%;
     --sidebar-accent: 217 33% 17%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 239 84% 67%;
+    --sidebar-border: 215 27% 17%;
+    --sidebar-ring: 207 90% 61%;
 
-    /* Chart colors - Brighter for dark mode */
-    --chart-1: 217 91% 60%; /* Blue */
-    --chart-2: 263 70% 50%; /* Violet */
-    --chart-3: 142 71% 45%; /* Emerald */
-    --chart-4: 38 92% 50%; /* Amber */
-    --chart-5: 346 87% 62%; /* Rose */
+    /* Chart colors - Vibrant for dark mode */
+    --chart-1: 207 90% 61%; /* Blue */
+    --chart-2: 291 64% 51%; /* Purple */
+    --chart-3: 122 39% 49%; /* Green */
+    --chart-4: 36 100% 50%; /* Orange */
+    --chart-5: 340 82% 52%; /* Pink */
   }
 }
 
@@ -131,214 +139,280 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
-  /* Clean scrollbar */
+  /* Material Design elevation scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-muted;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary rounded-full;
+    @apply bg-muted-foreground/20 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary/80;
+    @apply bg-muted-foreground/30;
   }
 }
 
 @layer components {
-  /* Glass card effect */
+  /* Material Design Paper/Card */
   .glass-card {
-    @apply bg-card/95 backdrop-blur-sm border border-border shadow-lg;
+    @apply bg-card backdrop-blur-sm border-0 shadow-lg rounded-lg;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
+                0px 1px 1px 0px rgba(0,0,0,0.14),
+                0px 1px 3px 0px rgba(0,0,0,0.12);
   }
 
-  /* Primary gradient */
+  /* Material elevation levels */
+  .elevation-0 {
+    box-shadow: none;
+  }
+
+  .elevation-1 {
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
+                0px 1px 1px 0px rgba(0,0,0,0.14),
+                0px 1px 3px 0px rgba(0,0,0,0.12);
+  }
+
+  .elevation-2 {
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),
+                0px 2px 2px 0px rgba(0,0,0,0.14),
+                0px 1px 5px 0px rgba(0,0,0,0.12);
+  }
+
+  .elevation-3 {
+    box-shadow: 0px 3px 3px -2px rgba(0,0,0,0.2),
+                0px 3px 4px 0px rgba(0,0,0,0.14),
+                0px 1px 8px 0px rgba(0,0,0,0.12);
+  }
+
+  .elevation-4 {
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),
+                0px 4px 5px 0px rgba(0,0,0,0.14),
+                0px 1px 10px 0px rgba(0,0,0,0.12);
+  }
+
+  /* Primary gradient - Material Blue */
   .gradient-primary {
     background: linear-gradient(135deg, 
-      hsl(239 84% 67%) 0%, 
-      hsl(221 83% 53%) 100%);
+      hsl(207 90% 54%) 0%, 
+      hsl(207 90% 64%) 100%);
   }
 
-  /* Accent gradient */
+  /* Accent gradient - Material Indigo to Purple */
   .gradient-accent {
     background: linear-gradient(135deg, 
-      hsl(221 83% 53%) 0%, 
-      hsl(262 83% 58%) 100%);
+      hsl(231 48% 48%) 0%, 
+      hsl(291 64% 42%) 100%);
+  }
+
+  /* Success gradient */
+  .gradient-success {
+    background: linear-gradient(135deg, 
+      hsl(122 39% 49%) 0%, 
+      hsl(122 39% 59%) 100%);
   }
 
   /* Text gradient */
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background: linear-gradient(135deg, 
-      hsl(239 84% 67%) 0%, 
-      hsl(221 83% 53%) 100%);
+      hsl(207 90% 54%) 0%, 
+      hsl(231 48% 48%) 100%);
   }
 
-  /* Primary glow effect */
-  .glow-primary {
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.3);
-  }
-
-  .glow-accent {
-    box-shadow: 0 0 30px hsl(var(--accent) / 0.3);
-  }
-
-  /* Status badges */
-  .status-draft {
-    @apply bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300;
-  }
-
-  .status-submitted {
-    @apply bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800;
-  }
-
-  .status-review {
-    @apply bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800;
-  }
-
-  .status-approved {
-    @apply bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800;
-  }
-
-  .status-rejected {
-    @apply bg-red-50 text-red-700 border border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800;
-  }
-
-  .status-implemented {
-    @apply bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800;
-  }
-
-  /* Shimmer effect */
-  .shimmer {
+  /* Material Design ripple effect simulation */
+  .ripple {
     position: relative;
     overflow: hidden;
   }
 
-  .shimmer::before {
+  .ripple::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-      transparent 0%, 
-      hsl(var(--primary) / 0.1) 50%, 
-      transparent 100%);
-    animation: shimmer 2s infinite;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
   }
 
-  @keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
+  .ripple:active::after {
+    width: 300px;
+    height: 300px;
   }
 
-  /* Tailwind Starter Kit button styles */
-  .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 
-           shadow-md hover:shadow-lg transition-all duration-200;
+  /* Status badges - Material Design colors */
+  .status-draft {
+    @apply bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300;
   }
 
-  .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 
-           border border-border transition-all duration-200;
+  .status-submitted {
+    @apply bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-900;
   }
 
-  .btn-outline {
-    @apply border-2 border-primary text-primary hover:bg-primary 
-           hover:text-primary-foreground transition-all duration-200;
+  .status-review {
+    @apply bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-900;
   }
 
-  /* Card styles */
-  .card-elevated {
-    @apply bg-card border border-border rounded-lg shadow-lg 
-           hover:shadow-xl transition-shadow duration-300;
+  .status-approved {
+    @apply bg-green-50 text-green-700 border border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-900;
   }
 
-  .card-flat {
-    @apply bg-card border border-border rounded-lg;
+  .status-rejected {
+    @apply bg-red-50 text-red-700 border border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-900;
   }
 
-  /* Input styles */
-  .input-primary {
-    @apply w-full px-3 py-2 bg-background border border-input 
-           rounded-md focus:outline-none focus:ring-2 focus:ring-ring 
-           focus:border-transparent transition-all;
+  .status-implemented {
+    @apply bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950 dark:text-indigo-400 dark:border-indigo-900;
   }
 
-  /* Badge styles */
+  /* Material Design button styles */
+  .btn-contained {
+    @apply px-4 py-2 bg-primary text-primary-foreground rounded-md 
+           shadow-md hover:shadow-lg transition-all duration-200 
+           font-medium text-sm uppercase tracking-wider;
+  }
+
+  .btn-outlined {
+    @apply px-4 py-2 border-2 border-primary text-primary rounded-md 
+           hover:bg-primary/10 transition-all duration-200 
+           font-medium text-sm uppercase tracking-wider;
+  }
+
+  .btn-text {
+    @apply px-4 py-2 text-primary rounded-md hover:bg-primary/10 
+           transition-all duration-200 font-medium text-sm uppercase tracking-wider;
+  }
+
+  .btn-fab {
+    @apply w-14 h-14 rounded-full bg-primary text-primary-foreground 
+           flex items-center justify-center shadow-lg hover:shadow-xl 
+           transition-all duration-200;
+  }
+
+  /* Material Design Card */
+  .material-card {
+    @apply bg-card rounded-lg border-0 overflow-hidden;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
+                0px 1px 1px 0px rgba(0,0,0,0.14),
+                0px 1px 3px 0px rgba(0,0,0,0.12);
+  }
+
+  .material-card:hover {
+    box-shadow: 0px 3px 3px -2px rgba(0,0,0,0.2),
+                0px 3px 4px 0px rgba(0,0,0,0.14),
+                0px 1px 8px 0px rgba(0,0,0,0.12);
+  }
+
+  /* Material Input */
+  .material-input {
+    @apply w-full px-3 py-3 bg-transparent border-b-2 border-input 
+           focus:border-primary outline-none transition-colors duration-200;
+  }
+
+  /* Material Badge */
+  .material-badge {
+    @apply inline-flex items-center justify-center px-2 py-1 
+           text-xs font-medium rounded-full min-w-[20px];
+  }
+
   .badge-primary {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
-           text-xs font-medium bg-primary/10 text-primary;
+    @apply material-badge bg-primary text-primary-foreground;
   }
 
   .badge-secondary {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
-           text-xs font-medium bg-secondary text-secondary-foreground;
+    @apply material-badge bg-secondary text-secondary-foreground;
   }
 
   .badge-success {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
-           text-xs font-medium bg-emerald-50 text-emerald-700 
-           dark:bg-emerald-950 dark:text-emerald-300;
+    @apply material-badge bg-success text-success-foreground;
   }
 
   .badge-warning {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
-           text-xs font-medium bg-amber-50 text-amber-700 
-           dark:bg-amber-950 dark:text-amber-300;
+    @apply material-badge bg-warning text-warning-foreground;
   }
 
-  .badge-danger {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full 
-           text-xs font-medium bg-red-50 text-red-700 
-           dark:bg-red-950 dark:text-red-300;
+  .badge-error {
+    @apply material-badge bg-destructive text-destructive-foreground;
   }
 
-  /* Alert styles */
-  .alert-info {
-    @apply p-4 rounded-lg bg-blue-50 border-l-4 border-blue-500 
-           text-blue-900 dark:bg-blue-950 dark:text-blue-100;
+  .badge-info {
+    @apply material-badge bg-info text-info-foreground;
   }
 
+  /* Material Alerts */
   .alert-success {
-    @apply p-4 rounded-lg bg-emerald-50 border-l-4 border-emerald-500 
-           text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100;
+    @apply p-4 rounded-md bg-green-50 border border-green-200 
+           text-green-800 dark:bg-green-950 dark:border-green-900 dark:text-green-200;
+  }
+
+  .alert-error {
+    @apply p-4 rounded-md bg-red-50 border border-red-200 
+           text-red-800 dark:bg-red-950 dark:border-red-900 dark:text-red-200;
   }
 
   .alert-warning {
-    @apply p-4 rounded-lg bg-amber-50 border-l-4 border-amber-500 
-           text-amber-900 dark:bg-amber-950 dark:text-amber-100;
+    @apply p-4 rounded-md bg-orange-50 border border-orange-200 
+           text-orange-800 dark:bg-orange-950 dark:border-orange-900 dark:text-orange-200;
   }
 
-  .alert-danger {
-    @apply p-4 rounded-lg bg-red-50 border-l-4 border-red-500 
-           text-red-900 dark:bg-red-950 dark:text-red-100;
+  .alert-info {
+    @apply p-4 rounded-md bg-blue-50 border border-blue-200 
+           text-blue-800 dark:bg-blue-950 dark:border-blue-900 dark:text-blue-200;
+  }
+
+  /* Material Chip */
+  .material-chip {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full 
+           bg-muted text-foreground text-sm font-medium 
+           hover:bg-muted/80 transition-colors;
+  }
+
+  /* Material Divider */
+  .material-divider {
+    @apply border-t border-border my-4;
+  }
+
+  /* Material Paper */
+  .material-paper {
+    @apply bg-card rounded-lg p-6;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
+                0px 1px 1px 0px rgba(0,0,0,0.14),
+                0px 1px 3px 0px rgba(0,0,0,0.12);
   }
 }
 
 @layer utilities {
+  /* Material Design animations */
   .animate-fade-in {
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 225ms cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 
   .animate-slide-up {
-    animation: slideUp 0.4s ease-out;
+    animation: slideUp 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 
   .animate-slide-in-left {
-    animation: slideInLeft 0.3s ease-out;
+    animation: slideInLeft 225ms cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 
-  .animate-bounce-in {
-    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  .animate-scale-in {
+    animation: scaleIn 225ms cubic-bezier(0.0, 0.0, 0.2, 1);
+  }
+
+  .animate-material-grow {
+    animation: materialGrow 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 
   @keyframes fadeIn {
@@ -347,26 +421,46 @@
   }
 
   @keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+      opacity: 0; 
+      transform: translateY(20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
   }
 
   @keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
+    from { 
+      opacity: 0; 
+      transform: translateX(-20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0); 
+    }
   }
 
-  @keyframes bounceIn {
-    0% { 
+  @keyframes scaleIn {
+    from { 
       opacity: 0; 
-      transform: scale(0.3);
+      transform: scale(0.9); 
     }
-    50% { 
+    to { 
       opacity: 1; 
-      transform: scale(1.05);
+      transform: scale(1); 
     }
-    100% { 
-      transform: scale(1);
+  }
+
+  @keyframes materialGrow {
+    from { 
+      opacity: 0; 
+      transform: scale(0); 
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1); 
     }
   }
 
@@ -375,16 +469,56 @@
     text-wrap: balance;
   }
 
-  /* Shadow utilities */
-  .shadow-soft {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  /* Material Design typography */
+  .typography-h1 {
+    @apply text-6xl font-light tracking-tight;
   }
 
-  .shadow-medium {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  .typography-h2 {
+    @apply text-5xl font-light tracking-tight;
   }
 
-  .shadow-strong {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  .typography-h3 {
+    @apply text-4xl font-normal;
+  }
+
+  .typography-h4 {
+    @apply text-3xl font-normal;
+  }
+
+  .typography-h5 {
+    @apply text-2xl font-normal;
+  }
+
+  .typography-h6 {
+    @apply text-xl font-medium;
+  }
+
+  .typography-subtitle1 {
+    @apply text-base font-normal;
+  }
+
+  .typography-subtitle2 {
+    @apply text-sm font-medium;
+  }
+
+  .typography-body1 {
+    @apply text-base font-normal;
+  }
+
+  .typography-body2 {
+    @apply text-sm font-normal;
+  }
+
+  .typography-button {
+    @apply text-sm font-medium uppercase tracking-wider;
+  }
+
+  .typography-caption {
+    @apply text-xs font-normal;
+  }
+
+  .typography-overline {
+    @apply text-xs font-normal uppercase tracking-wider;
   }
 }
