@@ -12,7 +12,10 @@ import {
   ChevronLeft,
   ChevronRight,
   BarChart3,
+  Sun,
+  Moon,
 } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useSidebarContext } from "@/contexts/SidebarContext";
@@ -39,6 +42,7 @@ const adminItems = [
 
 export function AppSidebar() {
   const { collapsed, toggle } = useSidebarContext();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
   const NavItem = ({ item }: { item: typeof navigationItems[0] }) => {
@@ -138,8 +142,26 @@ export function AppSidebar() {
         </div>
       </nav>
 
-      {/* Collapse Button */}
-      <div className="p-3 border-t border-sidebar-border">
+      {/* Bottom Actions */}
+      <div className="p-3 border-t border-sidebar-border space-y-1">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={toggleTheme}
+          className="w-full justify-center text-muted-foreground hover:text-foreground"
+        >
+          {theme === "dark" ? (
+            <>
+              <Sun className="h-4 w-4" />
+              {!collapsed && <span className="text-xs ml-2">Light Mode</span>}
+            </>
+          ) : (
+            <>
+              <Moon className="h-4 w-4" />
+              {!collapsed && <span className="text-xs ml-2">Dark Mode</span>}
+            </>
+          )}
+        </Button>
         <Button
           variant="ghost"
           size="sm"
