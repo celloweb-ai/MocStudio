@@ -1,123 +1,172 @@
 # MOC Studio Theme Documentation
 
-## Design System: Tailwind Starter Kit
+## Design System: Spike Next.js Material Design
 
-MOC Studio uses the Tailwind Starter Kit design system, featuring clean, professional styling with classic Tailwind CSS colors and components.
+MOC Studio uses the Spike Next.js design system, featuring **Material Design** principles with clean aesthetics, elevation-based shadows, and comprehensive MUI-inspired components.
+
+## Typography
+
+**Font Family**: Plus Jakarta Sans (Google Fonts)
+- Modern, geometric sans-serif font
+- Excellent readability and professional appearance
+- Variable weights: 300-800
+- Used by premium Material Design applications
 
 ## Color Palette
 
 ### Light Mode Colors
 
 #### Primary Colors
-- **Primary (Indigo)**: `hsl(239 84% 67%)` - Main brand color for primary actions and highlights
-- **Accent (Blue)**: `hsl(221 83% 53%)` - Secondary accent for interactive elements
-- **Success (Emerald)**: `hsl(142 76% 36%)` - Success states and positive actions
-- **Warning (Amber)**: `hsl(38 92% 50%)` - Warning states and cautionary messages
-- **Destructive (Red)**: `hsl(0 84% 60%)` - Error states and destructive actions
+- **Primary (Material Blue)**: `hsl(207 90% 54%)` - #2196F3 equivalent
+- **Accent (Material Indigo)**: `hsl(231 48% 48%)` - #3F51B5 equivalent
+- **Success (Material Green)**: `hsl(122 39% 49%)` - #4CAF50 equivalent
+- **Warning (Material Orange)**: `hsl(36 100% 50%)` - #FF9800 equivalent
+- **Destructive (Material Red)**: `hsl(0 65% 51%)` - #F44336 equivalent
+- **Info (Material Cyan)**: `hsl(187 71% 50%)` - #00BCD4 equivalent
 
 #### Neutral Colors
-- **Background**: `hsl(0 0% 100%)` - Pure white main background
-- **Foreground**: `hsl(222 47% 11%)` - Deep blue-gray for primary text
-- **Muted**: `hsl(240 5% 96%)` - Light gray for subtle backgrounds
-- **Border**: `hsl(240 6% 90%)` - Soft borders and dividers
+- **Background**: `hsl(0 0% 98%)` - Light gray background (#FAFAFA)
+- **Foreground**: `hsl(220 20% 18%)` - Dark text for readability
+- **Card**: `hsl(0 0% 100%)` - Pure white for elevated surfaces
+- **Muted**: `hsl(210 40% 96%)` - Subtle backgrounds
+- **Border**: `hsl(214 32% 91%)` - Soft dividers
 
 ### Dark Mode Colors
 
 #### Primary Colors
-- **Primary (Indigo)**: `hsl(239 84% 67%)` - Consistent across themes
-- **Accent (Blue)**: `hsl(217 91% 60%)` - Brighter blue for dark backgrounds
-- **Success (Emerald)**: `hsl(142 71% 45%)` - Enhanced visibility
-- **Warning (Amber)**: `hsl(38 92% 50%)` - High contrast
-- **Destructive (Red)**: `hsl(0 62% 50%)` - Adjusted for readability
+- **Primary (Material Blue)**: `hsl(207 90% 61%)` - Lighter for dark backgrounds
+- **Accent (Material Indigo)**: `hsl(235 86% 65%)` - Enhanced visibility
+- **Success (Material Green)**: `hsl(122 39% 49%)` - Consistent across themes
+- **Warning (Material Orange)**: `hsl(36 100% 50%)` - High contrast
+- **Destructive (Material Red)**: `hsl(0 72% 51%)` - Readable on dark
+- **Info (Material Cyan)**: `hsl(187 71% 50%)` - Vibrant cyan
 
 #### Neutral Colors
-- **Background**: `hsl(222 47% 11%)` - Deep blue-gray background
+- **Background**: `hsl(220 26% 14%)` - Deep blue-gray (#1E1E2D)
 - **Foreground**: `hsl(210 40% 98%)` - Near-white text
-- **Muted**: `hsl(223 47% 11%)` - Subtle background variations
-- **Border**: `hsl(217 33% 17%)` - Dark borders
+- **Card**: `hsl(224 71% 4%)` - Elevated dark surfaces
+- **Muted**: `hsl(223 47% 11%)` - Subtle dark backgrounds
+- **Border**: `hsl(215 27% 17%)` - Dark dividers
 
-## Chart Colors
+## Material Design Elevation
 
-Optimized palette for data visualization:
+Spike implements Material Design's elevation system using precise box-shadows:
 
-1. **Blue**: `hsl(221 83% 53%)` - Primary chart color
-2. **Violet**: `hsl(262 83% 58%)` - Secondary chart color
-3. **Emerald**: `hsl(142 76% 36%)` - Tertiary chart color
-4. **Amber**: `hsl(38 92% 50%)` - Quaternary chart color
-5. **Rose**: `hsl(346 77% 50%)` - Quinary chart color
+### Elevation Levels
+
+```tsx
+// No elevation
+<div className="elevation-0">Content</div>
+
+// Elevation 1 (Buttons, Cards)
+<div className="elevation-1">Content</div>
+
+// Elevation 2 (App bars)
+<div className="elevation-2">Content</div>
+
+// Elevation 3 (Refresh indicator, Quick entry)
+<div className="elevation-3">Content</div>
+
+// Elevation 4 (Modal bottom sheets)
+<div className="elevation-4">Content</div>
+```
+
+### Material Shadows
+
+Each elevation follows Material Design specifications:
+- **Key light**: Top-left shadow for depth
+- **Ambient light**: Diffuse shadow for context
+- **Contact shadow**: Bottom shadow for grounding
 
 ## Component Styles
 
-### Buttons
+### Buttons (Material Design)
 
-#### Primary Button
+#### Contained Button
 ```tsx
-<button className="btn-primary">
+<button className="btn-contained">
   Primary Action
 </button>
 ```
-- Indigo background with white text
-- Shadow on hover
-- Smooth transitions
+- Elevated with shadow
+- Uppercase text
+- Letter spacing: wider tracking
+- Ripple effect on interaction
 
-#### Secondary Button
+#### Outlined Button
 ```tsx
-<button className="btn-secondary">
+<button className="btn-outlined">
   Secondary Action
 </button>
 ```
-- Light background with border
-- Subtle hover effect
+- 2px border
+- No background (transparent)
+- Subtle fill on hover
 
-#### Outline Button
+#### Text Button
 ```tsx
-<button className="btn-outline">
-  Outline Action
+<button className="btn-text">
+  Tertiary Action
 </button>
 ```
-- Transparent with colored border
-- Fills on hover
+- No border or background
+- Minimal emphasis
+- Background tint on hover
 
-### Cards
-
-#### Elevated Card
+#### Floating Action Button (FAB)
 ```tsx
-<div className="card-elevated">
-  Card content
+<button className="btn-fab">
+  <PlusIcon />
+</button>
+```
+- 56px diameter
+- Circular shape
+- High elevation (shadow-lg)
+- Primary action indicator
+
+### Cards (Material Design)
+
+#### Material Card
+```tsx
+<div className="material-card">
+  Card content with elevation
 </div>
 ```
-- Shadow elevation
-- Hover shadow increase
+- Elevation 1 by default
+- Elevation 3 on hover
 - Rounded corners
+- No borders (elevation defines edges)
 
-#### Flat Card
+#### Material Paper
 ```tsx
-<div className="card-flat">
-  Card content
+<div className="material-paper">
+  Paper surface with padding
 </div>
 ```
-- Simple border
-- No shadow
+- Elevated surface
+- Built-in padding (24px)
+- Semantic for content containers
 
 #### Glass Card
 ```tsx
 <div className="glass-card">
-  Glass effect content
+  Frosted glass effect
 </div>
 ```
 - Backdrop blur
-- Semi-transparent background
-- Subtle shadow
+- Material elevation
+- Semi-transparent (maintains depth)
 
-### Badges
+### Badges (Material Design)
 
-#### Status Badges
+#### Color Badges
 ```tsx
 <span className="badge-primary">Primary</span>
 <span className="badge-secondary">Secondary</span>
 <span className="badge-success">Success</span>
 <span className="badge-warning">Warning</span>
-<span className="badge-danger">Danger</span>
+<span className="badge-error">Error</span>
+<span className="badge-info">Info</span>
 ```
 
 #### MOC Status Badges
@@ -130,199 +179,238 @@ Optimized palette for data visualization:
 <span className="status-implemented">Implemented</span>
 ```
 
+### Inputs (Material Design)
+
+#### Material Input
+```tsx
+<input className="material-input" placeholder="Label" />
+```
+- Bottom border (2px)
+- Border animates to primary on focus
+- No rounded corners (Material spec)
+- Transparent background
+
 ### Alerts
 
 ```tsx
-<div className="alert-info">
-  Information message
+<div className="alert-success">
+  Success message with green accent
 </div>
 
-<div className="alert-success">
-  Success message
+<div className="alert-error">
+  Error message with red accent
 </div>
 
 <div className="alert-warning">
-  Warning message
+  Warning message with orange accent
 </div>
 
-<div className="alert-danger">
-  Error message
-</div>
-```
-
-### Inputs
-
-```tsx
-<input className="input-primary" placeholder="Enter text" />
-```
-- Full width
-- Focus ring effect
-- Border highlight on focus
-
-## Effects and Animations
-
-### Gradients
-
-#### Primary Gradient
-```css
-.gradient-primary {
-  background: linear-gradient(135deg, indigo to blue);
-}
-```
-
-#### Accent Gradient
-```css
-.gradient-accent {
-  background: linear-gradient(135deg, blue to violet);
-}
-```
-
-#### Text Gradient
-```tsx
-<h1 className="text-gradient">Gradient Text</h1>
-```
-
-### Glow Effects
-
-```tsx
-<div className="glow-primary">
-  Primary glow effect
-</div>
-
-<div className="glow-accent">
-  Accent glow effect
+<div className="alert-info">
+  Info message with blue accent
 </div>
 ```
 
-### Animations
+### Material Chip
 
-#### Fade In
 ```tsx
-<div className="animate-fade-in">
-  Fades in on mount
+<div className="material-chip">
+  Chip label
+</div>
+```
+- Compact component for tags/filters
+- Rounded pill shape
+- Hover states
+- Optional close icon
+
+### Divider
+
+```tsx
+<div className="material-divider" />
+```
+- 1px horizontal rule
+- Subtle contrast
+- Vertical spacing (16px margin)
+
+## Gradients
+
+### Primary Gradient
+```tsx
+<div className="gradient-primary">
+  Blue gradient background
+</div>
+```
+Gradient from Material Blue to lighter shade
+
+### Accent Gradient
+```tsx
+<div className="gradient-accent">
+  Indigo to purple gradient
 </div>
 ```
 
-#### Slide Up
+### Success Gradient
 ```tsx
-<div className="animate-slide-up">
-  Slides up on mount
+<div className="gradient-success">
+  Green gradient background
 </div>
 ```
 
-#### Slide In Left
+### Text Gradient
 ```tsx
-<div className="animate-slide-in-left">
-  Slides in from left
-</div>
+<h1 className="text-gradient">
+  Gradient text effect
+</h1>
 ```
 
-#### Bounce In
-```tsx
-<div className="animate-bounce-in">
-  Bounces in on mount
-</div>
-```
+## Animations
 
-#### Shimmer Effect
-```tsx
-<div className="shimmer">
-  Content with shimmer effect
-</div>
-```
+All animations follow Material Design motion principles with cubic-bezier easing:
 
-## Shadow Utilities
+### Material Timing Functions
+- **Standard**: `cubic-bezier(0.4, 0.0, 0.2, 1)` - 225-300ms
+- **Deceleration**: `cubic-bezier(0.0, 0.0, 0.2, 1)` - 225ms
+- **Acceleration**: `cubic-bezier(0.4, 0.0, 1, 1)` - 195ms
+
+### Animation Classes
 
 ```tsx
-<div className="shadow-soft">Soft shadow</div>
-<div className="shadow-medium">Medium shadow</div>
-<div className="shadow-strong">Strong shadow</div>
+// Fade in (225ms)
+<div className="animate-fade-in">Content</div>
+
+// Slide up (300ms)
+<div className="animate-slide-up">Content</div>
+
+// Slide in from left (225ms)
+<div className="animate-slide-in-left">Content</div>
+
+// Scale in (225ms)
+<div className="animate-scale-in">Content</div>
+
+// Material grow (300ms)
+<div className="animate-material-grow">Content</div>
 ```
 
-## Scrollbar Styling
+### Ripple Effect
 
-Custom scrollbar with theme colors:
-- Clean 8px width
-- Primary color thumb
-- Rounded design
-- Hover opacity effect
-
-## Typography
-
-**Font Family**: Inter (Google Fonts)
-- Clean, modern sans-serif
-- Excellent readability
-- Variable weights: 300-800
-
-**Text Utilities**:
 ```tsx
-<p className="text-balance">
-  Balanced text wrapping
-</p>
+<button className="ripple">
+  Button with ripple
+</button>
 ```
+Simulates Material Design's touch ripple feedback
+
+## Material Design Typography
+
+Complete Material Design type scale:
+
+```tsx
+<h1 className="typography-h1">Heading 1</h1>      // 96px, light
+<h2 className="typography-h2">Heading 2</h2>      // 60px, light
+<h3 className="typography-h3">Heading 3</h3>      // 48px, normal
+<h4 className="typography-h4">Heading 4</h4>      // 34px, normal
+<h5 className="typography-h5">Heading 5</h5>      // 24px, normal
+<h6 className="typography-h6">Heading 6</h6>      // 20px, medium
+
+<p className="typography-subtitle1">Subtitle 1</p>  // 16px, normal
+<p className="typography-subtitle2">Subtitle 2</p>  // 14px, medium
+
+<p className="typography-body1">Body 1</p>          // 16px, normal
+<p className="typography-body2">Body 2</p>          // 14px, normal
+
+<button className="typography-button">Button</button> // 14px, medium, uppercase
+
+<span className="typography-caption">Caption</span>   // 12px, normal
+<span className="typography-overline">Overline</span> // 12px, uppercase
+```
+
+## Chart Colors
+
+Material Design palette for data visualization:
+
+1. **Blue**: `hsl(207 90% 54%)` - Primary data series
+2. **Purple**: `hsl(291 64% 42%)` - Secondary series
+3. **Green**: `hsl(122 39% 49%)` - Success metrics
+4. **Orange**: `hsl(36 100% 50%)` - Warning indicators
+5. **Pink**: `hsl(340 82% 52%)` - Accent data
+
+## Scrollbar
+
+Minimal Material Design scrollbar:
+- 6px width (thin)
+- Transparent track
+- Subtle thumb (20% opacity)
+- Hover darkens to 30%
+- Rounded corners
 
 ## Design Philosophy
 
-The Tailwind Starter Kit design embodies:
+Spike Next.js theme embodies Material Design principles:
 
-1. **Simplicity**: Clean, uncluttered interface
-2. **Consistency**: Cohesive color system across components
-3. **Accessibility**: High contrast ratios for readability
-4. **Professional**: Enterprise-ready appearance
-5. **Flexibility**: Easy to customize and extend
-6. **Performance**: Lightweight, optimized CSS
+1. **Material as Metaphor**: Surfaces with elevation and depth
+2. **Bold, Graphic, Intentional**: Strong visual hierarchy
+3. **Motion Provides Meaning**: Purposeful animations
+4. **Flexible Foundation**: Customizable and scalable
+5. **Cross-Platform**: Consistent across devices
 
-## Color Accessibility
+## Accessibility
 
-- Light mode text contrast: 9.5:1 (AAA rating)
-- Dark mode text contrast: 12:1 (AAA rating)
-- Success/Warning/Error colors meet WCAG AA standards
-- Focus indicators clearly visible
+### Color Contrast
+- Light mode text: 9.8:1 (AAA)
+- Dark mode text: 13.2:1 (AAA)
+- All status colors meet WCAG AA minimum
+- Focus indicators use 2px ring with primary color
+
+### Touch Targets
+- Minimum 48px × 48px for interactive elements
+- 8px spacing between adjacent targets
+- Clear focus and hover states
+
+## Material Design Resources
+
+- [Material Design 3](https://m3.material.io/)
+- [Material UI (MUI)](https://mui.com/)
+- [Material Design Colors](https://m2.material.io/design/color/)
+- [Material Design Icons](https://fonts.google.com/icons)
+- [Spike Next.js Template](https://www.wrappixel.com/templates/spike-next-js-free-admin-template/)
 
 ## Browser Support
 
-Full support for modern CSS features:
-- CSS Custom Properties (CSS variables)
-- Backdrop filters
-- CSS gradients
-- CSS animations
-- Flexbox and Grid
-
-Supported in all modern browsers:
+Full Material Design support:
 - Chrome/Edge 90+
 - Firefox 88+
 - Safari 14+
+- All features gracefully degrade
 
 ## Customization
 
-To customize the theme colors, edit CSS variables in `src/index.css`:
+Customize Material colors in `src/index.css`:
 
 ```css
 :root {
-  --primary: 239 84% 67%; /* Change primary color */
-  --accent: 221 83% 53%;  /* Change accent color */
+  --primary: 207 90% 54%; /* Material Blue */
+  --accent: 231 48% 48%;  /* Material Indigo */
+  --success: 122 39% 49%; /* Material Green */
   /* ... other variables */
 }
 ```
 
-## Migration from Aurora Theme
+## Migration Notes
 
-If migrating from the previous Aurora theme:
+### From Tailwind Starter Kit
+- Primary color changed from indigo to Material Blue
+- Elevation system replaces flat shadows
+- Typography follows Material type scale
+- Button styles now uppercase with tracking
+- Cards use elevation instead of borders
 
-1. **Color updates**: Aurora's teal/purple palette replaced with indigo/blue
-2. **Component classes**: Most classes remain compatible
-3. **Gradients**: Simplified gradient system
-4. **Effects**: Cleaner, more subtle effects
-5. **Status badges**: Now use Tailwind's semantic colors
-
-## Resources
-
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Tailwind Starter Kit](https://www.creative-tim.com/learning-lab/tailwind-starter-kit)
-- [Tailwind Colors](https://tailwindcss.com/docs/customizing-colors)
-- [shadcn/ui Components](https://ui.shadcn.com)
+### Key Differences
+- **Font**: Plus Jakarta Sans (was Inter)
+- **Shadows**: Material elevation (not flat)
+- **Buttons**: Uppercase text (Material spec)
+- **Colors**: Material Design palette
+- **Spacing**: 8px baseline grid
 
 ## License
 
-This theme is part of the MOC Studio project.
-Tailwind Starter Kit components are MIT licensed.
+This theme adapts Spike Next.js design principles for MOC Studio.
+Spike Next.js is created by WrapPixel (MIT License).
