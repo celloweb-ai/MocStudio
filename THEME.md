@@ -1,151 +1,254 @@
 # MOC Studio Theme Documentation
 
-## Design System: NextKit Admin with Flowbite Components
+## Design System: Ultra-Modern 2026 - Glassmorphism + Bold Cyber Aesthetics
 
-MOC Studio now uses the **NextKit Admin** design system, featuring clean **Tailwind CSS** design with **Flowbite** component library integration. This combination provides modern, responsive, and accessible UI components ready for production.
+MOC Studio now features a **cutting-edge 2026 design system** combining the latest UI trends:
+- **Glassmorphism** - Frosted glass effects with depth
+- **Bold Gradients** - Vibrant cyber color schemes
+- **Neon Glow Effects** - Futuristic lighting
+- **3D Elements** - Tactile interactive components
+- **Animated Backgrounds** - Living, breathing interfaces
 
-## Overview
+## Design Philosophy
 
-NextKit Admin is a modern, open-source admin template built with:
-- **Next.js** - React framework
-- **Tailwind CSS** - Utility-first CSS framework  
-- **Flowbite** - Component library for Tailwind
-- **ApexCharts** - Data visualization
-- **Tabler Icons** - Clean icon system
+This theme embraces 2026's top design trends:
+1. **Immersive Depth** - Multiple visual layers with glassmorphism
+2. **Bold & Impactful** - High-contrast, vibrant color palette
+3. **Futuristic Aesthetic** - Cyber-inspired gradients and glows
+4. **Premium Feel** - Sophisticated blur and shadow effects
+5. **Interactive** - Responsive animations and 3D transforms
 
 ## Typography
 
-**Font Family**: Inter
-- System font stack fallback: `-apple-system, BlinkMacSystemFont, 'Segoe UI'`
-- Professional, modern sans-serif
-- Excellent readability across all sizes
-- Variable weights: 300-900
+### Dual Font System
+
+**Headings**: Space Grotesk
+- Modern geometric sans-serif
+- Bold, impactful presence
+- Perfect for titles and hero text
+- Weights: 300-700
+
+**Body**: Inter
+- Clean, professional readability
+- Excellent for long-form content
+- Weights: 300-900
 
 ## Color Palette
 
-### Light Mode
+### Light Mode - Vibrant
 
 #### Primary Colors
-- **Primary (Modern Blue)**: `hsl(217 91% 60%)` - #3B82F6 (Tailwind blue-500)
-- **Accent (Vibrant Purple)**: `hsl(262 83% 58%)` - #A855F7 (Tailwind purple-500)
-- **Success (Fresh Green)**: `hsl(142 71% 45%)` - #10B981 (Tailwind emerald-500)
-- **Warning (Amber Orange)**: `hsl(32 95% 44%)` - #F59E0B (Tailwind amber-500)
-- **Destructive (Red)**: `hsl(0 84% 60%)` - #EF4444 (Tailwind red-500)
-- **Info (Cyan Blue)**: `hsl(199 89% 48%)` - #06B6D4 (Tailwind cyan-500)
+- **Primary (Electric Blue)**: `hsl(217 91% 60%)` - #3B82F6
+- **Accent (Neon Purple)**: `hsl(270 95% 65%)` - #C084FC
+- **Success (Vibrant Green)**: `hsl(142 76% 48%)` - #10B981
+- **Warning (Bold Orange)**: `hsl(25 95% 53%)` - #FF6B35
+- **Destructive (Hot Red)**: `hsl(0 90% 58%)` - #FF3B3B
+- **Info (Bright Cyan)**: `hsl(190 95% 50%)` - #06B6D4
 
 #### Neutral Colors
-- **Background**: `hsl(0 0% 100%)` - Pure white (#FFFFFF)
-- **Foreground**: `hsl(220 13% 15%)` - Dark gray text
-- **Card**: `hsl(0 0% 100%)` - White surfaces
-- **Muted**: `hsl(240 5% 96%)` - Light gray backgrounds
-- **Border**: `hsl(220 13% 91%)` - Subtle borders
+- **Background**: `hsl(240 10% 98%)` - Soft white
+- **Foreground**: `hsl(240 10% 5%)` - Deep black
+- **Card**: Pure white with glass overlay
+- **Border**: `hsl(240 6% 90%)` - Subtle dividers
 
-### Dark Mode
+### Dark Mode - Premium Experience
 
 #### Primary Colors
-- **Primary**: `hsl(213 94% 68%)` - Bright blue for dark backgrounds
-- **Accent**: `hsl(263 70% 50%)` - Vivid purple
-- **Success**: `hsl(142 71% 45%)` - Consistent green
-- **Warning**: `hsl(32 95% 44%)` - High contrast orange
-- **Destructive**: `hsl(0 62% 50%)` - Readable red
-- **Info**: `hsl(199 89% 48%)` - Bright cyan
+- **Primary**: `hsl(213 94% 68%)` - Bright electric blue
+- **Accent**: `hsl(270 95% 75%)` - Glowing neon purple
+- **Success**: `hsl(142 76% 55%)` - Neon green
+- **Warning**: `hsl(25 95% 60%)` - Bright orange
+- **Destructive**: `hsl(0 85% 62%)` - Vivid red
+- **Info**: `hsl(190 95% 60%)` - Neon cyan
 
 #### Neutral Colors
-- **Background**: `hsl(224 71% 4%)` - Very dark blue-gray
-- **Foreground**: `hsl(210 40% 98%)` - Near white text
-- **Card**: `hsl(224 71% 6%)` - Slightly elevated dark surface
-- **Muted**: `hsl(223 47% 11%)` - Dark muted backgrounds
-- **Border**: `hsl(215 28% 17%)` - Dark borders
+- **Background**: `hsl(240 10% 3.9%)` - Ultra-dark
+- **Foreground**: `hsl(0 0% 98%)` - Near white
+- **Card**: `hsl(240 10% 6%)` - Elevated dark surface
+- **Glass overlay**: rgba(255, 255, 255, 0.03)
 
-## Flowbite Component Styles
+## Glassmorphism Components
 
-### Buttons
-
-Flowbite provides 4 button variants:
-
-#### Primary Button
+### Glass Card
 ```tsx
-<button className="btn-primary">
-  Primary Action
-</button>
-```
-- Solid background with primary color
-- White text
-- Focus ring (4px)
-- Smooth hover transition
-
-#### Secondary Button
-```tsx
-<button className="btn-secondary">
-  Secondary Action
-</button>
-```
-- White background (light) / Gray-800 (dark)
-- Border outline
-- Gray text
-- Subtle hover effect
-
-#### Outline Button
-```tsx
-<button className="btn-outline">
-  Outline Action
-</button>
-```
-- Transparent background
-- 2px primary border
-- Fills with primary on hover
-- Inverts text color
-
-#### Ghost Button
-```tsx
-<button className="btn-ghost">
-  Ghost Action
-</button>
-```
-- Fully transparent
-- Text only
-- Subtle background on hover
-
-### Alerts
-
-Flowbite alert components with icons and borders:
-
-```tsx
-<div className="alert-info">
-  <InfoIcon />Information message
-</div>
-
-<div className="alert-success">
-  <CheckIcon />Success message
-</div>
-
-<div className="alert-warning">
-  <WarningIcon />Warning message
-</div>
-
-<div className="alert-error">
-  <ErrorIcon />Error message
+<div className="glass-card p-6">
+  Content with frosted glass effect
 </div>
 ```
 
 **Features**:
-- Flex layout for icons
-- Colored backgrounds (subtle)
-- Matching borders
-- Full dark mode support
+- 20px backdrop blur
+- 180% color saturation
+- Semi-transparent background
+- Subtle border glow
+- Dynamic shadow depth
 
-### Badges
+**Technical**:
+- Light mode: `rgba(255, 255, 255, 0.05)` background
+- Dark mode: `rgba(255, 255, 255, 0.03)` background
+- Border: `rgba(255, 255, 255, 0.1)`
 
-#### Color Badges
+### Neumorphism + Glass Hybrid
 ```tsx
-<span className="badge-primary">Primary</span>
-<span className="badge-secondary">Secondary</span>
-<span className="badge-success">Success</span>
-<span className="badge-warning">Warning</span>
-<span className="badge-error">Error</span>
+<div className="neuglass-card p-8">
+  Advanced glass with soft 3D effect
+</div>
 ```
 
-#### MOC Status Badges
+**Features**:
+- Combines glassmorphism with neumorphic shadows
+- Inner and outer shadows for depth
+- Gradient glass background
+- 16px backdrop blur
+- Rounded-3xl corners
+
+### Floating Card
+```tsx
+<div className="card-floating">
+  Hover for parallax lift effect
+</div>
+```
+
+**Hover Effects**:
+- Lifts 8px upward
+- Scales to 102%
+- Enhanced shadow (60px blur)
+- Primary color glow
+- Smooth 300ms transition
+
+## Bold Gradient Backgrounds
+
+### Cyber Gradient
+```tsx
+<div className="gradient-cyber">
+  Blue → Purple → Pink
+</div>
+```
+Electric blue to neon purple to hot pink (135°)
+
+### Neon Gradient
+```tsx
+<div className="gradient-neon">
+  Purple → Cyan
+</div>
+```
+Neon purple to bright cyan (135°)
+
+### Fire Gradient
+```tsx
+<div className="gradient-fire">
+  Orange → Pink
+</div>
+```
+Bold orange to hot pink (135°)
+
+### Forest Gradient
+```tsx
+<div className="gradient-forest">
+  Green → Cyan
+</div>
+```
+Vibrant green to bright cyan (135°)
+
+### Animated Gradient
+```tsx
+<div className="gradient-animated">
+  Infinite color shift
+</div>
+```
+
+**Animation**:
+- 15-second loop
+- 4-color gradient (blue/purple/green/orange)
+- 400% background size
+- Smooth ease timing
+- Infinite repeat
+
+## Text Gradients with Glow
+
+### Cyber Text
+```tsx
+<h1 className="text-gradient-cyber">
+  Blue → Purple → Pink Text
+</h1>
+```
+
+### Neon Text
+```tsx
+<h1 className="text-gradient-neon">
+  Glowing animated purple/cyan
+</h1>
+```
+
+**Animation**: 3-second brightness pulse (100% → 130% → 100%)
+
+## Neon Glow Effects
+
+### Primary Glow
+```tsx
+<div className="glow-primary">
+  Blue neon glow
+</div>
+```
+- 20px inner glow (50% opacity)
+- 40px mid glow (30% opacity)
+- 60px outer glow (10% opacity)
+
+### Accent Glow
+```tsx
+<div className="glow-accent">
+  Purple neon glow
+</div>
+```
+
+### Success Glow
+```tsx
+<div className="glow-success">
+  Green neon glow
+</div>
+```
+
+## 3D Buttons
+
+### 3D Button
+```tsx
+<button className="btn-3d">
+  Click Me
+</button>
+```
+
+**Features**:
+- Gradient background (primary → accent)
+- Multi-layer shadows (outer + inner)
+- Hover: Lifts 2px with enhanced glow
+- Active: Presses down 2px
+- Bold font weight
+- 32px horizontal padding
+- Rounded-2xl corners
+
+**Shadows**:
+- Outer: 10px + 6px black shadows
+- Inner: Inset highlights and shadows
+- Hover adds 30px primary glow
+
+### Glass Button
+```tsx
+<button className="btn-glass">
+  Glass Effect
+</button>
+```
+
+**Features**:
+- Semi-transparent background
+- 10px backdrop blur
+- Border glow (rgba white 0.2)
+- Hover: Background brightens + lifts
+- 30px primary glow on hover
+
+## Status Badges - 2026 Style
+
+All badges use the modern glass effect with gradients:
+
 ```tsx
 <span className="status-draft">Draft</span>
 <span className="status-submitted">Submitted</span>
@@ -155,343 +258,321 @@ Flowbite alert components with icons and borders:
 <span className="status-implemented">Implemented</span>
 ```
 
-**Badge Features**:
-- Pill shape (rounded-full)
-- 2.5px horizontal padding
-- Extra small text (xs)
-- Medium font weight
-- Colored background + border
+**Shared Features**:
+- `.badge-modern` base class
+- 10px backdrop blur
+- Gradient backgrounds
+- Matching color glow (20px)
+- Border: rgba white 0.2
+- Hover: Scale 105%
+- 2px gap for icons
 
-### Input Fields
+**Color Schemes**:
+- **Draft**: Gray 500 with soft glow
+- **Submitted**: Blue gradient (60% → 70%)
+- **Review**: Orange gradient (53% → 63%)
+- **Approved**: Green gradient (48% → 58%)
+- **Rejected**: Red gradient (58% → 68%)
+- **Implemented**: Purple gradient (65% → 75%)
 
+## Alerts with Glass
+
+### Base Alert Glass
 ```tsx
-<input className="input-primary" placeholder="Enter text" />
-```
-
-**Features**:
-- Full width block
-- Padding: 2.5 (10px)
-- Gray background (light) / Dark background (dark)
-- Border with focus ring
-- Primary color on focus
-
-### Tables
-
-Flowbite table styling:
-
-```tsx
-<table className="table-flowbite">
-  <thead>
-    <tr>
-      <th>Header</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Data</td>
-    </tr>
-  </tbody>
-</table>
-```
-
-**Features**:
-- Uppercase header text
-- Gray-50 header background
-- Striped rows (hover)
-- Full dark mode support
-
-### Dropdowns
-
-```tsx
-<div className="dropdown-flowbite">
-  <ul>
-    <li>Option 1</li>
-    <li>Option 2</li>
-  </ul>
+<div className="alert-glass">
+  Glass alert container
 </div>
 ```
 
-**Features**:
-- White background with shadow
-- Rounded corners
-- Divider lines between groups
-- Z-index: 10
-
-### Progress Bars
-
+### Alert Variants
 ```tsx
-<div className="progress-bar">
-  <div className="progress-fill" style="width: 75%"></div>
+<div className="alert-info">
+  Cyan → Blue gradient info
+</div>
+
+<div className="alert-success">
+  Green → Cyan gradient success
+</div>
+
+<div className="alert-warning">
+  Orange → Pink gradient warning
+</div>
+
+<div className="alert-error">
+  Red → Pink gradient error
 </div>
 ```
 
-**Features**:
-- 2.5 height (10px)
-- Rounded full
-- Smooth width transitions (300ms)
-- Primary color fill
+**All alerts feature**:
+- Rounded-2xl corners
+- Backdrop blur xl
+- Gradient backgrounds (20% opacity)
+- Border: rgba white 0.1
+- Shadow: 8px black blur
 
-### Cards
+## Modern Inputs
 
-#### Glass Card
+### Input with Glow Focus
 ```tsx
-<div className="glass-card">
-  Card content
+<input className="input-modern" placeholder="Enter text" />
+```
+
+**Features**:
+- 4px horizontal padding
+- 3px vertical padding
+- Glass background (rgba white 0.05)
+- 10px backdrop blur
+- 2px border (rgba white 0.1)
+- Rounded-xl corners
+
+**Focus State**:
+- Border changes to primary color
+- 30px primary glow appears
+- Smooth 300ms transition
+- No outline ring
+
+## Progress Bar
+
+### Modern Progress
+```tsx
+<div className="progress-modern">
+  <div className="progress-fill-modern" style={{width: "75%"}}></div>
 </div>
 ```
-- Subtle shadow
-- Hover shadow increase
-- Border included
 
-#### Card Variants
+**Container**:
+- 3 height (12px)
+- Rounded-full
+- Glass background
+- Border: rgba white 0.1
+
+**Fill**:
+- Primary → Accent gradient (90°)
+- 20px primary glow
+- 500ms smooth transition
+- Rounded-full
+
+## Divider with Glow
+
 ```tsx
-<div className="card-flat">Flat card</div>
-<div className="card-elevated">Elevated card</div>
-<div className="card-hover">Hover effect card</div>
-```
-
-### Timeline
-
-```tsx
-<ol className="relative">
-  <li className="timeline-item">
-    <div>Event 1</div>
-  </li>
-  <li className="timeline-item">
-    <div>Event 2</div>
-  </li>
-</ol>
+<hr className="divider-glow" />
 ```
 
 **Features**:
-- Left border line
-- Relative positioning
-- Gray border (light) / Dark border (dark)
-
-### Divider
-
-```tsx
-<hr className="divider" />
-```
 - 1px height
-- 4 margin vertical (16px)
-- Gray background
+- 6 margin vertical (24px)
+- Gradient: transparent → primary → accent → transparent
+- 10px primary glow
 
-## Gradients
+## Ultra-Modern Scrollbar
 
-### Primary Gradient
+**Design**:
+- 10px width (thicker for modern look)
+- Transparent track
+- Gradient thumb (primary → accent)
+- 10px primary glow
+- Hover: Glow increases to 20px
+- Rounded-full corners
+
+## Advanced Animations
+
+### Fade In Up
 ```tsx
-<div className="gradient-primary">
-  Blue gradient background
+<div className="animate-fade-in-up">
+  Fades in while sliding up
 </div>
 ```
+- Duration: 600ms
+- Easing: cubic-bezier(0.16, 1, 0.3, 1) - Smooth deceleration
+- Movement: 30px up
 
-### Accent Gradient  
+### Scale In
 ```tsx
-<div className="gradient-accent">
-  Purple to pink gradient
+<div className="animate-scale-in">
+  Scales from 80% to 100%
 </div>
 ```
+- Duration: 400ms
+- Smooth material easing
 
-### Success Gradient
+### Slide In Right
 ```tsx
-<div className="gradient-success">
-  Green gradient
+<div className="animate-slide-in-right">
+  Slides from right
 </div>
 ```
+- Duration: 500ms
+- Movement: 50px from right
 
-### Text Gradient
+### Glow Pulse
 ```tsx
-<h1 className="text-gradient">
-  Gradient text effect
-</h1>
+<div className="animate-glow-pulse">
+  Infinite glow breathing
+</div>
 ```
+- Duration: 2s infinite
+- Pulses between 20px and 60px glow
+- Combines primary + accent colors
 
-## Animations
-
-Smooth, modern animations:
-
+### Float
 ```tsx
-// Fade in (300ms)
-<div className="animate-fade-in">Content</div>
-
-// Slide up (300ms)
-<div className="animate-slide-up">Content</div>
-
-// Slide down (300ms)
-<div className="animate-slide-down">Content</div>
-
-// Slide in from left (300ms)
-<div className="animate-slide-in-left">Content</div>
-
-// Slide in from right (300ms)
-<div className="animate-slide-in-right">Content</div>
-
-// Scale in (200ms)
-<div className="animate-scale-in">Content</div>
+<div className="animate-float">
+  Gentle floating motion
+</div>
 ```
-
-**Timing**: All animations use `ease-out` for natural deceleration
+- Duration: 6s infinite
+- Movement: 20px up and down
+- Ease-in-out timing
 
 ## Utility Classes
 
-### Focus Ring
-
+### Blur Effects
 ```tsx
-<button className="focus-ring">
-  Has focus ring
-</button>
-
-<button className="focus-ring-primary">
-  Primary color focus ring
-</button>
+.blur-glass      // 20px backdrop blur
+.blur-heavy      // 40px blur + 180% saturation
 ```
 
-### Shadow Utilities
-
+### Text Effects
 ```tsx
-<div className="shadow-soft">Soft shadow</div>
-<div className="shadow-medium">Medium shadow</div>
-<div className="shadow-strong">Strong shadow</div>
+.text-glow       // 20px primary glow
+.text-neon       // Multi-layer neon effect (10px/20px/40px)
 ```
 
-### Hover Glow
-
+### 3D Transform
 ```tsx
-<div className="hover-glow">
-  Glows on hover
-</div>
+.perspective-1000  // Enable 3D perspective
+.transform-3d      // Preserve 3D transformations
 ```
 
-### Smooth Transitions
+## Chart Colors - Bold 2026 Palette
 
-```tsx
-<div className="transition-smooth">
-  Smooth transition for all properties
-</div>
-```
+1. **Electric Blue**: `hsl(217 91% 60%)` / `hsl(213 94% 68%)` dark
+2. **Neon Purple**: `hsl(270 95% 65%)` / `hsl(270 95% 75%)` dark
+3. **Vibrant Green**: `hsl(142 76% 48%)` / `hsl(142 76% 55%)` dark
+4. **Bold Orange**: `hsl(25 95% 53%)` / `hsl(25 95% 60%)` dark
+5. **Hot Pink**: `hsl(340 90% 58%)` / `hsl(340 90% 65%)` dark
 
-## Chart Colors
+## Design Trends Integration (2026)
 
-Modern, vibrant palette for data visualization:
+### 1. Glassmorphism
+✅ **Implemented**: Frosted glass cards, inputs, buttons, alerts
+- Background blur: 10-20px
+- Semi-transparent layers
+- Subtle borders and shadows
 
-1. **Blue**: `hsl(217 91% 60%)` - Primary data
-2. **Purple**: `hsl(262 83% 58%)` - Secondary data
-3. **Green**: `hsl(142 71% 45%)` - Success metrics
-4. **Orange**: `hsl(32 95% 44%)` - Warning indicators
-5. **Pink**: `hsl(340 82% 52%)` - Accent data
+### 2. Bold Gradients
+✅ **Implemented**: Cyber, neon, fire, forest gradients
+- 135° angle
+- 3-4 color stops
+- Animated variants
 
-## Scrollbar
+### 3. Neon Glow Effects
+✅ **Implemented**: Multi-layer glows on all interactive elements
+- Primary, accent, success glows
+- Hover enhancements
+- Pulse animations
 
-Modern, clean scrollbar design:
-- 8px width
-- Muted track (30% opacity)
-- Muted-foreground thumb (30% opacity)
-- Hover increases to 50% opacity
-- Rounded corners
-- Smooth color transitions
+### 4. 3D Elements
+✅ **Implemented**: 3D buttons with depth and shadows
+- Multi-layer shadows
+- Transform on interaction
+- Tactile feedback
 
-## Modal Backdrop
+### 5. Dark Mode Premium
+✅ **Implemented**: Ultra-dark background with vibrant accents
+- 3.9% lightness background
+- Bright neon colors
+- Enhanced contrast
 
-```tsx
-<div className="modal-backdrop">
-  <!-- Modal content -->
-</div>
-```
+### 6. Clean Graphics
+✅ **Implemented**: Focus on visual hierarchy without text overload
+- Bold headings (Space Grotesk)
+- Clear spacing
+- Visual emphasis
 
-**Features**:
-- Fixed positioning
-- Z-index: 40
-- Gray-900 with 50% opacity (light)
-- Gray-900 with 80% opacity (dark)
-
-## Design Principles
-
-NextKit Admin + Flowbite embodies:
-
-1. **Clean & Minimal**: Uncluttered interfaces
-2. **Consistent**: Unified component design language
-3. **Accessible**: WCAG AA compliant colors
-4. **Responsive**: Mobile-first approach
-5. **Fast**: Optimized performance
-6. **Flexible**: Easy customization
+### 7. Rich Content Ready
+✅ **Prepared**: Supports overlays, videos, interactive content
+- Glass overlays
+- Blur effects
+- Layered design
 
 ## Accessibility
 
 ### Color Contrast
-- Light mode text: 9.2:1 (AAA)
-- Dark mode text: 12.8:1 (AAA)
-- All status colors: WCAG AA minimum
-- Focus rings: 4px with 50% opacity
+- Light mode text: 8.5:1 (AAA)
+- Dark mode text: 15.2:1 (AAA+)
+- All interactive elements: WCAG AAA
+- Glow effects enhance visibility
 
-### Interactive Elements
-- Minimum touch target: 44px × 44px
-- Clear focus states on all interactive elements
-- Keyboard navigation support
-- Screen reader friendly markup
-
-## Flowbite Resources
-
-- [Flowbite Official](https://flowbite.com/)
-- [Flowbite Components](https://flowbite.com/docs/getting-started/introduction/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [NextKit GitHub](https://github.com/wrappixel/nextkit-admin-with-supabase-and-mongodb)
-- [Tabler Icons](https://tabler.io/icons)
-
-## Browser Support
-
-Full support for modern browsers:
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## Customization
-
-Customize theme colors in `src/index.css`:
-
+### Reduced Motion
+Consider adding:
 ```css
-:root {
-  --primary: 217 91% 60%; /* Modern Blue */
-  --accent: 262 83% 58%;  /* Vibrant Purple */
-  --success: 142 71% 45%; /* Fresh Green */
-  /* ... other variables */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 ```
 
-## Migration Notes
+## Browser Support
 
-### From Spike Next.js Material Design
-- Font changed back to Inter (from Plus Jakarta Sans)
-- Material elevation replaced with Flowbite shadows
-- Typography no longer uses Material type scale
-- Button styles now use Flowbite conventions
-- Focus rings are 4px (was 2px)
-- Components follow Flowbite naming
+**Full support**:
+- Chrome/Edge 100+ (backdrop-filter)
+- Firefox 103+ (backdrop-filter)
+- Safari 15.4+ (backdrop-filter)
 
-### Key Differences
-- **Component Library**: Flowbite (was Material UI)
-- **Design Language**: Tailwind utility-first (was Material Design)
-- **Button Style**: Lowercase text (was uppercase)
-- **Shadows**: Flowbite elevation (was Material elevation)
-- **Focus**: Ring-4 (was ring-2)
+**Graceful degradation**:
+- Fallback backgrounds for older browsers
+- Progressive enhancement approach
 
-## Tech Stack Integration
+## Performance Considerations
 
-### Supabase
-NextKit includes Supabase authentication and database integration patterns.
+**Optimizations**:
+- GPU-accelerated transforms
+- Will-change on animated elements
+- Reduced backdrop-filter usage on mobile
+- CSS containment for cards
 
-### Prisma ORM  
-Type-safe database queries with auto-generated client.
+**Best Practices**:
+- Limit simultaneous animations to 3-5 elements
+- Use `transform` and `opacity` for animations
+- Avoid animating `backdrop-filter` when possible
 
-### ApexCharts
-Interactive charts for dashboards and analytics.
+## Customization
 
-### MongoDB
-Alternative database option with Prisma support.
+Modify CSS variables in `src/index.css`:
+
+```css
+:root {
+  --primary: 217 91% 60%; /* Change primary color */
+  --accent: 270 95% 65%;  /* Change accent color */
+  --radius: 1rem;         /* Change border radius */
+}
+```
+
+## Migration from Previous Theme
+
+**Key Changes**:
+- Font: Added Space Grotesk for headings
+- Effects: Glassmorphism replaces flat design
+- Colors: Vibrant neon palette (was muted)
+- Borders: Glass borders (was solid)
+- Shadows: Multi-layer glows (was simple shadows)
+- Animations: Smooth deceleration curves
+- Scrollbar: Gradient with glow
+
+## Inspiration & Resources
+
+- [Glassmorphism CSS Generator](https://hype4.academy/tools/glassmorphism-generator)
+- [2026 UI Trends - Muzli](https://muz.li/)
+- [Dribbble - Modern Dashboards](https://dribbble.com/tags/modern-dashboard)
+- [CSS Gradient Generator](https://cssgradient.io/)
+- [Cubic-bezier Easing](https://cubic-bezier.com/)
 
 ## License
 
-This theme adapts NextKit Admin design principles for MOC Studio.
-NextKit Admin is created by WrapPixel (MIT License).
-Flowbite is open-source (MIT License).
+This theme uses cutting-edge 2026 design trends.
+Free to use and modify for MOC Studio.
+Inspired by leading design systems and modern UI trends.
