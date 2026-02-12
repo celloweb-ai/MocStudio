@@ -10,6 +10,7 @@ export const translations = {
   "nav.workOrders": { en: "Work Orders", pt: "Ordens de Serviço" },
   "nav.reports": { en: "Reports", pt: "Relatórios" },
   "nav.standards": { en: "Standards & Links", pt: "Normas e Links" },
+  "nav.helpCenter": { en: "Help Center", pt: "Central de Ajuda" },
   "nav.administration": { en: "Administration", pt: "Administração" },
   "nav.userManagement": { en: "User Management", pt: "Gestão de Usuários" },
 
