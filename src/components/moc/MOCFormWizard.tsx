@@ -54,33 +54,12 @@ const STEPS = [
   { id: 5, title: "Review", icon: Check },
 ];
 
-const stepValidationSchemas = {
-  1: mocFormSchema.pick({
-    title: true,
-    facility: true,
-    changeType: true,
-    priority: true,
-    description: true,
-    justification: true,
-  }),
-  2: mocFormSchema.pick({
-    affectedSystems: true,
-    affectedAreas: true,
-    estimatedDuration: true,
-    temporaryOrPermanent: true,
-  }),
-  3: mocFormSchema.pick({
-    probability: true,
-    severity: true,
-    riskCategory: true,
-    mitigationMeasures: true,
-  }),
-  4: mocFormSchema.pick({
-    requiredApprovers: true,
-    targetImplementationDate: true,
-    reviewDeadline: true,
-  }),
-} as const;
+const stepFields: Partial<Record<number, (keyof MOCFormData)[]>> = {
+  1: ["title", "facility", "changeType", "priority", "description", "justification"],
+  2: ["affectedSystems", "affectedAreas", "estimatedDuration", "temporaryOrPermanent"],
+  3: ["probability", "severity", "riskCategory", "mitigationMeasures"],
+  4: ["requiredApprovers", "targetImplementationDate", "reviewDeadline"],
+};
 
 interface MOCFormWizardProps {
   onClose: () => void;
@@ -118,30 +97,18 @@ export function MOCFormWizard({ onClose, onSubmit }: MOCFormWizardProps) {
   });
 
   const validateCurrentStep = async () => {
-    const schema = stepValidationSchemas[currentStep as keyof typeof stepValidationSchemas];
-
-    if (!schema) {
+    const fields = stepFields[currentStep];
+    if (!fields) {
       return true;
     }
 
-    const validationResult = schema.safeParse(form.getValues());
-    if (validationResult.success) {
-      return true;
-    }
-
-    form.clearErrors();
-    validationResult.error.issues.forEach((issue) => {
-      const fieldName = issue.path[0] as keyof MOCFormData;
-      form.setError(fieldName, { message: issue.message });
-    });
-
-    return false;
+    return form.trigger(fields);
   };
 
   const handleNext = async () => {
     const isValid = await validateCurrentStep();
     if (isValid && currentStep < 5) {
-      setCurrentStep(currentStep + 1);
+      setCurrentStep((previousStep) => previousStep + 1);
     }
   };
 
