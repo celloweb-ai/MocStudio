@@ -9,12 +9,23 @@ interface AppLayoutProps {
 
 function AppLayoutInner({ children }: AppLayoutProps) {
   const { collapsed } = useSidebarContext();
+  
   return (
     <div className="min-h-screen bg-background">
       <AppSidebar />
-      <div className={cn("transition-all duration-300 md:pl-16", collapsed ? "md:pl-16" : "md:pl-64", "pl-0")}>
+      <div 
+        className={cn(
+          "transition-all duration-300 ease-in-out",
+          "pl-0 md:pl-16",
+          !collapsed && "md:pl-64"
+        )}
+      >
         <TopBar />
-        <main className="p-6 animate-fade-in">{children}</main>
+        <main className="p-6 animate-fade-in">
+          <div className="transition-all duration-200">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   );
