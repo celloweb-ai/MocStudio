@@ -93,6 +93,10 @@ export default function MOCRequests() {
     navigate(`/moc-requests/${mocId}`);
   };
 
+  const handleEditRequest = (mocId: string) => {
+    navigate(`/moc-requests/${mocId}`);
+  };
+
   const getStatusInfo = (status: MOCStatus | null) => {
     switch (status) {
       case "draft":
@@ -330,11 +334,11 @@ export default function MOCRequests() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleViewDetails(moc.id)}>
+                              <DropdownMenuItem onSelect={() => handleViewDetails(moc.id)}>
                                 <Eye className="h-4 w-4 mr-2" />
                                 View Details
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onSelect={() => handleEditRequest(moc.id)}>
                                 <Edit className="h-4 w-4 mr-2" />
                                 Edit
                               </DropdownMenuItem>
