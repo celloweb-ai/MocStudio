@@ -2,132 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @layer base {
   :root {
-    /* Spike Next.js Material Design Theme - Light Mode */
-    --background: 0 0% 98%;
-    --foreground: 220 20% 18%;
+    /* NextKit Admin Theme - Clean Tailwind Design with Flowbite */
+    --background: 0 0% 100%;
+    --foreground: 220 13% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 18%;
+    --card-foreground: 220 13% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 18%;
+    --popover-foreground: 220 13% 15%;
 
-    /* Primary: Material Blue (MUI Default) */
-    --primary: 207 90% 54%;
+    /* Primary: Modern Blue - NextKit brand color */
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 220 20% 18%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 220 13% 15%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 220 9% 46%;
 
-    /* Accent: Material Indigo */
-    --accent: 231 48% 48%;
+    /* Accent: Vibrant Purple */
+    --accent: 262 83% 58%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 65% 51%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Success: Material Green */
-    --success: 122 39% 49%;
+    /* Success: Fresh Green */
+    --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning: Material Orange */
-    --warning: 36 100% 50%;
+    /* Warning: Amber Orange */
+    --warning: 32 95% 44%;
     --warning-foreground: 0 0% 100%;
 
-    /* Info: Material Cyan */
-    --info: 187 71% 50%;
+    /* Info: Cyan Blue */
+    --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 207 90% 54%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
 
     --radius: 0.5rem;
 
-    /* Sidebar - Material Design */
+    /* Sidebar - Clean modern design */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 20% 40%;
-    --sidebar-primary: 207 90% 54%;
+    --sidebar-foreground: 220 13% 35%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 220 20% 18%;
-    --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 207 90% 54%;
+    --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 220 13% 15%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 60%;
 
-    /* Chart colors - Material Design palette */
-    --chart-1: 207 90% 54%; /* Blue */
-    --chart-2: 291 64% 42%; /* Purple */
-    --chart-3: 122 39% 49%; /* Green */
-    --chart-4: 36 100% 50%; /* Orange */
+    /* Chart colors - Modern vibrant palette */
+    --chart-1: 217 91% 60%; /* Blue */
+    --chart-2: 262 83% 58%; /* Purple */
+    --chart-3: 142 71% 45%; /* Green */
+    --chart-4: 32 95% 44%; /* Orange */
     --chart-5: 340 82% 52%; /* Pink */
   }
 
   .dark {
-    /* Spike Next.js Material Design Theme - Dark Mode */
-    --background: 220 26% 14%;
+    /* NextKit Admin Dark Theme */
+    --background: 224 71% 4%;
     --foreground: 210 40% 98%;
 
-    --card: 224 71% 4%;
+    --card: 224 71% 6%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 224 71% 4%;
+    --popover: 224 71% 6%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary: Material Blue (lighter for dark) */
-    --primary: 207 90% 61%;
-    --primary-foreground: 220 26% 14%;
+    /* Primary: Bright Blue for dark mode */
+    --primary: 213 94% 68%;
+    --primary-foreground: 224 71% 4%;
 
-    --secondary: 217 33% 17%;
+    --secondary: 215 28% 17%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 223 47% 11%;
     --muted-foreground: 215 20% 65%;
 
-    /* Accent: Material Indigo */
-    --accent: 235 86% 65%;
-    --accent-foreground: 220 26% 14%;
+    /* Accent: Vivid Purple */
+    --accent: 263 70% 50%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 62% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Success: Material Green */
-    --success: 122 39% 49%;
+    /* Success: Bright Green */
+    --success: 142 71% 45%;
     --success-foreground: 210 40% 98%;
 
-    /* Warning: Material Orange */
-    --warning: 36 100% 50%;
-    --warning-foreground: 220 26% 14%;
+    /* Warning: Bright Orange */
+    --warning: 32 95% 44%;
+    --warning-foreground: 224 71% 4%;
 
-    /* Info: Material Cyan */
-    --info: 187 71% 50%;
-    --info-foreground: 220 26% 14%;
+    /* Info: Bright Cyan */
+    --info: 199 89% 48%;
+    --info-foreground: 224 71% 4%;
 
-    --border: 215 27% 17%;
-    --input: 215 27% 17%;
-    --ring: 207 90% 61%;
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 213 94% 68%;
 
-    /* Sidebar - Dark mode */
-    --sidebar-background: 220 26% 14%;
+    /* Sidebar - Dark theme */
+    --sidebar-background: 224 71% 4%;
     --sidebar-foreground: 215 20% 65%;
-    --sidebar-primary: 207 90% 61%;
-    --sidebar-primary-foreground: 220 26% 14%;
-    --sidebar-accent: 217 33% 17%;
+    --sidebar-primary: 213 94% 68%;
+    --sidebar-primary-foreground: 224 71% 4%;
+    --sidebar-accent: 215 28% 17%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 215 27% 17%;
-    --sidebar-ring: 207 90% 61%;
+    --sidebar-border: 215 28% 17%;
+    --sidebar-ring: 213 94% 68%;
 
-    /* Chart colors - Vibrant for dark mode */
-    --chart-1: 207 90% 61%; /* Blue */
-    --chart-2: 291 64% 51%; /* Purple */
-    --chart-3: 122 39% 49%; /* Green */
-    --chart-4: 36 100% 50%; /* Orange */
+    /* Chart colors - Enhanced for dark mode */
+    --chart-1: 213 94% 68%; /* Blue */
+    --chart-2: 263 70% 50%; /* Purple */
+    --chart-3: 142 71% 45%; /* Green */
+    --chart-4: 32 95% 44%; /* Orange */
     --chart-5: 340 82% 52%; /* Pink */
   }
 }
@@ -139,280 +139,284 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
-  /* Material Design elevation scrollbar */
+  /* Modern clean scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    @apply bg-muted/30;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/20 rounded-full;
+    @apply bg-muted-foreground/30 rounded-full;
+    transition: background-color 0.2s;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/30;
+    @apply bg-muted-foreground/50;
   }
 }
 
 @layer components {
-  /* Material Design Paper/Card */
+  /* Flowbite-style card with subtle shadow */
   .glass-card {
-    @apply bg-card backdrop-blur-sm border-0 shadow-lg rounded-lg;
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
-                0px 1px 1px 0px rgba(0,0,0,0.14),
-                0px 1px 3px 0px rgba(0,0,0,0.12);
+    @apply bg-card border border-border rounded-lg shadow-sm;
+    transition: box-shadow 0.2s ease-in-out;
   }
 
-  /* Material elevation levels */
-  .elevation-0 {
-    box-shadow: none;
+  .glass-card:hover {
+    @apply shadow-md;
   }
 
-  .elevation-1 {
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
-                0px 1px 1px 0px rgba(0,0,0,0.14),
-                0px 1px 3px 0px rgba(0,0,0,0.12);
+  /* NextKit elevation system */
+  .card-flat {
+    @apply bg-card border border-border rounded-lg;
   }
 
-  .elevation-2 {
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),
-                0px 2px 2px 0px rgba(0,0,0,0.14),
-                0px 1px 5px 0px rgba(0,0,0,0.12);
+  .card-elevated {
+    @apply bg-card border border-border rounded-lg shadow-lg;
   }
 
-  .elevation-3 {
-    box-shadow: 0px 3px 3px -2px rgba(0,0,0,0.2),
-                0px 3px 4px 0px rgba(0,0,0,0.14),
-                0px 1px 8px 0px rgba(0,0,0,0.12);
+  .card-hover {
+    @apply bg-card border border-border rounded-lg shadow-sm 
+           hover:shadow-md transition-shadow duration-200;
   }
 
-  .elevation-4 {
-    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),
-                0px 4px 5px 0px rgba(0,0,0,0.14),
-                0px 1px 10px 0px rgba(0,0,0,0.12);
-  }
-
-  /* Primary gradient - Material Blue */
+  /* Primary gradient - Modern blue */
   .gradient-primary {
     background: linear-gradient(135deg, 
-      hsl(207 90% 54%) 0%, 
-      hsl(207 90% 64%) 100%);
+      hsl(217 91% 60%) 0%, 
+      hsl(217 91% 70%) 100%);
   }
 
-  /* Accent gradient - Material Indigo to Purple */
+  /* Accent gradient - Purple to Pink */
   .gradient-accent {
     background: linear-gradient(135deg, 
-      hsl(231 48% 48%) 0%, 
-      hsl(291 64% 42%) 100%);
+      hsl(262 83% 58%) 0%, 
+      hsl(340 82% 52%) 100%);
   }
 
   /* Success gradient */
   .gradient-success {
     background: linear-gradient(135deg, 
-      hsl(122 39% 49%) 0%, 
-      hsl(122 39% 59%) 100%);
+      hsl(142 71% 45%) 0%, 
+      hsl(142 71% 55%) 100%);
   }
 
   /* Text gradient */
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background: linear-gradient(135deg, 
-      hsl(207 90% 54%) 0%, 
-      hsl(231 48% 48%) 100%);
+      hsl(217 91% 60%) 0%, 
+      hsl(262 83% 58%) 100%);
   }
 
-  /* Material Design ripple effect simulation */
-  .ripple {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .ripple::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-  }
-
-  .ripple:active::after {
-    width: 300px;
-    height: 300px;
-  }
-
-  /* Status badges - Material Design colors */
-  .status-draft {
-    @apply bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300;
-  }
-
-  .status-submitted {
-    @apply bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-900;
-  }
-
-  .status-review {
-    @apply bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-900;
-  }
-
-  .status-approved {
-    @apply bg-green-50 text-green-700 border border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-900;
-  }
-
-  .status-rejected {
-    @apply bg-red-50 text-red-700 border border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-900;
-  }
-
-  .status-implemented {
-    @apply bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950 dark:text-indigo-400 dark:border-indigo-900;
-  }
-
-  /* Material Design button styles */
-  .btn-contained {
-    @apply px-4 py-2 bg-primary text-primary-foreground rounded-md 
-           shadow-md hover:shadow-lg transition-all duration-200 
-           font-medium text-sm uppercase tracking-wider;
-  }
-
-  .btn-outlined {
-    @apply px-4 py-2 border-2 border-primary text-primary rounded-md 
-           hover:bg-primary/10 transition-all duration-200 
-           font-medium text-sm uppercase tracking-wider;
-  }
-
-  .btn-text {
-    @apply px-4 py-2 text-primary rounded-md hover:bg-primary/10 
-           transition-all duration-200 font-medium text-sm uppercase tracking-wider;
-  }
-
-  .btn-fab {
-    @apply w-14 h-14 rounded-full bg-primary text-primary-foreground 
-           flex items-center justify-center shadow-lg hover:shadow-xl 
+  /* Flowbite button styles */
+  .btn-primary {
+    @apply px-5 py-2.5 text-sm font-medium text-center text-white 
+           bg-primary rounded-lg hover:bg-primary/90 
+           focus:ring-4 focus:ring-primary/50 
            transition-all duration-200;
   }
 
-  /* Material Design Card */
-  .material-card {
-    @apply bg-card rounded-lg border-0 overflow-hidden;
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
-                0px 1px 1px 0px rgba(0,0,0,0.14),
-                0px 1px 3px 0px rgba(0,0,0,0.12);
+  .btn-secondary {
+    @apply px-5 py-2.5 text-sm font-medium text-center text-gray-900 
+           bg-white border border-gray-300 rounded-lg 
+           hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 
+           dark:bg-gray-800 dark:text-white dark:border-gray-600 
+           dark:hover:bg-gray-700 dark:focus:ring-gray-700 
+           transition-all duration-200;
   }
 
-  .material-card:hover {
-    box-shadow: 0px 3px 3px -2px rgba(0,0,0,0.2),
-                0px 3px 4px 0px rgba(0,0,0,0.14),
-                0px 1px 8px 0px rgba(0,0,0,0.12);
+  .btn-outline {
+    @apply px-5 py-2.5 text-sm font-medium text-center 
+           text-primary bg-transparent border-2 border-primary rounded-lg 
+           hover:bg-primary hover:text-white 
+           focus:ring-4 focus:ring-primary/50 
+           transition-all duration-200;
   }
 
-  /* Material Input */
-  .material-input {
-    @apply w-full px-3 py-3 bg-transparent border-b-2 border-input 
-           focus:border-primary outline-none transition-colors duration-200;
+  .btn-ghost {
+    @apply px-5 py-2.5 text-sm font-medium text-center 
+           text-gray-500 hover:text-gray-900 hover:bg-gray-100 
+           rounded-lg focus:ring-4 focus:ring-gray-200 
+           dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 
+           transition-all duration-200;
   }
 
-  /* Material Badge */
-  .material-badge {
-    @apply inline-flex items-center justify-center px-2 py-1 
-           text-xs font-medium rounded-full min-w-[20px];
+  /* Flowbite alert styles */
+  .alert-info {
+    @apply flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg 
+           bg-blue-50 dark:bg-gray-800 dark:text-blue-400 border border-blue-200 dark:border-blue-800;
   }
 
-  .badge-primary {
-    @apply material-badge bg-primary text-primary-foreground;
-  }
-
-  .badge-secondary {
-    @apply material-badge bg-secondary text-secondary-foreground;
-  }
-
-  .badge-success {
-    @apply material-badge bg-success text-success-foreground;
-  }
-
-  .badge-warning {
-    @apply material-badge bg-warning text-warning-foreground;
-  }
-
-  .badge-error {
-    @apply material-badge bg-destructive text-destructive-foreground;
-  }
-
-  .badge-info {
-    @apply material-badge bg-info text-info-foreground;
-  }
-
-  /* Material Alerts */
   .alert-success {
-    @apply p-4 rounded-md bg-green-50 border border-green-200 
-           text-green-800 dark:bg-green-950 dark:border-green-900 dark:text-green-200;
-  }
-
-  .alert-error {
-    @apply p-4 rounded-md bg-red-50 border border-red-200 
-           text-red-800 dark:bg-red-950 dark:border-red-900 dark:text-red-200;
+    @apply flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg 
+           bg-green-50 dark:bg-gray-800 dark:text-green-400 border border-green-200 dark:border-green-800;
   }
 
   .alert-warning {
-    @apply p-4 rounded-md bg-orange-50 border border-orange-200 
-           text-orange-800 dark:bg-orange-950 dark:border-orange-900 dark:text-orange-200;
+    @apply flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg 
+           bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-800;
   }
 
-  .alert-info {
-    @apply p-4 rounded-md bg-blue-50 border border-blue-200 
-           text-blue-800 dark:bg-blue-950 dark:border-blue-900 dark:text-blue-200;
+  .alert-error {
+    @apply flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg 
+           bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-200 dark:border-red-800;
   }
 
-  /* Material Chip */
-  .material-chip {
-    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full 
-           bg-muted text-foreground text-sm font-medium 
-           hover:bg-muted/80 transition-colors;
+  /* Flowbite badge styles */
+  .badge-primary {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
   }
 
-  /* Material Divider */
-  .material-divider {
-    @apply border-t border-border my-4;
+  .badge-secondary {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
   }
 
-  /* Material Paper */
-  .material-paper {
-    @apply bg-card rounded-lg p-6;
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),
-                0px 1px 1px 0px rgba(0,0,0,0.14),
-                0px 1px 3px 0px rgba(0,0,0,0.12);
+  .badge-success {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300;
+  }
+
+  .badge-error {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300;
+  }
+
+  /* Status badges for MOC */
+  .status-draft {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
+  }
+
+  .status-submitted {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-blue-100 text-blue-800 border border-blue-300 
+           dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700;
+  }
+
+  .status-review {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-yellow-100 text-yellow-800 border border-yellow-300 
+           dark:bg-yellow-900 dark:text-yellow-300 dark:border-yellow-700;
+  }
+
+  .status-approved {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-green-100 text-green-800 border border-green-300 
+           dark:bg-green-900 dark:text-green-300 dark:border-green-700;
+  }
+
+  .status-rejected {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-red-100 text-red-800 border border-red-300 
+           dark:bg-red-900 dark:text-red-300 dark:border-red-700;
+  }
+
+  .status-implemented {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+           bg-purple-100 text-purple-800 border border-purple-300 
+           dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700;
+  }
+
+  /* Flowbite input styles */
+  .input-primary {
+    @apply block w-full p-2.5 text-sm text-gray-900 bg-gray-50 
+           border border-gray-300 rounded-lg 
+           focus:ring-primary focus:border-primary 
+           dark:bg-gray-700 dark:border-gray-600 
+           dark:placeholder-gray-400 dark:text-white 
+           dark:focus:ring-primary dark:focus:border-primary;
+  }
+
+  /* Flowbite table */
+  .table-flowbite {
+    @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+  }
+
+  .table-flowbite thead {
+    @apply text-xs text-gray-700 uppercase bg-gray-50 
+           dark:bg-gray-700 dark:text-gray-400;
+  }
+
+  .table-flowbite tbody tr {
+    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 
+           hover:bg-gray-50 dark:hover:bg-gray-600;
+  }
+
+  /* Flowbite dropdown */
+  .dropdown-flowbite {
+    @apply z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-lg 
+           dark:bg-gray-700 dark:divide-gray-600;
+  }
+
+  /* Flowbite modal backdrop */
+  .modal-backdrop {
+    @apply fixed inset-0 z-40 bg-gray-900/50 dark:bg-gray-900/80;
+  }
+
+  /* Flowbite divider */
+  .divider {
+    @apply h-px my-4 bg-gray-200 border-0 dark:bg-gray-700;
+  }
+
+  /* Flowbite progress bar */
+  .progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700;
+  }
+
+  .progress-fill {
+    @apply bg-primary h-2.5 rounded-full transition-all duration-300;
+  }
+
+  /* Flowbite timeline */
+  .timeline-item {
+    @apply relative border-l border-gray-200 dark:border-gray-700;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition-all duration-200 ease-in-out;
   }
 }
 
 @layer utilities {
-  /* Material Design animations */
+  /* Flowbite-style animations */
   .animate-fade-in {
-    animation: fadeIn 225ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    animation: fadeIn 0.3s ease-out;
   }
 
   .animate-slide-up {
-    animation: slideUp 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-out;
   }
 
   .animate-slide-in-left {
-    animation: slideInLeft 225ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    animation: slideInLeft 0.3s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
   }
 
   .animate-scale-in {
-    animation: scaleIn 225ms cubic-bezier(0.0, 0.0, 0.2, 1);
-  }
-
-  .animate-material-grow {
-    animation: materialGrow 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    animation: scaleIn 0.2s ease-out;
   }
 
   @keyframes fadeIn {
@@ -423,7 +427,18 @@
   @keyframes slideUp {
     from { 
       opacity: 0; 
-      transform: translateY(20px); 
+      transform: translateY(1rem); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+
+  @keyframes slideDown {
+    from { 
+      opacity: 0; 
+      transform: translateY(-1rem); 
     }
     to { 
       opacity: 1; 
@@ -434,7 +449,18 @@
   @keyframes slideInLeft {
     from { 
       opacity: 0; 
-      transform: translateX(-20px); 
+      transform: translateX(-1rem); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0); 
+    }
+  }
+
+  @keyframes slideInRight {
+    from { 
+      opacity: 0; 
+      transform: translateX(1rem); 
     }
     to { 
       opacity: 1; 
@@ -445,7 +471,7 @@
   @keyframes scaleIn {
     from { 
       opacity: 0; 
-      transform: scale(0.9); 
+      transform: scale(0.95); 
     }
     to { 
       opacity: 1; 
@@ -453,15 +479,13 @@
     }
   }
 
-  @keyframes materialGrow {
-    from { 
-      opacity: 0; 
-      transform: scale(0); 
-    }
-    to { 
-      opacity: 1; 
-      transform: scale(1); 
-    }
+  /* Focus ring utilities */
+  .focus-ring {
+    @apply focus:ring-4 focus:outline-none;
+  }
+
+  .focus-ring-primary {
+    @apply focus:ring-4 focus:ring-primary/50 focus:outline-none;
   }
 
   /* Text utilities */
@@ -469,56 +493,25 @@
     text-wrap: balance;
   }
 
-  /* Material Design typography */
-  .typography-h1 {
-    @apply text-6xl font-light tracking-tight;
+  /* Shadow utilities */
+  .shadow-soft {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   }
 
-  .typography-h2 {
-    @apply text-5xl font-light tracking-tight;
+  .shadow-medium {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 
-  .typography-h3 {
-    @apply text-4xl font-normal;
+  .shadow-strong {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
-  .typography-h4 {
-    @apply text-3xl font-normal;
+  /* Hover glow effect */
+  .hover-glow {
+    @apply transition-shadow duration-200;
   }
 
-  .typography-h5 {
-    @apply text-2xl font-normal;
-  }
-
-  .typography-h6 {
-    @apply text-xl font-medium;
-  }
-
-  .typography-subtitle1 {
-    @apply text-base font-normal;
-  }
-
-  .typography-subtitle2 {
-    @apply text-sm font-medium;
-  }
-
-  .typography-body1 {
-    @apply text-base font-normal;
-  }
-
-  .typography-body2 {
-    @apply text-sm font-normal;
-  }
-
-  .typography-button {
-    @apply text-sm font-medium uppercase tracking-wider;
-  }
-
-  .typography-caption {
-    @apply text-xs font-normal;
-  }
-
-  .typography-overline {
-    @apply text-xs font-normal uppercase tracking-wider;
+  .hover-glow:hover {
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
   }
 }
