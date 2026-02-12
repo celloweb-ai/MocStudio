@@ -2,133 +2,143 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    /* NextKit Admin Theme - Clean Tailwind Design with Flowbite */
-    --background: 0 0% 100%;
-    --foreground: 220 13% 15%;
+    /* Ultra-Modern 2026 Theme - Glassmorphism + Bold Gradients */
+    --background: 240 10% 98%;
+    --foreground: 240 10% 5%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 13% 15%;
+    --card-foreground: 240 10% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 15%;
+    --popover-foreground: 240 10% 5%;
 
-    /* Primary: Modern Blue - NextKit brand color */
+    /* Primary: Vibrant Electric Blue */
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 240 5% 96%;
-    --secondary-foreground: 220 13% 15%;
+    --secondary-foreground: 240 10% 5%;
 
     --muted: 240 5% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted-foreground: 240 4% 46%;
 
-    /* Accent: Vibrant Purple */
-    --accent: 262 83% 58%;
+    /* Accent: Neon Purple */
+    --accent: 270 95% 65%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 90% 58%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Success: Fresh Green */
-    --success: 142 71% 45%;
+    /* Success: Vibrant Green */
+    --success: 142 76% 48%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning: Amber Orange */
-    --warning: 32 95% 44%;
+    /* Warning: Bold Orange */
+    --warning: 25 95% 53%;
     --warning-foreground: 0 0% 100%;
 
-    /* Info: Cyan Blue */
-    --info: 199 89% 48%;
+    /* Info: Bright Cyan */
+    --info: 190 95% 50%;
     --info-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
     --ring: 217 91% 60%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    /* Sidebar - Clean modern design */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 13% 35%;
+    /* Glass effect variables */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 100% / 0.18;
+    --glass-shadow: 0 8px 32px 0 rgb(31 38 135 / 0.37);
+
+    /* Sidebar - Modern glass style */
+    --sidebar-background: 0 0% 100% / 0.8;
+    --sidebar-foreground: 240 10% 15%;
     --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 5% 96%;
-    --sidebar-accent-foreground: 220 13% 15%;
-    --sidebar-border: 220 13% 91%;
+    --sidebar-accent-foreground: 240 10% 5%;
+    --sidebar-border: 240 6% 90%;
     --sidebar-ring: 217 91% 60%;
 
-    /* Chart colors - Modern vibrant palette */
-    --chart-1: 217 91% 60%; /* Blue */
-    --chart-2: 262 83% 58%; /* Purple */
-    --chart-3: 142 71% 45%; /* Green */
-    --chart-4: 32 95% 44%; /* Orange */
-    --chart-5: 340 82% 52%; /* Pink */
+    /* Chart colors - Bold 2026 palette */
+    --chart-1: 217 91% 60%; /* Electric Blue */
+    --chart-2: 270 95% 65%; /* Neon Purple */
+    --chart-3: 142 76% 48%; /* Vibrant Green */
+    --chart-4: 25 95% 53%; /* Bold Orange */
+    --chart-5: 340 90% 58%; /* Hot Pink */
   }
 
   .dark {
-    /* NextKit Admin Dark Theme */
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
+    /* Ultra-Modern Dark Mode 2026 - Premium Experience */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
 
-    --card: 224 71% 6%;
-    --card-foreground: 210 40% 98%;
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 224 71% 6%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 10% 6%;
+    --popover-foreground: 0 0% 98%;
 
-    /* Primary: Bright Blue for dark mode */
+    /* Primary: Bright Electric Blue */
     --primary: 213 94% 68%;
-    --primary-foreground: 224 71% 4%;
+    --primary-foreground: 240 10% 3.9%;
 
-    --secondary: 215 28% 17%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 223 47% 11%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
 
-    /* Accent: Vivid Purple */
-    --accent: 263 70% 50%;
-    --accent-foreground: 210 40% 98%;
+    /* Accent: Glowing Neon Purple */
+    --accent: 270 95% 75%;
+    --accent-foreground: 240 10% 3.9%;
 
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 85% 62%;
+    --destructive-foreground: 0 0% 98%;
 
-    /* Success: Bright Green */
-    --success: 142 71% 45%;
-    --success-foreground: 210 40% 98%;
+    /* Success: Neon Green */
+    --success: 142 76% 55%;
+    --success-foreground: 240 10% 3.9%;
 
     /* Warning: Bright Orange */
-    --warning: 32 95% 44%;
-    --warning-foreground: 224 71% 4%;
+    --warning: 25 95% 60%;
+    --warning-foreground: 240 10% 3.9%;
 
-    /* Info: Bright Cyan */
-    --info: 199 89% 48%;
-    --info-foreground: 224 71% 4%;
+    /* Info: Neon Cyan */
+    --info: 190 95% 60%;
+    --info-foreground: 240 10% 3.9%;
 
-    --border: 215 28% 17%;
-    --input: 215 28% 17%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
     --ring: 213 94% 68%;
 
-    /* Sidebar - Dark theme */
-    --sidebar-background: 224 71% 4%;
-    --sidebar-foreground: 215 20% 65%;
+    /* Glass effect for dark mode */
+    --glass-bg: 240 10% 10% / 0.7;
+    --glass-border: 0 0% 100% / 0.1;
+    --glass-shadow: 0 8px 32px 0 rgb(0 0 0 / 0.37);
+
+    /* Sidebar dark glass */
+    --sidebar-background: 240 10% 6% / 0.8;
+    --sidebar-foreground: 240 5% 64.9%;
     --sidebar-primary: 213 94% 68%;
-    --sidebar-primary-foreground: 224 71% 4%;
-    --sidebar-accent: 215 28% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 215 28% 17%;
+    --sidebar-primary-foreground: 240 10% 3.9%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 213 94% 68%;
 
-    /* Chart colors - Enhanced for dark mode */
-    --chart-1: 213 94% 68%; /* Blue */
-    --chart-2: 263 70% 50%; /* Purple */
-    --chart-3: 142 71% 45%; /* Green */
-    --chart-4: 32 95% 44%; /* Orange */
-    --chart-5: 340 82% 52%; /* Pink */
+    /* Chart colors - Vibrant for dark */
+    --chart-1: 213 94% 68%; /* Bright Blue */
+    --chart-2: 270 95% 75%; /* Neon Purple */
+    --chart-3: 142 76% 55%; /* Neon Green */
+    --chart-4: 25 95% 60%; /* Bright Orange */
+    --chart-5: 340 90% 65%; /* Hot Pink */
   }
 }
 
@@ -139,379 +149,437 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Inter', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
-  /* Modern clean scrollbar */
+  /* Ultra-modern scrollbar with glow */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-muted/30;
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30 rounded-full;
-    transition: background-color 0.2s;
+    background: linear-gradient(180deg, hsl(var(--primary)), hsl(var(--accent)));
+    @apply rounded-full;
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/50;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.8);
+  }
+
+  /* Headings with Space Grotesk */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
   }
 }
 
 @layer components {
-  /* Flowbite-style card with subtle shadow */
+  /* Glassmorphism Card - 2026 Trend */
   .glass-card {
-    @apply bg-card border border-border rounded-lg shadow-sm;
-    transition: box-shadow 0.2s ease-in-out;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    @apply rounded-2xl;
   }
 
-  .glass-card:hover {
-    @apply shadow-md;
+  .dark .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   }
 
-  /* NextKit elevation system */
-  .card-flat {
-    @apply bg-card border border-border rounded-lg;
+  /* Neumorphism + Glass hybrid */
+  .neuglass-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: 
+      20px 20px 60px rgba(0, 0, 0, 0.2),
+      -20px -20px 60px rgba(255, 255, 255, 0.05),
+      inset 2px 2px 5px rgba(255, 255, 255, 0.1),
+      inset -2px -2px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    @apply rounded-3xl;
   }
 
-  .card-elevated {
-    @apply bg-card border border-border rounded-lg shadow-lg;
-  }
-
-  .card-hover {
-    @apply bg-card border border-border rounded-lg shadow-sm 
-           hover:shadow-md transition-shadow duration-200;
-  }
-
-  /* Primary gradient - Modern blue */
-  .gradient-primary {
+  /* Bold gradient backgrounds */
+  .gradient-cyber {
     background: linear-gradient(135deg, 
-      hsl(217 91% 60%) 0%, 
-      hsl(217 91% 70%) 100%);
+      hsl(217 91% 60%) 0%,
+      hsl(270 95% 65%) 50%,
+      hsl(340 90% 58%) 100%);
   }
 
-  /* Accent gradient - Purple to Pink */
-  .gradient-accent {
-    background: linear-gradient(135deg, 
-      hsl(262 83% 58%) 0%, 
-      hsl(340 82% 52%) 100%);
+  .gradient-neon {
+    background: linear-gradient(135deg,
+      hsl(270 95% 65%) 0%,
+      hsl(190 95% 50%) 100%);
   }
 
-  /* Success gradient */
-  .gradient-success {
-    background: linear-gradient(135deg, 
-      hsl(142 71% 45%) 0%, 
-      hsl(142 71% 55%) 100%);
+  .gradient-fire {
+    background: linear-gradient(135deg,
+      hsl(25 95% 53%) 0%,
+      hsl(340 90% 58%) 100%);
   }
 
-  /* Text gradient */
-  .text-gradient {
+  .gradient-forest {
+    background: linear-gradient(135deg,
+      hsl(142 76% 48%) 0%,
+      hsl(190 95% 50%) 100%);
+  }
+
+  /* Animated gradient background */
+  .gradient-animated {
+    background: linear-gradient(270deg, 
+      hsl(217 91% 60%),
+      hsl(270 95% 65%),
+      hsl(142 76% 48%),
+      hsl(25 95% 53%));
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Text gradients */
+  .text-gradient-cyber {
     @apply bg-clip-text text-transparent;
-    background: linear-gradient(135deg, 
-      hsl(217 91% 60%) 0%, 
-      hsl(262 83% 58%) 100%);
+    background: linear-gradient(135deg,
+      hsl(217 91% 60%),
+      hsl(270 95% 65%),
+      hsl(340 90% 58%));
   }
 
-  /* Flowbite button styles */
-  .btn-primary {
-    @apply px-5 py-2.5 text-sm font-medium text-center text-white 
-           bg-primary rounded-lg hover:bg-primary/90 
-           focus:ring-4 focus:ring-primary/50 
-           transition-all duration-200;
+  .text-gradient-neon {
+    @apply bg-clip-text text-transparent;
+    background: linear-gradient(135deg,
+      hsl(270 95% 65%),
+      hsl(190 95% 50%));
+    animation: textGlow 3s ease-in-out infinite;
   }
 
-  .btn-secondary {
-    @apply px-5 py-2.5 text-sm font-medium text-center text-gray-900 
-           bg-white border border-gray-300 rounded-lg 
-           hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 
-           dark:bg-gray-800 dark:text-white dark:border-gray-600 
-           dark:hover:bg-gray-700 dark:focus:ring-gray-700 
-           transition-all duration-200;
+  @keyframes textGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
   }
 
-  .btn-outline {
-    @apply px-5 py-2.5 text-sm font-medium text-center 
-           text-primary bg-transparent border-2 border-primary rounded-lg 
-           hover:bg-primary hover:text-white 
-           focus:ring-4 focus:ring-primary/50 
-           transition-all duration-200;
+  /* Neon glow effects */
+  .glow-primary {
+    box-shadow: 
+      0 0 20px hsl(var(--primary) / 0.5),
+      0 0 40px hsl(var(--primary) / 0.3),
+      0 0 60px hsl(var(--primary) / 0.1);
   }
 
-  .btn-ghost {
-    @apply px-5 py-2.5 text-sm font-medium text-center 
-           text-gray-500 hover:text-gray-900 hover:bg-gray-100 
-           rounded-lg focus:ring-4 focus:ring-gray-200 
-           dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 
-           transition-all duration-200;
+  .glow-accent {
+    box-shadow: 
+      0 0 20px hsl(var(--accent) / 0.5),
+      0 0 40px hsl(var(--accent) / 0.3),
+      0 0 60px hsl(var(--accent) / 0.1);
   }
 
-  /* Flowbite alert styles */
-  .alert-info {
-    @apply flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg 
-           bg-blue-50 dark:bg-gray-800 dark:text-blue-400 border border-blue-200 dark:border-blue-800;
+  .glow-success {
+    box-shadow: 
+      0 0 20px hsl(var(--success) / 0.5),
+      0 0 40px hsl(var(--success) / 0.3);
   }
 
-  .alert-success {
-    @apply flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg 
-           bg-green-50 dark:bg-gray-800 dark:text-green-400 border border-green-200 dark:border-green-800;
+  /* 3D Button effect */
+  .btn-3d {
+    @apply px-8 py-4 font-bold text-white rounded-2xl;
+    background: linear-gradient(145deg, hsl(var(--primary)), hsl(var(--accent)));
+    box-shadow: 
+      0 10px 20px rgba(0, 0, 0, 0.3),
+      0 6px 6px rgba(0, 0, 0, 0.23),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+      inset 0 2px 5px rgba(255, 255, 255, 0.2);
+    transform: translateY(0);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .alert-warning {
-    @apply flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg 
-           bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-800;
+  .btn-3d:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 15px 30px rgba(0, 0, 0, 0.4),
+      0 10px 10px rgba(0, 0, 0, 0.3),
+      0 0 30px hsl(var(--primary) / 0.5);
   }
 
-  .alert-error {
-    @apply flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg 
-           bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-200 dark:border-red-800;
+  .btn-3d:active {
+    transform: translateY(2px);
+    box-shadow: 
+      0 5px 10px rgba(0, 0, 0, 0.3),
+      inset 0 3px 5px rgba(0, 0, 0, 0.4);
   }
 
-  /* Flowbite badge styles */
-  .badge-primary {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
+  /* Glass button */
+  .btn-glass {
+    @apply px-6 py-3 font-semibold rounded-xl;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: all 0.3s ease;
   }
 
-  .badge-secondary {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
+  .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.5);
+    transform: translateY(-2px);
   }
 
-  .badge-success {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300;
+  /* Floating card with parallax effect */
+  .card-floating {
+    @apply glass-card p-6;
+    transform: translateZ(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .badge-warning {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300;
+  .card-floating:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.4),
+      0 0 40px hsl(var(--primary) / 0.3);
   }
 
-  .badge-error {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300;
+  /* Status badges - Bold 2026 style */
+  .badge-modern {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
   }
 
-  /* Status badges for MOC */
+  .badge-modern:hover {
+    transform: scale(1.05);
+  }
+
   .status-draft {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
+    @apply badge-modern bg-gray-500/20 text-gray-100;
+    box-shadow: 0 0 20px rgba(156, 163, 175, 0.3);
   }
 
   .status-submitted {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-blue-100 text-blue-800 border border-blue-300 
-           dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700;
+    @apply badge-modern;
+    background: linear-gradient(135deg, hsl(217 91% 60% / 0.3), hsl(217 91% 70% / 0.3));
+    color: hsl(217 91% 80%);
+    box-shadow: 0 0 20px hsl(217 91% 60% / 0.4);
   }
 
   .status-review {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-yellow-100 text-yellow-800 border border-yellow-300 
-           dark:bg-yellow-900 dark:text-yellow-300 dark:border-yellow-700;
+    @apply badge-modern;
+    background: linear-gradient(135deg, hsl(25 95% 53% / 0.3), hsl(25 95% 63% / 0.3));
+    color: hsl(25 95% 70%);
+    box-shadow: 0 0 20px hsl(25 95% 53% / 0.4);
   }
 
   .status-approved {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-green-100 text-green-800 border border-green-300 
-           dark:bg-green-900 dark:text-green-300 dark:border-green-700;
+    @apply badge-modern;
+    background: linear-gradient(135deg, hsl(142 76% 48% / 0.3), hsl(142 76% 58% / 0.3));
+    color: hsl(142 76% 70%);
+    box-shadow: 0 0 20px hsl(142 76% 48% / 0.4);
   }
 
   .status-rejected {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-red-100 text-red-800 border border-red-300 
-           dark:bg-red-900 dark:text-red-300 dark:border-red-700;
+    @apply badge-modern;
+    background: linear-gradient(135deg, hsl(0 90% 58% / 0.3), hsl(0 90% 68% / 0.3));
+    color: hsl(0 90% 80%);
+    box-shadow: 0 0 20px hsl(0 90% 58% / 0.4);
   }
 
   .status-implemented {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-           bg-purple-100 text-purple-800 border border-purple-300 
-           dark:bg-purple-900 dark:text-purple-300 dark:border-purple-700;
+    @apply badge-modern;
+    background: linear-gradient(135deg, hsl(270 95% 65% / 0.3), hsl(270 95% 75% / 0.3));
+    color: hsl(270 95% 85%);
+    box-shadow: 0 0 20px hsl(270 95% 65% / 0.4);
   }
 
-  /* Flowbite input styles */
-  .input-primary {
-    @apply block w-full p-2.5 text-sm text-gray-900 bg-gray-50 
-           border border-gray-300 rounded-lg 
-           focus:ring-primary focus:border-primary 
-           dark:bg-gray-700 dark:border-gray-600 
-           dark:placeholder-gray-400 dark:text-white 
-           dark:focus:ring-primary dark:focus:border-primary;
+  /* Alert with glass effect */
+  .alert-glass {
+    @apply p-4 rounded-2xl backdrop-blur-xl;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   }
 
-  /* Flowbite table */
-  .table-flowbite {
-    @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+  .alert-info {
+    @apply alert-glass;
+    background: linear-gradient(135deg, hsl(190 95% 50% / 0.2), hsl(217 91% 60% / 0.2));
   }
 
-  .table-flowbite thead {
-    @apply text-xs text-gray-700 uppercase bg-gray-50 
-           dark:bg-gray-700 dark:text-gray-400;
+  .alert-success {
+    @apply alert-glass;
+    background: linear-gradient(135deg, hsl(142 76% 48% / 0.2), hsl(190 95% 50% / 0.2));
   }
 
-  .table-flowbite tbody tr {
-    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700 
-           hover:bg-gray-50 dark:hover:bg-gray-600;
+  .alert-warning {
+    @apply alert-glass;
+    background: linear-gradient(135deg, hsl(25 95% 53% / 0.2), hsl(340 90% 58% / 0.2));
   }
 
-  /* Flowbite dropdown */
-  .dropdown-flowbite {
-    @apply z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-lg 
-           dark:bg-gray-700 dark:divide-gray-600;
+  .alert-error {
+    @apply alert-glass;
+    background: linear-gradient(135deg, hsl(0 90% 58% / 0.2), hsl(340 90% 68% / 0.2));
   }
 
-  /* Flowbite modal backdrop */
-  .modal-backdrop {
-    @apply fixed inset-0 z-40 bg-gray-900/50 dark:bg-gray-900/80;
+  /* Input with glow focus */
+  .input-modern {
+    @apply w-full px-4 py-3 rounded-xl;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: inherit;
+    transition: all 0.3s ease;
   }
 
-  /* Flowbite divider */
-  .divider {
-    @apply h-px my-4 bg-gray-200 border-0 dark:bg-gray-700;
+  .input-modern:focus {
+    outline: none;
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.5);
   }
 
-  /* Flowbite progress bar */
-  .progress-bar {
-    @apply w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700;
+  /* Progress bar with gradient */
+  .progress-modern {
+    @apply w-full h-3 rounded-full overflow-hidden;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .progress-fill {
-    @apply bg-primary h-2.5 rounded-full transition-all duration-300;
+  .progress-fill-modern {
+    @apply h-full rounded-full transition-all duration-500;
+    background: linear-gradient(90deg,
+      hsl(var(--primary)),
+      hsl(var(--accent)));
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
   }
 
-  /* Flowbite timeline */
-  .timeline-item {
-    @apply relative border-l border-gray-200 dark:border-gray-700;
-  }
-
-  /* Smooth transitions */
-  .transition-smooth {
-    @apply transition-all duration-200 ease-in-out;
+  /* Divider with glow */
+  .divider-glow {
+    @apply h-px my-6;
+    background: linear-gradient(90deg,
+      transparent,
+      hsl(var(--primary)),
+      hsl(var(--accent)),
+      transparent);
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
   }
 }
 
 @layer utilities {
-  /* Flowbite-style animations */
-  .animate-fade-in {
-    animation: fadeIn 0.3s ease-out;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
-  }
-
-  .animate-slide-down {
-    animation: slideDown 0.3s ease-out;
-  }
-
-  .animate-slide-in-left {
-    animation: slideInLeft 0.3s ease-out;
-  }
-
-  .animate-slide-in-right {
-    animation: slideInRight 0.3s ease-out;
+  /* Ultra-smooth animations */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .animate-scale-in {
-    animation: scaleIn 0.2s ease-out;
+    animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  .animate-slide-in-right {
+    animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  @keyframes slideUp {
-    from { 
-      opacity: 0; 
-      transform: translateY(1rem); 
-    }
-    to { 
-      opacity: 1; 
-      transform: translateY(0); 
-    }
+  .animate-glow-pulse {
+    animation: glowPulse 2s ease-in-out infinite;
   }
 
-  @keyframes slideDown {
-    from { 
-      opacity: 0; 
-      transform: translateY(-1rem); 
-    }
-    to { 
-      opacity: 1; 
-      transform: translateY(0); 
-    }
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
   }
 
-  @keyframes slideInLeft {
-    from { 
-      opacity: 0; 
-      transform: translateX(-1rem); 
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
     }
-    to { 
-      opacity: 1; 
-      transform: translateX(0); 
-    }
-  }
-
-  @keyframes slideInRight {
-    from { 
-      opacity: 0; 
-      transform: translateX(1rem); 
-    }
-    to { 
-      opacity: 1; 
-      transform: translateX(0); 
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
   @keyframes scaleIn {
-    from { 
-      opacity: 0; 
-      transform: scale(0.95); 
+    from {
+      opacity: 0;
+      transform: scale(0.8);
     }
-    to { 
-      opacity: 1; 
-      transform: scale(1); 
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 
-  /* Focus ring utilities */
-  .focus-ring {
-    @apply focus:ring-4 focus:outline-none;
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
-  .focus-ring-primary {
-    @apply focus:ring-4 focus:ring-primary/50 focus:outline-none;
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(var(--primary) / 0.6),
+                  0 0 60px hsl(var(--accent) / 0.3);
+    }
   }
 
-  /* Text utilities */
-  .text-balance {
-    text-wrap: balance;
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
   }
 
-  /* Shadow utilities */
-  .shadow-soft {
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  /* Blur utilities */
+  .blur-glass {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
 
-  .shadow-medium {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  .blur-heavy {
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
   }
 
-  .shadow-strong {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* Text effects */
+  .text-glow {
+    text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
   }
 
-  /* Hover glow effect */
-  .hover-glow {
-    @apply transition-shadow duration-200;
+  .text-neon {
+    text-shadow: 
+      0 0 10px hsl(var(--primary)),
+      0 0 20px hsl(var(--primary)),
+      0 0 40px hsl(var(--accent));
   }
 
-  .hover-glow:hover {
-    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+  /* Perspective utilities */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .transform-3d {
+    transform-style: preserve-3d;
   }
 }
