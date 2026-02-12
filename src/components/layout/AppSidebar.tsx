@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
   BarChart3,
+  CircleHelp,
   Sun,
   Moon,
   Globe,
@@ -37,6 +38,7 @@ const navigationItems: { name: TranslationKey; href: string; icon: typeof Layout
   { name: "nav.workOrders", href: "/work-orders", icon: ClipboardList },
   { name: "nav.reports", href: "/reports", icon: BarChart3 },
   { name: "nav.standards", href: "/standards", icon: Link2 },
+  { name: "nav.helpCenter", href: "/help-center", icon: CircleHelp },
 ];
 
 const adminItems: { name: TranslationKey; href: string; icon: typeof Users }[] = [
