@@ -36,7 +36,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const users = [
+type UserStatus = "Active" | "Inactive";
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  facility: string;
+  status: UserStatus;
+  lastLogin: string;
+};
+
+const initialUsers: User[] = [
   {
     id: 1,
     name: "Carlos Silva",
@@ -102,9 +114,22 @@ const roles = [
   "Approval Committee",
 ];
 
+const facilities = ["All", "Platform Alpha", "Platform Beta", "FPSO Gamma", "Platform Delta"];
+
 export default function UserManagement() {
+  const [users, setUsers] = useState<User[]>(initialUsers);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
+
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editFacility, setEditFacility] = useState("");
+  const [editStatus, setEditStatus] = useState<UserStatus>("Active");
+  const [selectedRole, setSelectedRole] = useState("");
 
   const filteredUsers = users.filter(
     (user) =>
@@ -137,6 +162,79 @@ export default function UserManagement() {
       .join("")
       .toUpperCase()
       .slice(0, 2);
+  };
+
+  const openEditDialog = (user: User) => {
+    setSelectedUser(user);
+    setEditName(user.name);
+    setEditEmail(user.email);
+    setEditFacility(user.facility);
+    setEditStatus(user.status);
+    setIsEditDialogOpen(true);
+  };
+
+  const saveEditedUser = () => {
+    if (!selectedUser) {
+      return;
+    }
+
+    setUsers((currentUsers) =>
+      currentUsers.map((user) =>
+        user.id === selectedUser.id
+          ? {
+              ...user,
+              name: editName,
+              email: editEmail,
+              facility: editFacility,
+              status: editStatus,
+            }
+          : user
+      )
+    );
+
+    setIsEditDialogOpen(false);
+    setSelectedUser(null);
+  };
+
+  const openRoleDialog = (user: User) => {
+    setSelectedUser(user);
+    setSelectedRole(user.role);
+    setIsRoleDialogOpen(true);
+  };
+
+  const saveRoleChange = () => {
+    if (!selectedUser || !selectedRole) {
+      return;
+    }
+
+    setUsers((currentUsers) =>
+      currentUsers.map((user) =>
+        user.id === selectedUser.id
+          ? {
+              ...user,
+              role: selectedRole,
+            }
+          : user
+      )
+    );
+
+    setIsRoleDialogOpen(false);
+    setSelectedUser(null);
+  };
+
+  const toggleUserStatus = (user: User) => {
+    const nextStatus: UserStatus = user.status === "Active" ? "Inactive" : "Active";
+
+    setUsers((currentUsers) =>
+      currentUsers.map((currentUser) =>
+        currentUser.id === user.id
+          ? {
+              ...currentUser,
+              status: nextStatus,
+            }
+          : currentUser
+      )
+    );
   };
 
   return (
@@ -214,6 +312,94 @@ export default function UserManagement() {
           </DialogContent>
         </Dialog>
       </div>
+
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+            <DialogDescription>Update user details and access status.</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="edit-name">Full Name</Label>
+              <Input id="edit-name" value={editName} onChange={(e) => setEditName(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-email">Email</Label>
+              <Input id="edit-email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-facility">Assigned Facility</Label>
+              <Select value={editFacility} onValueChange={setEditFacility}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select facility" />
+                </SelectTrigger>
+                <SelectContent>
+                  {facilities.map((facility) => (
+                    <SelectItem key={facility} value={facility}>
+                      {facility}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-status">Status</Label>
+              <Select value={editStatus} onValueChange={(value) => setEditStatus(value as UserStatus)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Active">Active</SelectItem>
+                  <SelectItem value="Inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="gradient-primary text-primary-foreground" onClick={saveEditedUser}>
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isRoleDialogOpen} onOpenChange={setIsRoleDialogOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle>Change Role</DialogTitle>
+            <DialogDescription>
+              Select a new role for {selectedUser?.name ?? "the selected user"}.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-2 py-4">
+            <Label htmlFor="change-role">Role</Label>
+            <Select value={selectedRole} onValueChange={setSelectedRole}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select role" />
+              </SelectTrigger>
+              <SelectContent>
+                {roles.map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {role}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsRoleDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="gradient-primary text-primary-foreground" onClick={saveRoleChange}>
+              Update Role
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -338,17 +524,20 @@ export default function UserManagement() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => openEditDialog(user)}>
                         <Edit className="h-4 w-4 mr-2" />
                         Edit User
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => openRoleDialog(user)}>
                         <Shield className="h-4 w-4 mr-2" />
                         Change Role
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">
+                      <DropdownMenuItem
+                        className={user.status === "Active" ? "text-destructive" : "text-success"}
+                        onSelect={() => toggleUserStatus(user)}
+                      >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        Deactivate
+                        {user.status === "Active" ? "Deactivate" : "Activate"}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
