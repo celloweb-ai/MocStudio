@@ -6,107 +6,121 @@
 
 @layer base {
   :root {
-    --background: 210 20% 96%;
-    --foreground: 222 47% 11%;
+    /* Aurora Light Theme - Inspired by Northern Lights */
+    --background: 220 25% 97%;
+    --foreground: 230 20% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 230 20% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 230 20% 12%;
 
-    --primary: 32 95% 50%;
+    /* Primary: Aurora Green/Teal - Main northern lights color */
+    --primary: 165 85% 45%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 214 20% 92%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 220 20% 94%;
+    --secondary-foreground: 230 20% 12%;
 
-    --muted: 214 20% 92%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 15% 50%;
 
-    --accent: 217 91% 55%;
+    /* Accent: Aurora Purple/Magenta */
+    --accent: 280 75% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 142 76% 36%;
+    /* Success: Aurora Green */
+    --success: 145 80% 42%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 45 93% 47%;
-    --warning-foreground: 222 47% 11%;
+    /* Warning: Aurora Yellow/Gold */
+    --warning: 45 95% 55%;
+    --warning-foreground: 230 20% 12%;
 
-    --border: 214 20% 85%;
-    --input: 214 20% 85%;
-    --ring: 32 95% 50%;
+    --border: 220 20% 88%;
+    --input: 220 20% 88%;
+    --ring: 165 85% 45%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 215 16% 47%;
-    --sidebar-primary: 32 95% 50%;
+    /* Sidebar with Aurora gradient feel */
+    --sidebar-background: 220 30% 98%;
+    --sidebar-foreground: 220 20% 40%;
+    --sidebar-primary: 165 85% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 214 20% 95%;
-    --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 214 20% 90%;
-    --sidebar-ring: 32 95% 50%;
+    --sidebar-accent: 220 25% 95%;
+    --sidebar-accent-foreground: 230 20% 12%;
+    --sidebar-border: 220 20% 92%;
+    --sidebar-ring: 165 85% 45%;
 
-    --chart-1: 32 95% 50%;
-    --chart-2: 217 91% 55%;
-    --chart-3: 142 76% 36%;
-    --chart-4: 45 93% 47%;
-    --chart-5: 0 72% 51%;
+    /* Chart colors - Aurora palette */
+    --chart-1: 165 85% 45%; /* Teal */
+    --chart-2: 280 75% 60%; /* Purple */
+    --chart-3: 210 90% 55%; /* Blue */
+    --chart-4: 145 80% 42%; /* Green */
+    --chart-5: 320 70% 58%; /* Pink */
   }
 
   .dark {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
+    /* Aurora Dark Theme - Night sky with northern lights */
+    --background: 230 25% 8%;
+    --foreground: 210 40% 96%;
 
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 230 25% 10%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 222 47% 10%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 230 25% 12%;
+    --popover-foreground: 210 40% 96%;
 
-    --primary: 32 95% 55%;
-    --primary-foreground: 222 47% 6%;
+    /* Primary: Brighter Aurora Green for dark mode */
+    --primary: 165 85% 50%;
+    --primary-foreground: 230 25% 8%;
 
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 230 20% 16%;
+    --secondary-foreground: 210 40% 96%;
 
-    --muted: 217 33% 14%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 230 20% 14%;
+    --muted-foreground: 220 20% 60%;
 
-    --accent: 217 91% 60%;
-    --accent-foreground: 210 40% 98%;
+    /* Accent: Aurora Purple/Magenta - brighter for dark */
+    --accent: 280 80% 65%;
+    --accent-foreground: 210 40% 96%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 75% 58%;
+    --destructive-foreground: 210 40% 96%;
 
-    --success: 142 76% 36%;
-    --success-foreground: 210 40% 98%;
+    /* Success: Aurora Green */
+    --success: 145 80% 45%;
+    --success-foreground: 210 40% 96%;
 
-    --warning: 45 93% 47%;
-    --warning-foreground: 222 47% 6%;
+    /* Warning: Aurora Yellow/Gold */
+    --warning: 45 95% 60%;
+    --warning-foreground: 230 25% 8%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 32 95% 55%;
+    --border: 230 20% 18%;
+    --input: 230 20% 18%;
+    --ring: 165 85% 50%;
 
-    --sidebar-background: 222 47% 5%;
-    --sidebar-foreground: 215 20% 65%;
-    --sidebar-primary: 32 95% 55%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 217 33% 12%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 14%;
-    --sidebar-ring: 32 95% 55%;
+    /* Sidebar - Deep space with aurora glow */
+    --sidebar-background: 230 30% 6%;
+    --sidebar-foreground: 220 20% 70%;
+    --sidebar-primary: 165 85% 50%;
+    --sidebar-primary-foreground: 230 25% 8%;
+    --sidebar-accent: 230 25% 12%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 230 25% 14%;
+    --sidebar-ring: 165 85% 50%;
 
-    --chart-1: 32 95% 55%;
-    --chart-2: 217 91% 60%;
-    --chart-3: 142 76% 36%;
-    --chart-4: 45 93% 47%;
-    --chart-5: 0 72% 51%;
+    /* Chart colors - Vibrant Aurora palette for dark mode */
+    --chart-1: 165 85% 50%; /* Teal */
+    --chart-2: 280 80% 65%; /* Purple */
+    --chart-3: 210 90% 60%; /* Blue */
+    --chart-4: 145 80% 45%; /* Green */
+    --chart-5: 320 75% 62%; /* Pink */
   }
 }
 
@@ -120,7 +134,7 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar with Aurora colors */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -131,58 +145,107 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30 rounded-full;
+    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    @apply rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/50;
+    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(280 80% 55%) 100%);
   }
 }
 
 @layer components {
+  /* Aurora-themed glass effect */
   .glass-card {
     @apply bg-card/80 backdrop-blur-xl border border-border/50 shadow-xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 
+                0 0 20px hsl(var(--primary) / 0.1);
   }
 
+  /* Aurora gradient - Primary (Teal to Blue) */
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(32 95% 45%) 100%);
+    background: linear-gradient(135deg, 
+      hsl(165 85% 45%) 0%, 
+      hsl(210 90% 55%) 50%,
+      hsl(165 85% 50%) 100%);
   }
 
+  /* Aurora gradient - Accent (Purple to Pink) */
   .gradient-accent {
-    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(217 91% 50%) 100%);
+    background: linear-gradient(135deg, 
+      hsl(280 75% 60%) 0%, 
+      hsl(320 70% 58%) 50%,
+      hsl(280 80% 65%) 100%);
   }
 
+  /* Aurora text gradient - Northern lights colors */
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(45 93% 60%) 100%);
+    background: linear-gradient(135deg, 
+      hsl(165 85% 45%) 0%, 
+      hsl(280 75% 60%) 50%, 
+      hsl(210 90% 55%) 100%);
   }
 
+  /* Aurora glow effect */
   .glow-primary {
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.3);
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.4),
+                0 0 80px hsl(var(--accent) / 0.2);
   }
 
+  .glow-accent {
+    box-shadow: 0 0 40px hsl(var(--accent) / 0.4),
+                0 0 80px hsl(var(--primary) / 0.2);
+  }
+
+  /* Status badges with Aurora colors */
   .status-draft {
     @apply bg-muted text-muted-foreground;
   }
 
   .status-submitted {
-    @apply bg-accent/20 text-accent;
+    @apply bg-accent/20 text-accent border border-accent/30;
   }
 
   .status-review {
-    @apply bg-warning/20 text-warning;
+    @apply bg-warning/20 text-warning border border-warning/30;
   }
 
   .status-approved {
-    @apply bg-success/20 text-success;
+    @apply bg-success/20 text-success border border-success/30;
   }
 
   .status-rejected {
-    @apply bg-destructive/20 text-destructive;
+    @apply bg-destructive/20 text-destructive border border-destructive/30;
   }
 
   .status-implemented {
-    @apply bg-primary/20 text-primary;
+    @apply bg-primary/20 text-primary border border-primary/30;
+  }
+
+  /* Aurora shimmer effect */
+  .aurora-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .aurora-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      hsl(var(--primary) / 0.2) 50%, 
+      transparent 100%);
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
   }
 }
 
@@ -199,6 +262,10 @@
     animation: slideInLeft 0.3s ease-out;
   }
 
+  .animate-aurora-pulse {
+    animation: auroraPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -212,5 +279,16 @@
   @keyframes slideInLeft {
     from { opacity: 0; transform: translateX(-10px); }
     to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes auroraPulse {
+    0%, 100% { 
+      opacity: 1; 
+      filter: brightness(1);
+    }
+    50% { 
+      opacity: 0.8; 
+      filter: brightness(1.2);
+    }
   }
 }
