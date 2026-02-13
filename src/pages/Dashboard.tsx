@@ -94,10 +94,10 @@ export default function Dashboard() {
               facilities.slice(0, 4).map((facility) => (
                 <div
                   key={facility.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-gradient-primary/10 backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all"
+                  className="flex items-center justify-between p-3 rounded-lg bg-primary/10 backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-gradient-primary">
+                    <div className="p-2 rounded-lg gradient-cyber">
                       <Building2 className="h-4 w-4 text-white" />
                     </div>
                     <div>
