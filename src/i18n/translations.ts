@@ -117,7 +117,7 @@ export const translations = {
   "moc.rejected": { en: "Rejected", pt: "Rejeitado" },
   "moc.implemented": { en: "Implemented", pt: "Implementado" },
   "moc.requestNumber": { en: "Request #", pt: "Solicitação nº" },
-  "moc.title": { en: "Title", pt: "Título" },
+  "moc.fieldTitle": { en: "Title", pt: "Título" },
   "moc.description": { en: "Description", pt: "Descrição" },
   "moc.facility": { en: "Facility", pt: "Instalação" },
   "moc.requestedBy": { en: "Requested By", pt: "Solicitado Por" },

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 const ProfileSettings = () => {
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   
