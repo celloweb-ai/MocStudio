@@ -50,6 +50,24 @@ export function useApproverCandidates() {
   return useQuery({
     queryKey: ["approver-candidates"],
     queryFn: async () => {
+      const { data: rpcCandidates, error: rpcError } = await supabase.rpc(
+        "get_approver_candidates" as never
+      );
+
+      if (!rpcError) {
+        return rpcCandidates ?? [];
+      }
+
+      const missingRpcFunction =
+        rpcError.code === "PGRST202" ||
+        rpcError.message.toLowerCase().includes("could not find the function");
+
+      if (!missingRpcFunction) {
+        throw new Error(
+          `Unable to load approver candidates: ${rpcError.message}`
+        );
+      }
+
       // Get all users with their roles who can be approvers
       const { data: userRoles, error: rolesError } = await supabase
         .from("user_roles")
