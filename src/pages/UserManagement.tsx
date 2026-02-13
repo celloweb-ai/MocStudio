@@ -131,6 +131,11 @@ export default function UserManagement() {
   const [editStatus, setEditStatus] = useState<UserStatus>("Active");
   const [selectedRole, setSelectedRole] = useState("");
 
+  const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newRole, setNewRole] = useState(roles[0]);
+  const [newFacility, setNewFacility] = useState(facilities[0]);
+
   const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -237,6 +242,40 @@ export default function UserManagement() {
     );
   };
 
+  const resetCreateUserForm = () => {
+    setNewName("");
+    setNewEmail("");
+    setNewRole(roles[0]);
+    setNewFacility(facilities[0]);
+  };
+
+  const createUser = () => {
+    const name = newName.trim();
+    const email = newEmail.trim();
+
+    if (!name || !email || !newRole || !newFacility) {
+      return;
+    }
+
+    const nextId = users.length > 0 ? Math.max(...users.map((user) => user.id)) + 1 : 1;
+
+    setUsers((currentUsers) => [
+      {
+        id: nextId,
+        name,
+        email,
+        role: newRole,
+        facility: newFacility,
+        status: "Active",
+        lastLogin: "Never",
+      },
+      ...currentUsers,
+    ]);
+
+    resetCreateUserForm();
+    setIsDialogOpen(false);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -264,21 +303,32 @@ export default function UserManagement() {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="name">Full Name</Label>
-                <Input id="name" placeholder="Enter full name" />
+                <Input
+                  id="name"
+                  placeholder="Enter full name"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="user@company.com" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="user@company.com"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="role">Role</Label>
-                <Select>
+                <Select value={newRole} onValueChange={setNewRole}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
                     {roles.map((role) => (
-                      <SelectItem key={role} value={role.toLowerCase()}>
+                      <SelectItem key={role} value={role}>
                         {role}
                       </SelectItem>
                     ))}
@@ -287,25 +337,31 @@ export default function UserManagement() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="facility">Assigned Facility</Label>
-                <Select>
+                <Select value={newFacility} onValueChange={setNewFacility}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select facility" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Facilities</SelectItem>
-                    <SelectItem value="alpha">Platform Alpha</SelectItem>
-                    <SelectItem value="beta">Platform Beta</SelectItem>
-                    <SelectItem value="gamma">FPSO Gamma</SelectItem>
-                    <SelectItem value="delta">Platform Delta</SelectItem>
+                    {facilities.map((facility) => (
+                      <SelectItem key={facility} value={facility}>
+                        {facility}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  resetCreateUserForm();
+                  setIsDialogOpen(false);
+                }}
+              >
                 Cancel
               </Button>
-              <Button className="gradient-primary text-primary-foreground">
+              <Button className="gradient-primary text-primary-foreground" onClick={createUser}>
                 Create User
               </Button>
             </DialogFooter>
