@@ -2,24 +2,30 @@
 -- This migration ensures that MOCs can be approved by setting up approval roles and auto-assignment
 
 -- Step 1: Ensure at least one user has approval roles
--- Add approval committee role to the first admin user (if exists)
+-- Add approval committee role to all administrator users (if any)
 DO $$
 DECLARE
-  admin_user_id UUID;
+  granted_count INTEGER := 0;
 BEGIN
-  -- Find first administrator
-  SELECT user_id INTO admin_user_id
-  FROM public.user_roles
-  WHERE role = 'administrator'
-  LIMIT 1;
+  INSERT INTO public.user_roles (user_id, role)
+  SELECT ur.user_id, 'approval_committee'
+  FROM public.user_roles ur
+  WHERE ur.role = 'administrator'
+  ON CONFLICT (user_id, role) DO NOTHING;
 
-  -- If an admin exists, grant them approval_committee role
-  IF admin_user_id IS NOT NULL THEN
-    INSERT INTO public.user_roles (user_id, role)
-    VALUES (admin_user_id, 'approval_committee')
-    ON CONFLICT (user_id, role) DO NOTHING;
+  GET DIAGNOSTICS granted_count = ROW_COUNT;
 
-    RAISE NOTICE 'Granted approval_committee role to admin user: %', admin_user_id;
+  IF granted_count > 0 THEN
+    RAISE NOTICE 'Granted approval_committee role to % administrator user(s).', granted_count;
+  ELSE
+    RAISE NOTICE 'No new approval_committee grants were needed for administrator users.';
+  END IF;
+
+  -- Safety net: if there are still no approval committee members, warn operators.
+  IF NOT EXISTS (
+    SELECT 1 FROM public.user_roles WHERE role = 'approval_committee'
+  ) THEN
+    RAISE WARNING 'No approval_committee users found after setup. Assign at least one user manually to enable approvals.';
   END IF;
 END $$;
 
@@ -28,7 +34,8 @@ CREATE OR REPLACE FUNCTION public.auto_assign_moc_approvers()
 RETURNS TRIGGER AS $$
 DECLARE
   approver_record RECORD;
-  assigned_count INTEGER := 0;
+  committee_assigned_count INTEGER := 0;
+  facility_manager_assigned_count INTEGER := 0;
 BEGIN
   -- Only auto-assign when status changes to 'submitted' from 'draft'
   IF NEW.status = 'submitted' AND (OLD.status IS NULL OR OLD.status = 'draft') THEN
@@ -47,35 +54,41 @@ BEGIN
       VALUES (NEW.id, approver_record.user_id, 'approval_committee', 'pending')
       ON CONFLICT (moc_request_id, user_id) DO NOTHING;
       
-      assigned_count := assigned_count + 1;
+      committee_assigned_count := committee_assigned_count + 1;
     END LOOP;
 
     -- Also assign facility manager if different from creator
     IF NEW.facility_id IS NOT NULL THEN
-      INSERT INTO public.moc_approvers (moc_request_id, user_id, role_required, status)
-      SELECT NEW.id, f.manager_id, 'facility_manager', 'pending'
-      FROM public.facilities f
-      WHERE f.id = NEW.facility_id 
-        AND f.manager_id IS NOT NULL
-        AND f.manager_id != NEW.created_by
-      ON CONFLICT (moc_request_id, user_id) DO NOTHING;
+      WITH inserted AS (
+        INSERT INTO public.moc_approvers (moc_request_id, user_id, role_required, status)
+        SELECT NEW.id, f.manager_id, 'facility_manager', 'pending'
+        FROM public.facilities f
+        WHERE f.id = NEW.facility_id 
+          AND f.manager_id IS NOT NULL
+          AND f.manager_id != NEW.created_by
+        ON CONFLICT (moc_request_id, user_id) DO NOTHING
+        RETURNING 1
+      )
+      SELECT COUNT(*) INTO facility_manager_assigned_count FROM inserted;
     END IF;
 
     -- Log the auto-assignment
-    IF assigned_count > 0 THEN
+    IF (committee_assigned_count + facility_manager_assigned_count) > 0 THEN
       INSERT INTO public.moc_history (moc_request_id, user_id, action, details)
       VALUES (
         NEW.id, 
         NEW.created_by, 
         'approvers_assigned', 
         jsonb_build_object(
-          'count', assigned_count,
+          'count', committee_assigned_count + facility_manager_assigned_count,
+          'approval_committee_count', committee_assigned_count,
+          'facility_manager_count', facility_manager_assigned_count,
           'auto_assigned', true,
           'timestamp', NOW()
         )
       );
       
-      RAISE NOTICE 'Auto-assigned % approvers to MOC %', assigned_count, NEW.request_number;
+      RAISE NOTICE 'Auto-assigned % approvers to MOC %', committee_assigned_count + facility_manager_assigned_count, NEW.request_number;
     ELSE
       RAISE WARNING 'No approvers found for MOC %. Please ensure users have approval_committee role.', NEW.request_number;
     END IF;
@@ -102,7 +115,8 @@ DO $$
 DECLARE
   moc_record RECORD;
   approver_record RECORD;
-  assigned_count INTEGER;
+  committee_assigned_count INTEGER;
+  facility_manager_assigned_count INTEGER;
 BEGIN
   FOR moc_record IN 
     SELECT m.id, m.request_number, m.created_by, m.facility_id
@@ -112,7 +126,8 @@ BEGIN
         SELECT 1 FROM public.moc_approvers ma WHERE ma.moc_request_id = m.id
       )
   LOOP
-    assigned_count := 0;
+    committee_assigned_count := 0;
+    facility_manager_assigned_count := 0;
     
     -- Assign approval committee members
     FOR approver_record IN
@@ -125,22 +140,43 @@ BEGIN
       VALUES (moc_record.id, approver_record.user_id, 'approval_committee', 'pending')
       ON CONFLICT (moc_request_id, user_id) DO NOTHING;
       
-      assigned_count := assigned_count + 1;
+      committee_assigned_count := committee_assigned_count + 1;
     END LOOP;
 
     -- Assign facility manager
     IF moc_record.facility_id IS NOT NULL THEN
-      INSERT INTO public.moc_approvers (moc_request_id, user_id, role_required, status)
-      SELECT moc_record.id, f.manager_id, 'facility_manager', 'pending'
-      FROM public.facilities f
-      WHERE f.id = moc_record.facility_id 
-        AND f.manager_id IS NOT NULL
-        AND f.manager_id != moc_record.created_by
-      ON CONFLICT (moc_request_id, user_id) DO NOTHING;
+      WITH inserted AS (
+        INSERT INTO public.moc_approvers (moc_request_id, user_id, role_required, status)
+        SELECT moc_record.id, f.manager_id, 'facility_manager', 'pending'
+        FROM public.facilities f
+        WHERE f.id = moc_record.facility_id 
+          AND f.manager_id IS NOT NULL
+          AND f.manager_id != moc_record.created_by
+        ON CONFLICT (moc_request_id, user_id) DO NOTHING
+        RETURNING 1
+      )
+      SELECT COUNT(*) INTO facility_manager_assigned_count FROM inserted;
     END IF;
 
-    IF assigned_count > 0 THEN
-      RAISE NOTICE 'Backfilled % approvers for MOC %', assigned_count, moc_record.request_number;
+    IF (committee_assigned_count + facility_manager_assigned_count) > 0 THEN
+      INSERT INTO public.moc_history (moc_request_id, user_id, action, details)
+      VALUES (
+        moc_record.id,
+        moc_record.created_by,
+        'approvers_backfilled',
+        jsonb_build_object(
+          'count', committee_assigned_count + facility_manager_assigned_count,
+          'approval_committee_count', committee_assigned_count,
+          'facility_manager_count', facility_manager_assigned_count,
+          'auto_assigned', true,
+          'backfilled', true,
+          'timestamp', NOW()
+        )
+      );
+
+      RAISE NOTICE 'Backfilled % approvers for MOC %', committee_assigned_count + facility_manager_assigned_count, moc_record.request_number;
+    ELSE
+      RAISE WARNING 'No approvers available to backfill MOC %', moc_record.request_number;
     END IF;
   END LOOP;
 END $$;
