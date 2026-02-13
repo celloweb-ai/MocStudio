@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { useRemoveBranding } from "@/hooks/useRemoveBranding";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Facilities from "./pages/Facilities";
@@ -44,6 +45,9 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AppRoutes() {
+  // Remove third-party branding
+  useRemoveBranding();
+
   return (
     <Routes>
       <Route path="/auth" element={<Auth />} />
