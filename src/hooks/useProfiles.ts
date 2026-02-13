@@ -59,8 +59,14 @@ export function useApproverCandidates() {
         `);
 
       if (rolesError) {
+        const isPermissionIssue =
+          rolesError.code === "42501" ||
+          rolesError.message.toLowerCase().includes("permission denied");
+
         throw new Error(
-          `Unable to load user roles for approver discovery: ${rolesError.message}`
+          isPermissionIssue
+            ? "Unable to load approver roles because Row Level Security is blocking reads on user_roles. Apply migration 20260213113000_allow_authenticated_read_user_roles.sql to allow authenticated users to read role assignments."
+            : `Unable to load user roles for approver discovery: ${rolesError.message}`
         );
       }
 
