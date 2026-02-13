@@ -115,7 +115,7 @@ const ProfileSettings = () => {
     <div className="container mx-auto py-6 space-y-6 animate-fade-in-up">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gradient-cyber">{t('topbar.profileSettings')}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{t('topbar.profileSettings')}</h1>
           <p className="text-muted-foreground mt-2">
             Manage your account settings and preferences
           </p>
