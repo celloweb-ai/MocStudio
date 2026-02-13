@@ -65,6 +65,7 @@ export function useApproverCandidates() {
         "administrator",
         "facility_manager", 
         "process_engineer",
+        "maintenance_technician",
         "hse_coordinator",
         "approval_committee"
       ];
