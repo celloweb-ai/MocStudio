@@ -51,7 +51,7 @@ interface MOCApprovalStepProps {
 }
 
 export function MOCApprovalStep({ form }: MOCApprovalStepProps) {
-  const { data: approverCandidates, isLoading } = useApproverCandidates();
+  const { data: approverCandidates, isLoading, error } = useApproverCandidates();
 
   return (
     <div className="space-y-6">
@@ -74,6 +74,13 @@ export function MOCApprovalStep({ form }: MOCApprovalStepProps) {
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            ) : error ? (
+              <div className="text-center py-8 text-muted-foreground border rounded-md">
+                <p>Unable to load eligible approvers.</p>
+                <p className="text-xs mt-1">
+                  {error instanceof Error ? error.message : "Please verify role access policies and try again."}
+                </p>
               </div>
             ) : approverCandidates && approverCandidates.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
@@ -126,7 +133,7 @@ export function MOCApprovalStep({ form }: MOCApprovalStepProps) {
               <div className="text-center py-8 text-muted-foreground border rounded-md">
                 <p>No eligible approvers found.</p>
                 <p className="text-xs mt-1">
-                  Assign roles to users in User Management to enable approvals.
+                  Assign an approval role in <code>user_roles</code> for at least one user to enable approvals.
                 </p>
               </div>
             )}
