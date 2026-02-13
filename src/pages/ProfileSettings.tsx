@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,6 +24,8 @@ const ProfileSettings = () => {
   const [email, setEmail] = useState(user?.email || '');
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || user?.user_metadata?.avatar_url || '');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | null>(null);
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
   
   // Password form state
   const [currentPassword, setCurrentPassword] = useState('');
@@ -35,6 +37,14 @@ const ProfileSettings = () => {
     setEmail(profile?.email || user?.email || '');
     setAvatarUrl(profile?.avatar_url || user?.user_metadata?.avatar_url || '');
   }, [profile, user]);
+
+  useEffect(() => {
+    return () => {
+      if (avatarPreviewUrl) {
+        URL.revokeObjectURL(avatarPreviewUrl);
+      }
+    };
+  }, [avatarPreviewUrl]);
 
   const handleAvatarFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -61,7 +71,12 @@ const ProfileSettings = () => {
       return;
     }
 
+    if (avatarPreviewUrl) {
+      URL.revokeObjectURL(avatarPreviewUrl);
+    }
+
     const previewUrl = URL.createObjectURL(file);
+    setAvatarPreviewUrl(previewUrl);
     setAvatarFile(file);
     setAvatarUrl(previewUrl);
   };
@@ -116,6 +131,13 @@ const ProfileSettings = () => {
 
       setAvatarUrl(nextAvatarUrl);
       setAvatarFile(null);
+      if (avatarPreviewUrl) {
+        URL.revokeObjectURL(avatarPreviewUrl);
+        setAvatarPreviewUrl(null);
+      }
+      if (avatarInputRef.current) {
+        avatarInputRef.current.value = '';
+      }
 
       toast({
         title: t('common.success'),
@@ -268,6 +290,7 @@ const ProfileSettings = () => {
                           </AvatarFallback>
                         </Avatar>
                         <Input
+                          ref={avatarInputRef}
                           id="avatar"
                           type="file"
                           accept="image/*"

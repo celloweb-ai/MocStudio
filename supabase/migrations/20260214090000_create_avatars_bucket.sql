@@ -9,6 +9,11 @@ values (
 )
 on conflict (id) do nothing;
 
+drop policy if exists "Avatar images are publicly accessible" on storage.objects;
+drop policy if exists "Users can upload their own avatar" on storage.objects;
+drop policy if exists "Users can update their own avatar" on storage.objects;
+drop policy if exists "Users can delete their own avatar" on storage.objects;
+
 create policy "Avatar images are publicly accessible"
 on storage.objects
 for select
