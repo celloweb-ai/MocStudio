@@ -1,6 +1,16 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { translations, type Language, type TranslationKey } from "@/i18n/translations";
 
+const VALID_LANGUAGES: Language[] = ["en", "pt"];
+
+const parseStoredLanguage = (value: string | null): Language => {
+  if (value && VALID_LANGUAGES.includes(value as Language)) {
+    return value as Language;
+  }
+
+  return "en";
+};
+
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
@@ -13,7 +23,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLang] = useState<Language>(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("language") as Language) || "en";
+      return parseStoredLanguage(localStorage.getItem("language"));
     }
     return "en";
   });
