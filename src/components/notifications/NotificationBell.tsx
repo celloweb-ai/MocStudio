@@ -21,7 +21,7 @@ const typeIcons = {
 };
 
 const typeColors = {
-  info: "text-blue-400",
+  info: "text-info",
   warning: "text-warning",
   success: "text-primary",
   error: "text-destructive",

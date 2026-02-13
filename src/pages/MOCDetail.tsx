@@ -46,7 +46,7 @@ const getStatusInfo = (status: MOCStatus | null) => {
     case "draft":
       return { icon: FileText, color: "bg-muted text-muted-foreground", label: "Draft" };
     case "submitted":
-      return { icon: Clock, color: "bg-blue-500/20 text-blue-400", label: "Submitted" };
+      return { icon: Clock, color: "bg-info/20 text-info", label: "Submitted" };
     case "under_review":
       return { icon: AlertTriangle, color: "bg-warning/20 text-warning", label: "In Review" };
     case "approved":

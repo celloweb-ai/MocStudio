@@ -11,7 +11,7 @@ const actionIcons: Record<string, { icon: typeof FileText; color: string }> = {
   status_changed: { icon: Clock, color: "text-accent" },
   approved: { icon: CheckCircle, color: "text-success" },
   rejected: { icon: XCircle, color: "text-destructive" },
-  comment_added: { icon: MessageSquare, color: "text-blue-400" },
+  comment_added: { icon: MessageSquare, color: "text-info" },
   task_created: { icon: ListTodo, color: "text-warning" },
 };
 
