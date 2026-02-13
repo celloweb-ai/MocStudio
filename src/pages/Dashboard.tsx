@@ -13,7 +13,6 @@ export default function Dashboard() {
   const { facilities } = useFacilities();
   const { language } = useLanguage();
 
-  // Calculate month-over-month change
   const monthChange = mocStats ? (
     mocStats.lastMonthCount > 0 
       ? Math.round(((mocStats.thisMonthCount - mocStats.lastMonthCount) / mocStats.lastMonthCount) * 100)
@@ -21,12 +20,12 @@ export default function Dashboard() {
   ) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in-up">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{language === "pt" ? "Painel" : "Dashboard"}</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold text-gradient-cyber">{language === "pt" ? "Painel" : "Dashboard"}</h1>
+          <p className="text-muted-foreground mt-2">
             {language === "pt" ? "Visão geral das operações de Gestão de Mudanças" : "Overview of your Management of Change operations"}
           </p>
         </div>
@@ -36,10 +35,10 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {isLoading ? (
           <>
-            <Skeleton className="h-32 rounded-xl" />
-            <Skeleton className="h-32 rounded-xl" />
-            <Skeleton className="h-32 rounded-xl" />
-            <Skeleton className="h-32 rounded-xl" />
+            <Skeleton className="h-32 rounded-xl glass-card" />
+            <Skeleton className="h-32 rounded-xl glass-card" />
+            <Skeleton className="h-32 rounded-xl glass-card" />
+            <Skeleton className="h-32 rounded-xl glass-card" />
           </>
         ) : (
           <>
@@ -88,28 +87,30 @@ export default function Dashboard() {
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Facilities Overview */}
-        <div className="glass-card rounded-xl p-6 animate-slide-up">
-          <h3 className="text-lg font-semibold text-foreground mb-4">{language === "pt" ? "Visão geral das instalações" : "Facilities Overview"}</h3>
-          <div className="space-y-4">
+        <div className="glass-card rounded-xl p-6 card-floating">
+          <h3 className="text-lg font-semibold text-gradient-cyber mb-4">{language === "pt" ? "Visão geral das instalações" : "Facilities Overview"}</h3>
+          <div className="space-y-3">
             {facilities && facilities.length > 0 ? (
               facilities.slice(0, 4).map((facility) => (
                 <div
                   key={facility.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-muted/30"
+                  className="flex items-center justify-between p-3 rounded-lg bg-gradient-primary/10 backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <Building2 className="h-5 w-5 text-primary" />
+                    <div className="p-2 rounded-lg bg-gradient-primary">
+                      <Building2 className="h-4 w-4 text-white" />
+                    </div>
                     <div>
                       <p className="text-sm font-medium text-foreground">{facility.name}</p>
                       <p className="text-xs text-muted-foreground">{facility.code || (language === "pt" ? "Sem código" : "No code")}</p>
                     </div>
                   </div>
                   <span
-                    className={`text-xs px-2 py-1 rounded-full ${
+                    className={
                       facility.status === "active"
-                        ? "bg-success/20 text-success"
-                        : "bg-warning/20 text-warning"
-                    }`}
+                        ? "status-approved"
+                        : "status-review"
+                    }
                   >
                     {facility.status || (language === "pt" ? "Ativa" : "Active")}
                   </span>
@@ -122,40 +123,48 @@ export default function Dashboard() {
         </div>
 
         {/* Risk Alerts */}
-        <div className="glass-card rounded-xl p-6 animate-slide-up">
-          <h3 className="text-lg font-semibold text-foreground mb-4">{language === "pt" ? "Resumo de risco" : "Risk Summary"}</h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+        <div className="glass-card rounded-xl p-6 card-floating">
+          <h3 className="text-lg font-semibold text-gradient-cyber mb-4">{language === "pt" ? "Resumo de risco" : "Risk Summary"}</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-destructive/10 backdrop-blur-sm border border-destructive/20 hover:border-destructive/40 transition-all">
               <div className="flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-destructive" />
-                <span className="text-sm font-medium">{language === "pt" ? "Prioridade crítica" : "Critical Priority"}</span>
+                <div className="p-2 rounded-lg bg-destructive/20">
+                  <AlertTriangle className="h-4 w-4 text-destructive" />
+                </div>
+                <span className="text-sm font-medium text-foreground">{language === "pt" ? "Prioridade crítica" : "Critical Priority"}</span>
               </div>
-              <span className="text-lg font-bold text-destructive">
+              <span className="text-lg font-bold text-destructive glow-primary">
                 {mocStats?.byPriority?.critical || 0}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-warning/10 backdrop-blur-sm border border-warning/20 hover:border-warning/40 transition-all">
               <div className="flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-warning" />
-                <span className="text-sm font-medium">{language === "pt" ? "Alta prioridade" : "High Priority"}</span>
+                <div className="p-2 rounded-lg bg-warning/20">
+                  <AlertTriangle className="h-4 w-4 text-warning" />
+                </div>
+                <span className="text-sm font-medium text-foreground">{language === "pt" ? "Alta prioridade" : "High Priority"}</span>
               </div>
               <span className="text-lg font-bold text-warning">
                 {mocStats?.byPriority?.high || 0}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-destructive/10 backdrop-blur-sm border border-destructive/20 hover:border-destructive/40 transition-all">
               <div className="flex items-center gap-3">
-                <Clock className="h-5 w-5 text-destructive" />
-                <span className="text-sm font-medium">{language === "pt" ? "MOCs atrasados" : "Overdue MOCs"}</span>
+                <div className="p-2 rounded-lg bg-destructive/20">
+                  <Clock className="h-4 w-4 text-destructive" />
+                </div>
+                <span className="text-sm font-medium text-foreground">{language === "pt" ? "MOCs atrasados" : "Overdue MOCs"}</span>
               </div>
-              <span className="text-lg font-bold text-destructive">
+              <span className="text-lg font-bold text-destructive glow-primary">
                 {mocStats?.overdueCount || 0}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-warning/10 backdrop-blur-sm border border-warning/20 hover:border-warning/40 transition-all">
               <div className="flex items-center gap-3">
-                <ListTodo className="h-5 w-5 text-warning" />
-                <span className="text-sm font-medium">{language === "pt" ? "Tarefas atrasadas" : "Overdue Tasks"}</span>
+                <div className="p-2 rounded-lg bg-warning/20">
+                  <ListTodo className="h-4 w-4 text-warning" />
+                </div>
+                <span className="text-sm font-medium text-foreground">{language === "pt" ? "Tarefas atrasadas" : "Overdue Tasks"}</span>
               </div>
               <span className="text-lg font-bold text-warning">
                 {taskStats?.overdue || 0}
