@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Search, Users, MoreVertical, Edit, Trash2, Shield, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -115,9 +115,48 @@ const roles = [
 ];
 
 const facilities = ["All", "Platform Alpha", "Platform Beta", "FPSO Gamma", "Platform Delta"];
+const userManagementStorageKey = "user-management-users";
+
+const isValidUserStatus = (value: unknown): value is UserStatus => value === "Active" || value === "Inactive";
+
+const isPersistedUser = (value: unknown): value is User => {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Partial<User>;
+  return (
+    typeof candidate.id === "number" &&
+    typeof candidate.name === "string" &&
+    typeof candidate.email === "string" &&
+    typeof candidate.role === "string" &&
+    typeof candidate.facility === "string" &&
+    isValidUserStatus(candidate.status) &&
+    typeof candidate.lastLogin === "string"
+  );
+};
+
+const loadPersistedUsers = (): User[] => {
+  const rawUsers = localStorage.getItem(userManagementStorageKey);
+  if (!rawUsers) {
+    return initialUsers;
+  }
+
+  try {
+    const parsedUsers: unknown = JSON.parse(rawUsers);
+    if (!Array.isArray(parsedUsers)) {
+      return initialUsers;
+    }
+
+    const validUsers = parsedUsers.filter(isPersistedUser);
+    return validUsers.length > 0 ? validUsers : initialUsers;
+  } catch {
+    return initialUsers;
+  }
+};
 
 export default function UserManagement() {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState<User[]>(loadPersistedUsers);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -135,6 +174,10 @@ export default function UserManagement() {
   const [newEmail, setNewEmail] = useState("");
   const [newRole, setNewRole] = useState(roles[0]);
   const [newFacility, setNewFacility] = useState(facilities[0]);
+
+  useEffect(() => {
+    localStorage.setItem(userManagementStorageKey, JSON.stringify(users));
+  }, [users]);
 
   const filteredUsers = users.filter(
     (user) =>
