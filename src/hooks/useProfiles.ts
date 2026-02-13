@@ -50,13 +50,64 @@ export function useApproverCandidates() {
   return useQuery({
     queryKey: ["approver-candidates"],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("get_approver_candidates");
+      // Get all users with their roles who can be approvers
+      const { data: userRoles, error: rolesError } = await supabase
+        .from("user_roles")
+        .select(`
+          user_id,
+          role
+        `);
 
-      if (error) {
-        throw new Error(`Unable to load approver candidates: ${error.message}`);
+      if (rolesError) {
+        throw new Error(
+          `Unable to load user roles for approver discovery: ${rolesError.message}`
+        );
       }
 
-      return data ?? [];
+      // Get unique user IDs that have approval-eligible roles
+      const approverRoles = [
+        "administrator",
+        "facility_manager", 
+        "process_engineer",
+        "maintenance_technician",
+        "hse_coordinator",
+        "approval_committee"
+      ];
+      
+      const eligibleUserIds = [...new Set(
+        userRoles
+          .filter(ur => approverRoles.includes(ur.role))
+          .map(ur => ur.user_id)
+      )];
+
+      if (eligibleUserIds.length === 0) {
+        return [];
+      }
+
+      // Fetch profiles for eligible users
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, full_name, email, department")
+        .in("id", eligibleUserIds)
+        .order("full_name", { ascending: true });
+
+      if (profilesError) {
+        throw new Error(
+          `Unable to load approver profiles: ${profilesError.message}`
+        );
+      }
+
+      // Create role map for each user
+      const userRolesMap = new Map<string, string[]>();
+      userRoles.forEach(ur => {
+        const existing = userRolesMap.get(ur.user_id) || [];
+        userRolesMap.set(ur.user_id, [...existing, ur.role]);
+      });
+
+      return (profiles ?? []).map(profile => ({
+        ...profile,
+        roles: userRolesMap.get(profile.id) || [],
+      }));
     },
     enabled: !!user,
   });
