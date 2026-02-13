@@ -58,7 +58,11 @@ export function useApproverCandidates() {
           role
         `);
 
-      if (rolesError) throw rolesError;
+      if (rolesError) {
+        throw new Error(
+          `Unable to load user roles for approver discovery: ${rolesError.message}`
+        );
+      }
 
       // Get unique user IDs that have approval-eligible roles
       const approverRoles = [
@@ -87,7 +91,11 @@ export function useApproverCandidates() {
         .in("id", eligibleUserIds)
         .order("full_name", { ascending: true });
 
-      if (profilesError) throw profilesError;
+      if (profilesError) {
+        throw new Error(
+          `Unable to load approver profiles: ${profilesError.message}`
+        );
+      }
 
       // Create role map for each user
       const userRolesMap = new Map<string, string[]>();
@@ -96,7 +104,7 @@ export function useApproverCandidates() {
         userRolesMap.set(ur.user_id, [...existing, ur.role]);
       });
 
-      return profiles.map(profile => ({
+      return (profiles ?? []).map(profile => ({
         ...profile,
         roles: userRolesMap.get(profile.id) || [],
       }));
