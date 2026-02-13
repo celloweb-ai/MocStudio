@@ -24,7 +24,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gradient-cyber">{language === "pt" ? "Painel" : "Dashboard"}</h1>
+          <h1 className="text-3xl font-bold text-foreground">{language === "pt" ? "Painel" : "Dashboard"}</h1>
           <p className="text-muted-foreground mt-2">
             {language === "pt" ? "Visão geral das operações de Gestão de Mudanças" : "Overview of your Management of Change operations"}
           </p>
