@@ -124,7 +124,7 @@ export default function Dashboard() {
 
         {/* Risk Alerts */}
         <div className="glass-card rounded-xl p-6 card-floating">
-          <h3 className="text-lg font-semibold text-gradient-cyber mb-4">{language === "pt" ? "Resumo de risco" : "Risk Summary"}</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">{language === "pt" ? "Resumo de risco" : "Risk Summary"}</h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 rounded-lg bg-destructive/10 backdrop-blur-sm border border-destructive/20 hover:border-destructive/40 transition-all">
               <div className="flex items-center gap-3">
