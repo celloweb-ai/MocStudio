@@ -11,7 +11,7 @@ function AppLayoutInner({ children }: AppLayoutProps) {
   const { collapsed } = useSidebarContext();
   
   return (
-    <div className="min-h-screen bg-background">
+    <div className="app-shell min-h-screen bg-background">
       <AppSidebar />
       <div 
         className={cn(
@@ -21,7 +21,7 @@ function AppLayoutInner({ children }: AppLayoutProps) {
         )}
       >
         <TopBar />
-        <main className="p-6 animate-fade-in">
+        <main className="relative z-10 p-6 animate-fade-in">
           <div className="transition-all duration-200">
             {children}
           </div>

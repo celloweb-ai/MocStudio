@@ -38,7 +38,7 @@ export function TopBar() {
   };
 
   return (
-    <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
+    <header className="h-16 border-b border-border/70 bg-card/65 backdrop-blur-xl sticky top-0 z-40 supports-[backdrop-filter]:bg-card/55">
       <div className="h-full px-6 flex items-center justify-between">
         {/* Mobile hamburger */}
         <Button variant="ghost" size="icon" className="md:hidden mr-2" onClick={toggle}>
@@ -51,7 +51,7 @@ export function TopBar() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder={t("topbar.search")}
-              className="pl-10 bg-muted/50 border-border focus:bg-background"
+              className="pl-10 bg-background/70 border-border/70 focus:bg-background"
             />
           </div>
         </div>
@@ -84,7 +84,7 @@ export function TopBar() {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-3 px-2">
+              <Button variant="ghost" className="gap-3 px-2 hover:bg-accent/60">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary/20 text-primary text-sm font-medium">
                     {getInitials()}

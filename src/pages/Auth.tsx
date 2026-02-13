@@ -162,7 +162,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative">
+    <div className="app-shell min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4 relative">
       {/* Top-right controls */}
       <div className="absolute top-4 right-4 flex items-center gap-2">
         <Button
