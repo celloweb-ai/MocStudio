@@ -88,7 +88,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Facilities Overview */}
         <div className="glass-card rounded-xl p-6 card-floating">
-          <h3 className="text-lg font-semibold text-gradient-cyber mb-4">{language === "pt" ? "Visão geral das instalações" : "Facilities Overview"}</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">{language === "pt" ? "Visão geral das instalações" : "Facilities Overview"}</h3>
           <div className="space-y-3">
             {facilities && facilities.length > 0 ? (
               facilities.slice(0, 4).map((facility) => (
