@@ -57,10 +57,10 @@ export function AppSidebar() {
         to={item.href}
         onClick={onNavigate}
         className={cn(
-          "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
+          "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200",
           "hover:bg-sidebar-accent group relative overflow-hidden",
           isActive
-            ? "bg-primary/10 text-primary border-l-2 border-primary shadow-sm"
+            ? "bg-gradient-primary/15 text-primary border border-primary/35 shadow-[0_8px_22px_hsl(var(--primary)/0.25)]"
             : "text-sidebar-foreground hover:text-sidebar-accent-foreground",
           compact ? "justify-center" : "",
         )}
@@ -106,7 +106,7 @@ export function AppSidebar() {
   const SidebarContent = ({ compact = false, onNavigate }: { compact?: boolean; onNavigate?: () => void }) => (
     <>
       {/* Header with logo and title */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border bg-sidebar/50 backdrop-blur-sm">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border/80 bg-sidebar/65 backdrop-blur-xl">
         <div className={cn(
           "flex items-center gap-3 transition-all duration-300",
           compact ? "justify-center w-full" : ""
@@ -161,7 +161,7 @@ export function AppSidebar() {
       </nav>
 
       {/* Footer with controls */}
-      <div className="p-3 border-t border-sidebar-border bg-sidebar/50 backdrop-blur-sm space-y-1">
+      <div className="p-3 border-t border-sidebar-border/80 bg-sidebar/65 backdrop-blur-xl space-y-1">
         {/* Language toggle */}
         <Tooltip delayDuration={300}>
           <TooltipTrigger asChild>
@@ -261,7 +261,7 @@ export function AppSidebar() {
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border hidden md:flex",
+          "fixed left-0 top-0 h-screen bg-sidebar/80 border-r border-sidebar-border/80 hidden md:flex backdrop-blur-xl",
           "flex-col z-50 shadow-lg",
           "transition-all duration-300 ease-in-out",
           collapsed ? "w-16" : "w-64",
@@ -274,7 +274,7 @@ export function AppSidebar() {
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent 
           side="left" 
-          className="w-64 p-0 border-r border-sidebar-border bg-sidebar text-sidebar-foreground md:hidden [&>button]:hidden"
+          className="w-64 p-0 border-r border-sidebar-border/80 bg-sidebar/85 backdrop-blur-xl text-sidebar-foreground md:hidden [&>button]:hidden"
         >
           <div className="h-full flex flex-col">
             <SidebarContent onNavigate={() => setMobileOpen(false)} />
