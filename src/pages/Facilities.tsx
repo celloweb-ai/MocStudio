@@ -248,7 +248,7 @@ export default function Facilities() {
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-primary">
+                <div className="p-2 rounded-lg gradient-cyber">
                   <Building2 className="h-5 w-5 text-white" />
                 </div>
                 <div>
