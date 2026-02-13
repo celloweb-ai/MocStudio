@@ -50,7 +50,7 @@ interface MOCTaskListProps {
 
 const statusConfig = {
   pending: { icon: Circle, color: "text-muted-foreground", label: "Pending" },
-  in_progress: { icon: Clock, color: "text-blue-400", label: "In Progress" },
+  in_progress: { icon: Clock, color: "text-info", label: "In Progress" },
   completed: { icon: CheckCircle2, color: "text-primary", label: "Completed" },
   cancelled: { icon: XCircle, color: "text-destructive", label: "Cancelled" },
 };
