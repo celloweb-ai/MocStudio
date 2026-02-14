@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Users, MoreVertical, Edit, Trash2, Shield, Mail } from "lucide-react";
+import { Plus, Search, Users, MoreVertical, Edit, Trash2, Shield, Mail, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import {
@@ -20,6 +20,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserManagement, type ManagedUser } from "@/hooks/useUserManagement";
 import { useFacilities } from "@/hooks/useFacilities";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 import type { Database } from "@/integrations/supabase/types";
 
 type AppRole = Database["public"]["Enums"]["app_role"];
@@ -62,12 +64,20 @@ export default function UserManagement() {
   const [selectedUser, setSelectedUser] = useState<ManagedUser | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
+  const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
 
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const [editFacility, setEditFacility] = useState<string>("");
   const [editStatus, setEditStatus] = useState("active");
   const [selectedRole, setSelectedRole] = useState<AppRole>("administrator");
+
+  // Invite form state
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteFullName, setInviteFullName] = useState("");
+  const [inviteRole, setInviteRole] = useState<AppRole>("process_engineer");
+  const [inviteFacility, setInviteFacility] = useState<string>("none");
+  const [isInviting, setIsInviting] = useState(false);
 
   const filteredUsers = users.filter(
     (u) =>
@@ -109,6 +119,48 @@ export default function UserManagement() {
     setIsRoleDialogOpen(false);
   };
 
+  const resetInviteForm = () => {
+    setInviteEmail("");
+    setInviteFullName("");
+    setInviteRole("process_engineer");
+    setInviteFacility("none");
+  };
+
+  const handleInviteUser = async () => {
+    if (!inviteEmail.trim()) return;
+
+    setIsInviting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("invite-user", {
+        body: {
+          email: inviteEmail.trim(),
+          full_name: inviteFullName.trim() || undefined,
+          role: inviteRole,
+          facility_id: inviteFacility === "none" ? undefined : inviteFacility,
+        },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast({
+        title: "Invite Sent",
+        description: `Invitation email sent to ${inviteEmail}.`,
+      });
+
+      resetInviteForm();
+      setIsInviteDialogOpen(false);
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err.message || "Failed to send invitation.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsInviting(false);
+    }
+  };
+
   const activeCount = users.filter((u) => u.status === "active").length;
   const adminCount = users.filter((u) => u.roles.includes("administrator")).length;
   const inactiveCount = users.filter((u) => u.status === "inactive").length;
@@ -128,9 +180,87 @@ export default function UserManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">User Management</h1>
-        <p className="text-muted-foreground">Manage user accounts and access permissions</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">User Management</h1>
+          <p className="text-muted-foreground">Manage user accounts and access permissions</p>
+        </div>
+        <Dialog open={isInviteDialogOpen} onOpenChange={setIsInviteDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="gradient-primary text-primary-foreground">
+              <UserPlus className="h-4 w-4 mr-2" />
+              Invite User
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Invite New User</DialogTitle>
+              <DialogDescription>
+                Send an invitation email to a new user. They will receive a link to set up their account.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="invite-email">Email *</Label>
+                <Input
+                  id="invite-email"
+                  type="email"
+                  placeholder="user@company.com"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="invite-name">Full Name</Label>
+                <Input
+                  id="invite-name"
+                  placeholder="Enter full name"
+                  value={inviteFullName}
+                  onChange={(e) => setInviteFullName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="invite-role">Role</Label>
+                <Select value={inviteRole} onValueChange={(v) => setInviteRole(v as AppRole)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {allRoles.map((role) => (
+                      <SelectItem key={role} value={role}>{roleLabels[role]}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="invite-facility">Assigned Facility</Label>
+                <Select value={inviteFacility} onValueChange={setInviteFacility}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select facility" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">All / None</SelectItem>
+                    {facilities?.map((f) => (
+                      <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => { resetInviteForm(); setIsInviteDialogOpen(false); }}>
+                Cancel
+              </Button>
+              <Button
+                className="gradient-primary text-primary-foreground"
+                onClick={handleInviteUser}
+                disabled={isInviting || !inviteEmail.trim()}
+              >
+                {isInviting ? "Sending..." : "Send Invitation"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Edit Dialog */}
