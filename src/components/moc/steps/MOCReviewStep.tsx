@@ -4,6 +4,7 @@ import { FileText, MapPin, AlertTriangle, Users, Calendar, CheckCircle } from "l
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { useApproverCandidates } from "@/hooks/useProfiles";
 import type { MOCFormData } from "../MOCFormWizard";
 
 const FACILITIES_MAP: Record<string, string> = {
@@ -31,15 +32,6 @@ const RISK_CATEGORIES_MAP: Record<string, string> = {
   reputation: "Reputation",
 };
 
-const APPROVERS_MAP: Record<string, string> = {
-  "facility-manager": "Facility Manager",
-  "process-engineer": "Process Engineer",
-  "hse-coordinator": "HSE Coordinator",
-  "maintenance-lead": "Maintenance Lead",
-  "operations-manager": "Operations Manager",
-  "approval-committee": "Approval Committee",
-};
-
 const getRiskLevel = (probability: number, severity: number) => {
   const score = probability * severity;
   if (score >= 15) return { level: "Critical", color: "bg-destructive text-destructive-foreground" };
@@ -55,6 +47,14 @@ interface MOCReviewStepProps {
 export function MOCReviewStep({ form }: MOCReviewStepProps) {
   const values = form.getValues();
   const riskInfo = getRiskLevel(values.probability, values.severity);
+  const { data: approverCandidates } = useApproverCandidates();
+
+  const approverNameMap = new Map(
+    (approverCandidates || []).map((candidate) => [
+      candidate.id,
+      candidate.full_name || candidate.email,
+    ])
+  );
 
   return (
     <div className="space-y-6">
@@ -228,7 +228,7 @@ export function MOCReviewStep({ form }: MOCReviewStepProps) {
               {values.requiredApprovers?.length > 0 ? (
                 values.requiredApprovers.map((approver) => (
                   <Badge key={approver} variant="secondary" className="text-xs">
-                    {APPROVERS_MAP[approver] || approver}
+                    {approverNameMap.get(approver) || approver}
                   </Badge>
                 ))
               ) : (
