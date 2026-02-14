@@ -475,8 +475,10 @@ export type Database = {
           created_at: string
           department: string | null
           email: string
+          facility_id: string | null
           full_name: string | null
           id: string
+          status: string
           updated_at: string
         }
         Insert: {
@@ -484,8 +486,10 @@ export type Database = {
           created_at?: string
           department?: string | null
           email: string
+          facility_id?: string | null
           full_name?: string | null
           id: string
+          status?: string
           updated_at?: string
         }
         Update: {
@@ -493,11 +497,21 @@ export type Database = {
           created_at?: string
           department?: string | null
           email?: string
+          facility_id?: string | null
           full_name?: string | null
           id?: string
+          status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_facility_id_fkey"
+            columns: ["facility_id"]
+            isOneToOne: false
+            referencedRelation: "facilities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
