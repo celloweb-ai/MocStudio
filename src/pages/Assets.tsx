@@ -16,12 +16,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAssets } from "@/hooks/useAssets";
 import { useFacilities } from "@/hooks/useFacilities";
 import { AddAssetDialog } from "@/components/assets/AddAssetDialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Assets() {
   const [searchQuery, setSearchQuery] = useState("");
   const [facilityFilter, setFacilityFilter] = useState("all");
   const { assets, isLoading } = useAssets();
   const { facilities } = useFacilities();
+  const { t } = useLanguage();
 
   const filteredAssets = (assets ?? []).filter((asset) => {
     const matchesSearch =
@@ -54,8 +56,8 @@ export default function Assets() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Assets</h1>
-          <p className="text-muted-foreground">Equipment and systems registry</p>
+          <h1 className="text-2xl font-bold text-foreground">{t("assets.title")}</h1>
+          <p className="text-muted-foreground">{t("assets.equipmentRegistry")}</p>
         </div>
         <AddAssetDialog />
       </div>
@@ -64,7 +66,7 @@ export default function Assets() {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search assets by name or code..."
+            placeholder={t("assets.searchByNameCode")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -73,10 +75,10 @@ export default function Assets() {
         <Select value={facilityFilter} onValueChange={setFacilityFilter}>
           <SelectTrigger className="w-[200px]">
             <Filter className="h-4 w-4 mr-2" />
-            <SelectValue placeholder="Filter by facility" />
+            <SelectValue placeholder={t("assets.filterByFacility")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Facilities</SelectItem>
+            <SelectItem value="all">{t("assets.allFacilities")}</SelectItem>
             {facilities?.map((f) => (
               <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>
             ))}
@@ -88,14 +90,14 @@ export default function Assets() {
         <Table>
           <TableHeader>
             <TableRow className="border-border hover:bg-transparent">
-              <TableHead className="text-muted-foreground">Code</TableHead>
-              <TableHead className="text-muted-foreground">Name</TableHead>
-              <TableHead className="text-muted-foreground">Type</TableHead>
-              <TableHead className="text-muted-foreground">Facility</TableHead>
-              <TableHead className="text-muted-foreground">Location</TableHead>
-              <TableHead className="text-muted-foreground">Criticality</TableHead>
-              <TableHead className="text-muted-foreground">Status</TableHead>
-              <TableHead className="text-muted-foreground text-right">Actions</TableHead>
+              <TableHead className="text-muted-foreground">{t("assets.code")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("assets.name")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("assets.type")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("assets.facility")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("assets.location")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("assets.criticality")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("assets.status")}</TableHead>
+              <TableHead className="text-muted-foreground text-right">{t("moc.actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -110,7 +112,7 @@ export default function Assets() {
             ) : filteredAssets.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
-                  No assets found. Click "Add Asset" to create one.
+                  {t("assets.noAssetsClickAdd")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -151,13 +153,13 @@ export default function Assets() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>
-                          <Edit className="h-4 w-4 mr-2" /> Edit
+                          <Edit className="h-4 w-4 mr-2" /> {t("common.edit")}
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <History className="h-4 w-4 mr-2" /> View History
+                          <History className="h-4 w-4 mr-2" /> {t("assets.viewHistory")}
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
-                          <Trash2 className="h-4 w-4 mr-2" /> Delete
+                          <Trash2 className="h-4 w-4 mr-2" /> {t("common.delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

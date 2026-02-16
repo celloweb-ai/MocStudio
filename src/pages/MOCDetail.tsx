@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   ArrowLeft,
   FileText,
