@@ -22,17 +22,18 @@ import { useUserManagement, type ManagedUser } from "@/hooks/useUserManagement";
 import { useFacilities } from "@/hooks/useFacilities";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { Database } from "@/integrations/supabase/types";
 
 type AppRole = Database["public"]["Enums"]["app_role"];
 
-const roleLabels: Record<AppRole, string> = {
-  administrator: "Administrator",
-  facility_manager: "Facility Manager",
-  process_engineer: "Process Engineer",
-  maintenance_technician: "Maintenance Technician",
-  hse_coordinator: "HSE Coordinator",
-  approval_committee: "Approval Committee",
+const roleTranslationKeys: Record<AppRole, string> = {
+  administrator: "roles.administrator",
+  facility_manager: "roles.facility_manager",
+  process_engineer: "roles.process_engineer",
+  maintenance_technician: "roles.maintenance_technician",
+  hse_coordinator: "roles.hse_coordinator",
+  approval_committee: "roles.approval_committee",
 };
 
 const allRoles: AppRole[] = [
@@ -59,6 +60,7 @@ const getInitials = (name: string | null) => {
 export default function UserManagement() {
   const { users, isLoading, updateProfile, updateRole, toggleStatus } = useUserManagement();
   const { facilities } = useFacilities();
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
 
   const [selectedUser, setSelectedUser] = useState<ManagedUser | null>(null);
@@ -144,16 +146,16 @@ export default function UserManagement() {
       if (data?.error) throw new Error(data.error);
 
       toast({
-        title: "Invite Sent",
-        description: `Invitation email sent to ${inviteEmail}.`,
+        title: t("users.inviteSent"),
+        description: `${t("users.inviteSentDesc")} ${inviteEmail}.`,
       });
 
       resetInviteForm();
       setIsInviteDialogOpen(false);
     } catch (err: any) {
       toast({
-        title: "Error",
-        description: err.message || "Failed to send invitation.",
+        title: t("common.error"),
+        description: err.message || t("users.inviteError"),
         variant: "destructive",
       });
     } finally {
@@ -182,26 +184,26 @@ export default function UserManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">User Management</h1>
-          <p className="text-muted-foreground">Manage user accounts and access permissions</p>
+          <h1 className="text-2xl font-bold text-foreground">{t("users.title")}</h1>
+          <p className="text-muted-foreground">{t("users.manageAccess")}</p>
         </div>
         <Dialog open={isInviteDialogOpen} onOpenChange={setIsInviteDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gradient-primary text-primary-foreground">
               <UserPlus className="h-4 w-4 mr-2" />
-              Invite User
+              {t("users.inviteUser")}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Invite New User</DialogTitle>
+              <DialogTitle>{t("users.inviteNewUser")}</DialogTitle>
               <DialogDescription>
-                Send an invitation email to a new user. They will receive a link to set up their account.
+                {t("users.inviteDesc")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="invite-email">Email *</Label>
+                <Label htmlFor="invite-email">{t("users.email")} *</Label>
                 <Input
                   id="invite-email"
                   type="email"
@@ -211,35 +213,35 @@ export default function UserManagement() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="invite-name">Full Name</Label>
+                <Label htmlFor="invite-name">{t("users.fullName")}</Label>
                 <Input
                   id="invite-name"
-                  placeholder="Enter full name"
+                  placeholder={t("users.enterFullName")}
                   value={inviteFullName}
                   onChange={(e) => setInviteFullName(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="invite-role">Role</Label>
+                <Label htmlFor="invite-role">{t("users.role")}</Label>
                 <Select value={inviteRole} onValueChange={(v) => setInviteRole(v as AppRole)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select role" />
+                    <SelectValue placeholder={t("users.selectRole")} />
                   </SelectTrigger>
                   <SelectContent>
                     {allRoles.map((role) => (
-                      <SelectItem key={role} value={role}>{roleLabels[role]}</SelectItem>
+                      <SelectItem key={role} value={role}>{t(roleTranslationKeys[role] as any)}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="invite-facility">Assigned Facility</Label>
+                <Label htmlFor="invite-facility">{t("users.assignedFacility")}</Label>
                 <Select value={inviteFacility} onValueChange={setInviteFacility}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select facility" />
+                    <SelectValue placeholder={t("users.selectFacility")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">All / None</SelectItem>
+                    <SelectItem value="none">{t("users.allNone")}</SelectItem>
                     {facilities?.map((f) => (
                       <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>
                     ))}
@@ -249,14 +251,14 @@ export default function UserManagement() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => { resetInviteForm(); setIsInviteDialogOpen(false); }}>
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button
                 className="gradient-primary text-primary-foreground"
                 onClick={handleInviteUser}
                 disabled={isInviting || !inviteEmail.trim()}
               >
-                {isInviting ? "Sending..." : "Send Invitation"}
+                {isInviting ? t("users.sending") : t("users.sendInvitation")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -267,26 +269,26 @@ export default function UserManagement() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Edit User</DialogTitle>
-            <DialogDescription>Update user details and access status.</DialogDescription>
+            <DialogTitle>{t("users.editUserTitle")}</DialogTitle>
+            <DialogDescription>{t("users.editUserDesc")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="edit-name">Full Name</Label>
+              <Label htmlFor="edit-name">{t("users.fullName")}</Label>
               <Input id="edit-name" value={editName} onChange={(e) => setEditName(e.target.value)} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="edit-email">Email</Label>
+              <Label htmlFor="edit-email">{t("users.email")}</Label>
               <Input id="edit-email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="edit-facility">Assigned Facility</Label>
+              <Label htmlFor="edit-facility">{t("users.assignedFacility")}</Label>
               <Select value={editFacility} onValueChange={setEditFacility}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select facility" />
+                  <SelectValue placeholder={t("users.selectFacility")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">All / None</SelectItem>
+                  <SelectItem value="none">{t("users.allNone")}</SelectItem>
                   {facilities?.map((f) => (
                     <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>
                   ))}
@@ -294,22 +296,22 @@ export default function UserManagement() {
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="edit-status">Status</Label>
+              <Label htmlFor="edit-status">{t("users.status")}</Label>
               <Select value={editStatus} onValueChange={setEditStatus}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("users.selectStatus")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="active">{t("users.active")}</SelectItem>
+                  <SelectItem value="inactive">{t("users.inactive")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>{t("common.cancel")}</Button>
             <Button className="gradient-primary text-primary-foreground" onClick={saveEditedUser} disabled={updateProfile.isPending}>
-              Save Changes
+              {t("users.saveChanges")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -319,28 +321,28 @@ export default function UserManagement() {
       <Dialog open={isRoleDialogOpen} onOpenChange={setIsRoleDialogOpen}>
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>
-            <DialogTitle>Change Role</DialogTitle>
+            <DialogTitle>{t("users.changeRole")}</DialogTitle>
             <DialogDescription>
-              Select a new role for {selectedUser?.full_name ?? "the selected user"}.
+              {t("users.changeRoleDesc")} {selectedUser?.full_name ?? t("users.theSelectedUser")}.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-2 py-4">
-            <Label htmlFor="change-role">Role</Label>
+            <Label htmlFor="change-role">{t("users.role")}</Label>
             <Select value={selectedRole} onValueChange={(v) => setSelectedRole(v as AppRole)}>
               <SelectTrigger>
-                <SelectValue placeholder="Select role" />
+                <SelectValue placeholder={t("users.selectRole")} />
               </SelectTrigger>
               <SelectContent>
                 {allRoles.map((role) => (
-                  <SelectItem key={role} value={role}>{roleLabels[role]}</SelectItem>
+                  <SelectItem key={role} value={role}>{t(roleTranslationKeys[role] as any)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsRoleDialogOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setIsRoleDialogOpen(false)}>{t("common.cancel")}</Button>
             <Button className="gradient-primary text-primary-foreground" onClick={saveRoleChange} disabled={updateRole.isPending}>
-              Update Role
+              {t("users.updateRole")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -354,7 +356,7 @@ export default function UserManagement() {
               <Users className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Users</p>
+              <p className="text-sm text-muted-foreground">{t("users.totalUsers")}</p>
               <p className="text-2xl font-bold text-foreground">{users.length}</p>
             </div>
           </div>
@@ -365,7 +367,7 @@ export default function UserManagement() {
               <Shield className="h-5 w-5 text-success" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Active</p>
+              <p className="text-sm text-muted-foreground">{t("users.active")}</p>
               <p className="text-2xl font-bold text-foreground">{activeCount}</p>
             </div>
           </div>
@@ -376,7 +378,7 @@ export default function UserManagement() {
               <Shield className="h-5 w-5 text-warning" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Admins</p>
+              <p className="text-sm text-muted-foreground">{t("users.admins")}</p>
               <p className="text-2xl font-bold text-foreground">{adminCount}</p>
             </div>
           </div>
@@ -387,7 +389,7 @@ export default function UserManagement() {
               <Users className="h-5 w-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Inactive</p>
+              <p className="text-sm text-muted-foreground">{t("users.inactive")}</p>
               <p className="text-2xl font-bold text-foreground">{inactiveCount}</p>
             </div>
           </div>
@@ -398,7 +400,7 @@ export default function UserManagement() {
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search users..."
+          placeholder={t("users.searchUsers")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -410,18 +412,18 @@ export default function UserManagement() {
         <Table>
           <TableHeader>
             <TableRow className="border-border hover:bg-transparent">
-              <TableHead className="text-muted-foreground">User</TableHead>
-              <TableHead className="text-muted-foreground">Role</TableHead>
-              <TableHead className="text-muted-foreground">Facility</TableHead>
-              <TableHead className="text-muted-foreground">Status</TableHead>
-              <TableHead className="text-muted-foreground text-right">Actions</TableHead>
+              <TableHead className="text-muted-foreground">{t("users.user")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("users.role")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("users.facility")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("users.status")}</TableHead>
+              <TableHead className="text-muted-foreground text-right">{t("moc.actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredUsers.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                  No users found.
+                  {t("users.noUsersFound")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -448,16 +450,16 @@ export default function UserManagement() {
                       {user.roles.length > 0 ? (
                         user.roles.map((role) => (
                           <Badge key={role} className={getRoleColor(role)}>
-                            {roleLabels[role] ?? role}
+                            {t(roleTranslationKeys[role] as any) ?? role}
                           </Badge>
                         ))
                       ) : (
-                        <span className="text-muted-foreground text-sm">No role</span>
+                        <span className="text-muted-foreground text-sm">{t("users.noRole")}</span>
                       )}
                     </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {user.facility_name ?? "All"}
+                    {user.facility_name ?? t("users.all")}
                   </TableCell>
                   <TableCell>
                     <Badge
@@ -467,7 +469,7 @@ export default function UserManagement() {
                           : "bg-muted text-muted-foreground"
                       }
                     >
-                      {user.status === "active" ? "Active" : "Inactive"}
+                      {user.status === "active" ? t("users.active") : t("users.inactive")}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -480,18 +482,18 @@ export default function UserManagement() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onSelect={() => openEditDialog(user)}>
                           <Edit className="h-4 w-4 mr-2" />
-                          Edit User
+                          {t("users.editUser")}
                         </DropdownMenuItem>
                         <DropdownMenuItem onSelect={() => openRoleDialog(user)}>
                           <Shield className="h-4 w-4 mr-2" />
-                          Change Role
+                          {t("users.changeRole")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className={user.status === "active" ? "text-destructive" : "text-success"}
                           onSelect={() => toggleStatus.mutate({ userId: user.id, currentStatus: user.status })}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          {user.status === "active" ? "Deactivate" : "Activate"}
+                          {user.status === "active" ? t("users.deactivate") : t("users.activate")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
