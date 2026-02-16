@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const standards = [
   {
@@ -99,6 +100,7 @@ export default function Standards() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("standards");
+  const { t } = useLanguage();
 
   const filteredStandards = standards.filter(
     (item) =>
@@ -117,65 +119,61 @@ export default function Standards() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Standards & Links</h1>
-          <p className="text-muted-foreground">
-            Reference documentation and external resources
-          </p>
+          <h1 className="text-2xl font-bold text-foreground">{t("standards.title")}</h1>
+          <p className="text-muted-foreground">{t("standards.refDocumentation")}</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gradient-primary text-primary-foreground">
               <Plus className="h-4 w-4 mr-2" />
-              Add Resource
+              {t("standards.addResource")}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Add New Resource</DialogTitle>
-              <DialogDescription>
-                Add a new standard or external link to the repository.
-              </DialogDescription>
+              <DialogTitle>{t("standards.addNewResource")}</DialogTitle>
+              <DialogDescription>{t("standards.addNewResourceDesc")}</DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="type">Resource Type</Label>
+                <Label htmlFor="type">{t("standards.resourceType")}</Label>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue placeholder={t("facilities.selectType")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="standard">Standard</SelectItem>
-                    <SelectItem value="link">External Link</SelectItem>
+                    <SelectItem value="standard">{t("standards.standard")}</SelectItem>
+                    <SelectItem value="link">{t("standards.externalLink")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="title">Title</Label>
-                <Input id="title" placeholder="Resource title" />
+                <Label htmlFor="title">{t("standards.titleField")}</Label>
+                <Input id="title" placeholder={t("standards.resourceTitle")} />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t("standards.descriptionField")}</Label>
                 <Textarea
                   id="description"
-                  placeholder="Brief description..."
+                  placeholder={t("standards.briefDescription")}
                   rows={3}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="category">Category</Label>
-                <Input id="category" placeholder="e.g., Safety, Training" />
+                <Label htmlFor="category">{t("standards.categoryField")}</Label>
+                <Input id="category" placeholder={t("standards.categoryPlaceholder")} />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="url">URL</Label>
+                <Label htmlFor="url">{t("standards.urlField")}</Label>
                 <Input id="url" placeholder="https://..." />
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button className="gradient-primary text-primary-foreground">
-                Add Resource
+                {t("standards.addResource")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -187,11 +185,11 @@ export default function Standards() {
         <TabsList className="bg-muted/50">
           <TabsTrigger value="standards" className="data-[state=active]:bg-background">
             <FileText className="h-4 w-4 mr-2" />
-            Standards ({standards.length})
+            {t("standards.standardsTab")} ({standards.length})
           </TabsTrigger>
           <TabsTrigger value="links" className="data-[state=active]:bg-background">
             <Link2 className="h-4 w-4 mr-2" />
-            External Links ({links.length})
+            {t("standards.externalLinks")} ({links.length})
           </TabsTrigger>
         </TabsList>
 
@@ -200,7 +198,7 @@ export default function Standards() {
           <div className="relative max-w-md mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search resources..."
+              placeholder={t("standards.searchResources")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -237,11 +235,11 @@ export default function Standards() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>
                           <Edit className="h-4 w-4 mr-2" />
-                          Edit
+                          {t("common.edit")}
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
                           <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
+                          {t("common.delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -256,7 +254,7 @@ export default function Standards() {
                     className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
                   >
                     <ExternalLink className="h-4 w-4" />
-                    View Standard
+                    {t("standards.viewStandard")}
                   </a>
                 </div>
               ))}
@@ -293,11 +291,11 @@ export default function Standards() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>
                           <Edit className="h-4 w-4 mr-2" />
-                          Edit
+                          {t("common.edit")}
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
                           <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
+                          {t("common.delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -312,7 +310,7 @@ export default function Standards() {
                     className="inline-flex items-center gap-2 text-sm text-accent hover:underline"
                   >
                     <ExternalLink className="h-4 w-4" />
-                    Open Link
+                    {t("standards.openLink")}
                   </a>
                 </div>
               ))}
