@@ -59,10 +59,9 @@ function generateEmailHtml(type: EmailRequest["notification_type"], data: EmailR
   `;
 
   let content = "";
-  let subject = "";
 
   switch (type) {
-    case "moc_status":
+    case "moc_status": {
       const statusClass = `status-${data.new_status || "default"}`;
       content = `
         <p>${greeting}</p>
@@ -80,6 +79,7 @@ function generateEmailHtml(type: EmailRequest["notification_type"], data: EmailR
         <a href="${actionUrl}" class="button">View MOC Details</a>
       `;
       break;
+    }
 
     case "moc_approval":
       content = `
@@ -212,8 +212,8 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "MOC Studio <onboarding@resend.dev>",
       to: [to_email],
-      subject: subject,
-      html: html,
+      subject,
+      html,
     });
 
     console.log("Email sent successfully:", emailResponse);

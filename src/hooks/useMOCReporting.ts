@@ -159,7 +159,23 @@ export function useMOCReporting() {
 }
 
 // Export function to generate CSV data
-export function generateMOCExportData(mocs: any[]) {
+type ExportMOC = {
+  request_number: string | null;
+  title: string;
+  status: MOCStatus | null;
+  priority: string | null;
+  change_type: string | null;
+  created_at: string;
+  submitted_at: string | null;
+  review_deadline: string | null;
+  risk_probability: number | null;
+  risk_severity: number | null;
+  risk_category: string | null;
+  facility: { name: string } | null;
+  creator: { full_name: string | null; email: string | null } | null;
+};
+
+export function generateMOCExportData(mocs: ExportMOC[]) {
   const headers = [
     "Request Number",
     "Title",
@@ -193,7 +209,7 @@ export function generateMOCExportData(mocs: any[]) {
   return { headers, rows };
 }
 
-export function downloadCSV(headers: string[], rows: any[][], filename: string) {
+export function downloadCSV(headers: string[], rows: Array<Array<string | number | null | undefined>>, filename: string) {
   const csvContent = [
     headers.join(","),
     ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")),

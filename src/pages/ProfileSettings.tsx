@@ -26,6 +26,9 @@ const ProfileSettings = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const getErrorMessage = (error: unknown) =>
+    error instanceof Error ? error.message : t('common.error');
+
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -41,10 +44,10 @@ const ProfileSettings = () => {
         title: t('common.success'),
         description: t('common.updateSuccess'),
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: t('common.error'),
-        description: error.message,
+        description: getErrorMessage(error),
         variant: 'destructive',
       });
     } finally {
@@ -91,10 +94,10 @@ const ProfileSettings = () => {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: t('common.error'),
-        description: error.message,
+        description: getErrorMessage(error),
         variant: 'destructive',
       });
     } finally {
