@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Accordion,
   AccordionContent,

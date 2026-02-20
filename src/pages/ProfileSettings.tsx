@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,37 +8,136 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, User, Lock, Bell, Globe } from 'lucide-react';
+import { Loader2, User, Lock, Bell, Globe, Camera } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useProfile } from '@/hooks/useProfiles';
 
 const ProfileSettings = () => {
   const { user } = useAuth();
+  const { data: profile } = useProfile();
   const { t } = useLanguage();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   
   // Profile form state
-  const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '');
+  const [fullName, setFullName] = useState(profile?.full_name || user?.user_metadata?.full_name || '');
   const [email, setEmail] = useState(user?.email || '');
+  const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url || user?.user_metadata?.avatar_url || '');
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | null>(null);
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
   
   // Password form state
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const getErrorMessage = (error: unknown) =>
-    error instanceof Error ? error.message : t('common.error');
+  useEffect(() => {
+    setFullName(profile?.full_name || user?.user_metadata?.full_name || '');
+    setEmail(profile?.email || user?.email || '');
+    setAvatarUrl(profile?.avatar_url || user?.user_metadata?.avatar_url || '');
+  }, [profile, user]);
+
+  useEffect(() => {
+    return () => {
+      if (avatarPreviewUrl) {
+        URL.revokeObjectURL(avatarPreviewUrl);
+      }
+    };
+  }, [avatarPreviewUrl]);
+
+  const handleAvatarFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: t('common.error'),
+        description: 'Selecione um arquivo de imagem válido.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast({
+        title: t('common.error'),
+        description: 'A imagem deve ter no máximo 2MB.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (avatarPreviewUrl) {
+      URL.revokeObjectURL(avatarPreviewUrl);
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarPreviewUrl(previewUrl);
+    setAvatarFile(file);
+    setAvatarUrl(previewUrl);
+  };
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      return;
+    }
+
     setLoading(true);
 
     try {
+      let nextAvatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url || '';
+
+      if (avatarFile) {
+        const fileExt = avatarFile.name.split('.').pop() || 'png';
+        const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(filePath, avatarFile, {
+            upsert: true,
+            contentType: avatarFile.type,
+          });
+
+        if (uploadError) throw uploadError;
+
+        const { data: publicUrlData } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(filePath);
+
+        nextAvatarUrl = publicUrlData.publicUrl;
+      }
+
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ full_name: fullName, avatar_url: nextAvatarUrl || null })
+        .eq('id', user.id);
+
+      if (profileError) throw profileError;
+
       const { error } = await supabase.auth.updateUser({
-        data: { full_name: fullName }
+        data: {
+          full_name: fullName,
+          avatar_url: nextAvatarUrl || null,
+        }
       });
 
       if (error) throw error;
+
+      setAvatarUrl(nextAvatarUrl);
+      setAvatarFile(null);
+      if (avatarPreviewUrl) {
+        URL.revokeObjectURL(avatarPreviewUrl);
+        setAvatarPreviewUrl(null);
+      }
+      if (avatarInputRef.current) {
+        avatarInputRef.current.value = '';
+      }
 
       toast({
         title: t('common.success'),
@@ -47,7 +146,7 @@ const ProfileSettings = () => {
     } catch (error: unknown) {
       toast({
         title: t('common.error'),
-        description: getErrorMessage(error),
+        description: error instanceof Error ? error.message : t('common.error'),
         variant: 'destructive',
       });
     } finally {
@@ -97,7 +196,7 @@ const ProfileSettings = () => {
     } catch (error: unknown) {
       toast({
         title: t('common.error'),
-        description: getErrorMessage(error),
+        description: error instanceof Error ? error.message : t('common.error'),
         variant: 'destructive',
       });
     } finally {
@@ -130,7 +229,7 @@ const ProfileSettings = () => {
         <Card className="glass-card lg:col-span-1">
           <CardHeader className="text-center">
             <Avatar className="h-24 w-24 mx-auto mb-4 ring-4 ring-primary/20">
-              <AvatarImage src="" alt={fullName} />
+              <AvatarImage src={avatarUrl} alt={fullName} />
               <AvatarFallback className="text-2xl bg-gradient-primary text-white">
                 {getInitials(fullName || 'User')}
               </AvatarFallback>
@@ -181,6 +280,30 @@ const ProfileSettings = () => {
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleUpdateProfile} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="avatar">Foto do perfil</Label>
+                      <div className="flex items-center gap-4">
+                        <Avatar className="h-16 w-16 ring-2 ring-primary/20">
+                          <AvatarImage src={avatarUrl} alt={fullName} />
+                          <AvatarFallback className="bg-gradient-primary text-white">
+                            {getInitials(fullName || 'User')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <Input
+                          ref={avatarInputRef}
+                          id="avatar"
+                          type="file"
+                          accept="image/*"
+                          className="input-modern file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1 file:text-sm file:text-primary-foreground"
+                          onChange={handleAvatarFileChange}
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Camera className="h-3 w-3" />
+                        Formatos aceitos: JPG, PNG, WEBP, GIF (até 2MB)
+                      </p>
+                    </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="fullName">{t('auth.fullName')}</Label>
                       <Input

@@ -88,16 +88,16 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Facilities Overview */}
         <div className="glass-card rounded-xl p-6 card-floating">
-          <h3 className="text-lg font-semibold text-gradient-cyber mb-4">{language === "pt" ? "Visão geral das instalações" : "Facilities Overview"}</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">{language === "pt" ? "Visão geral das instalações" : "Facilities Overview"}</h3>
           <div className="space-y-3">
             {facilities && facilities.length > 0 ? (
               facilities.slice(0, 4).map((facility) => (
                 <div
                   key={facility.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-gradient-primary/10 backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all"
+                  className="flex items-center justify-between p-3 rounded-lg bg-primary/10 backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-gradient-primary">
+                    <div className="p-2 rounded-lg gradient-cyber">
                       <Building2 className="h-4 w-4 text-white" />
                     </div>
                     <div>
@@ -124,7 +124,7 @@ export default function Dashboard() {
 
         {/* Risk Alerts */}
         <div className="glass-card rounded-xl p-6 card-floating">
-          <h3 className="text-lg font-semibold text-gradient-cyber mb-4">{language === "pt" ? "Resumo de risco" : "Risk Summary"}</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">{language === "pt" ? "Resumo de risco" : "Risk Summary"}</h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 rounded-lg bg-destructive/10 backdrop-blur-sm border border-destructive/20 hover:border-destructive/40 transition-all">
               <div className="flex items-center gap-3">

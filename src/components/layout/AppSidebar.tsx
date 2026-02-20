@@ -116,7 +116,7 @@ export function AppSidebar() {
           </div>
           {!compact && (
             <div className="flex flex-col animate-in fade-in slide-in-from-left-2 duration-300">
-              <span className="font-bold text-foreground text-base tracking-tight">MOC Studio</span>
+              <span className="font-bold text-sidebar-foreground text-base tracking-tight">MOC Studio</span>
               <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">
                 {t("sidebar.managementOfChange")}
               </span>
@@ -274,7 +274,7 @@ export function AppSidebar() {
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent 
           side="left" 
-          className="w-64 p-0 border-r border-sidebar-border/80 bg-sidebar/85 backdrop-blur-xl text-sidebar-foreground md:hidden [&>button]:hidden"
+          className="w-64 p-0 border-r border-sidebar-border bg-sidebar backdrop-blur-xl md:hidden [&>button]:hidden"
         >
           <div className="h-full flex flex-col">
             <SidebarContent onNavigate={() => setMobileOpen(false)} />

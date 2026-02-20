@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { subMonths, startOfMonth, endOfMonth, format } from "date-fns";
 import { 
   FileText, 

@@ -50,13 +50,88 @@ export function useApproverCandidates() {
   return useQuery({
     queryKey: ["approver-candidates"],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("get_approver_candidates");
+      const { data: rpcCandidates, error: rpcError } = await supabase.rpc(
+        "get_approver_candidates" as never
+      );
 
-      if (error) {
-        throw new Error(`Unable to load approver candidates: ${error.message}`);
+      if (!rpcError) {
+        return rpcCandidates ?? [];
       }
 
-      return data ?? [];
+      const missingRpcFunction =
+        rpcError.code === "PGRST202" ||
+        rpcError.message.toLowerCase().includes("could not find the function");
+
+      if (!missingRpcFunction) {
+        throw new Error(
+          `Unable to load approver candidates: ${rpcError.message}`
+        );
+      }
+
+      // Get all users with their roles who can be approvers
+      const { data: userRoles, error: rolesError } = await supabase
+        .from("user_roles")
+        .select(`
+          user_id,
+          role
+        `);
+
+      if (rolesError) {
+        const isPermissionIssue =
+          rolesError.code === "42501" ||
+          rolesError.message.toLowerCase().includes("permission denied");
+
+        throw new Error(
+          isPermissionIssue
+            ? "Unable to load approver roles because Row Level Security is blocking reads on user_roles. Apply migration 20260213113000_allow_authenticated_read_user_roles.sql to allow authenticated users to read role assignments."
+            : `Unable to load user roles for approver discovery: ${rolesError.message}`
+        );
+      }
+
+      // Get unique user IDs that have approval-eligible roles
+      const approverRoles = [
+        "administrator",
+        "facility_manager", 
+        "process_engineer",
+        "maintenance_technician",
+        "hse_coordinator",
+        "approval_committee"
+      ];
+      
+      const eligibleUserIds = [...new Set(
+        userRoles
+          .filter(ur => approverRoles.includes(ur.role))
+          .map(ur => ur.user_id)
+      )];
+
+      if (eligibleUserIds.length === 0) {
+        return [];
+      }
+
+      // Fetch profiles for eligible users
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, full_name, email, department")
+        .in("id", eligibleUserIds)
+        .order("full_name", { ascending: true });
+
+      if (profilesError) {
+        throw new Error(
+          `Unable to load approver profiles: ${profilesError.message}`
+        );
+      }
+
+      // Create role map for each user
+      const userRolesMap = new Map<string, string[]>();
+      userRoles.forEach(ur => {
+        const existing = userRolesMap.get(ur.user_id) || [];
+        userRolesMap.set(ur.user_id, [...existing, ur.role]);
+      });
+
+      return (profiles ?? []).map(profile => ({
+        ...profile,
+        roles: userRolesMap.get(profile.id) || [],
+      }));
     },
     enabled: !!user,
   });

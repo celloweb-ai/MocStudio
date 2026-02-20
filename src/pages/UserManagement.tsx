@@ -1,401 +1,348 @@
 import { useState } from "react";
-import { Plus, Search, Users, MoreVertical, Edit, Trash2, Shield, Mail } from "lucide-react";
+import { Plus, Search, Users, MoreVertical, Edit, Trash2, Shield, Mail, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useUserManagement, type ManagedUser } from "@/hooks/useUserManagement";
+import { useFacilities } from "@/hooks/useFacilities";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import type { Database } from "@/integrations/supabase/types";
 
-type UserStatus = "Active" | "Inactive";
+type AppRole = Database["public"]["Enums"]["app_role"];
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  facility: string;
-  status: UserStatus;
-  lastLogin: string;
+const roleTranslationKeys: Record<AppRole, string> = {
+  administrator: "roles.administrator",
+  facility_manager: "roles.facility_manager",
+  process_engineer: "roles.process_engineer",
+  maintenance_technician: "roles.maintenance_technician",
+  hse_coordinator: "roles.hse_coordinator",
+  approval_committee: "roles.approval_committee",
 };
 
-const initialUsers: User[] = [
-  {
-    id: 1,
-    name: "Carlos Silva",
-    email: "carlos.silva@company.com",
-    role: "Administrator",
-    facility: "All",
-    status: "Active",
-    lastLogin: "2024-02-08 14:32",
-  },
-  {
-    id: 2,
-    name: "Maria Santos",
-    email: "maria.santos@company.com",
-    role: "Installation Manager",
-    facility: "Platform Beta",
-    status: "Active",
-    lastLogin: "2024-02-08 10:15",
-  },
-  {
-    id: 3,
-    name: "João Oliveira",
-    email: "joao.oliveira@company.com",
-    role: "Process Engineer",
-    facility: "FPSO Gamma",
-    status: "Active",
-    lastLogin: "2024-02-07 16:45",
-  },
-  {
-    id: 4,
-    name: "Ana Costa",
-    email: "ana.costa@company.com",
-    role: "Maintenance Technician",
-    facility: "Platform Alpha",
-    status: "Active",
-    lastLogin: "2024-02-08 09:00",
-  },
-  {
-    id: 5,
-    name: "Pedro Almeida",
-    email: "pedro.almeida@company.com",
-    role: "HSE Coordinator",
-    facility: "Platform Delta",
-    status: "Inactive",
-    lastLogin: "2024-01-25 11:30",
-  },
-  {
-    id: 6,
-    name: "Fernanda Lima",
-    email: "fernanda.lima@company.com",
-    role: "Approval Committee",
-    facility: "All",
-    status: "Active",
-    lastLogin: "2024-02-08 08:00",
-  },
+const allRoles: AppRole[] = [
+  "administrator", "facility_manager", "process_engineer",
+  "maintenance_technician", "hse_coordinator", "approval_committee",
 ];
 
-const roles = [
-  "Administrator",
-  "Installation Manager",
-  "Process Engineer",
-  "Maintenance Technician",
-  "HSE Coordinator",
-  "Approval Committee",
-];
+const getRoleColor = (role: string) => {
+  switch (role) {
+    case "administrator": return "bg-destructive/20 text-destructive";
+    case "facility_manager": return "bg-primary/20 text-primary";
+    case "process_engineer": return "bg-accent/20 text-accent";
+    case "hse_coordinator": return "bg-warning/20 text-warning";
+    case "approval_committee": return "bg-success/20 text-success";
+    default: return "bg-muted text-muted-foreground";
+  }
+};
 
-const facilities = ["All", "Platform Alpha", "Platform Beta", "FPSO Gamma", "Platform Delta"];
+const getInitials = (name: string | null) => {
+  if (!name) return "??";
+  return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+};
 
 export default function UserManagement() {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const { users, isLoading, updateProfile, updateRole, toggleStatus } = useUserManagement();
+  const { facilities } = useFacilities();
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<ManagedUser | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
+  const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
 
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
-  const [editFacility, setEditFacility] = useState("");
-  const [editStatus, setEditStatus] = useState<UserStatus>("Active");
-  const [selectedRole, setSelectedRole] = useState("");
+  const [editFacility, setEditFacility] = useState<string>("");
+  const [editStatus, setEditStatus] = useState("active");
+  const [selectedRole, setSelectedRole] = useState<AppRole>("administrator");
+
+  // Invite form state
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteFullName, setInviteFullName] = useState("");
+  const [inviteRole, setInviteRole] = useState<AppRole>("process_engineer");
+  const [inviteFacility, setInviteFacility] = useState<string>("none");
+  const [isInviting, setIsInviting] = useState(false);
 
   const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchQuery.toLowerCase())
+    (u) =>
+      (u.full_name ?? "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.roles.some((r) => r.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case "Administrator":
-        return "bg-destructive/20 text-destructive";
-      case "Installation Manager":
-        return "bg-primary/20 text-primary";
-      case "Process Engineer":
-        return "bg-accent/20 text-accent";
-      case "HSE Coordinator":
-        return "bg-warning/20 text-warning";
-      case "Approval Committee":
-        return "bg-success/20 text-success";
-      default:
-        return "bg-muted text-muted-foreground";
-    }
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
-  const openEditDialog = (user: User) => {
+  const openEditDialog = (user: ManagedUser) => {
     setSelectedUser(user);
-    setEditName(user.name);
+    setEditName(user.full_name ?? "");
     setEditEmail(user.email);
-    setEditFacility(user.facility);
+    setEditFacility(user.facility_id ?? "none");
     setEditStatus(user.status);
     setIsEditDialogOpen(true);
   };
 
   const saveEditedUser = () => {
-    if (!selectedUser) {
-      return;
-    }
-
-    setUsers((currentUsers) =>
-      currentUsers.map((user) =>
-        user.id === selectedUser.id
-          ? {
-              ...user,
-              name: editName,
-              email: editEmail,
-              facility: editFacility,
-              status: editStatus,
-            }
-          : user
-      )
-    );
-
+    if (!selectedUser) return;
+    updateProfile.mutate({
+      userId: selectedUser.id,
+      full_name: editName,
+      email: editEmail,
+      facility_id: editFacility === "none" ? null : editFacility,
+      status: editStatus,
+    });
     setIsEditDialogOpen(false);
-    setSelectedUser(null);
   };
 
-  const openRoleDialog = (user: User) => {
+  const openRoleDialog = (user: ManagedUser) => {
     setSelectedUser(user);
-    setSelectedRole(user.role);
+    setSelectedRole(user.roles[0] ?? "administrator");
     setIsRoleDialogOpen(true);
   };
 
   const saveRoleChange = () => {
-    if (!selectedUser || !selectedRole) {
-      return;
-    }
-
-    setUsers((currentUsers) =>
-      currentUsers.map((user) =>
-        user.id === selectedUser.id
-          ? {
-              ...user,
-              role: selectedRole,
-            }
-          : user
-      )
-    );
-
+    if (!selectedUser) return;
+    updateRole.mutate({ userId: selectedUser.id, newRole: selectedRole });
     setIsRoleDialogOpen(false);
-    setSelectedUser(null);
   };
 
-  const toggleUserStatus = (user: User) => {
-    const nextStatus: UserStatus = user.status === "Active" ? "Inactive" : "Active";
+  const resetInviteForm = () => {
+    setInviteEmail("");
+    setInviteFullName("");
+    setInviteRole("process_engineer");
+    setInviteFacility("none");
+  };
 
-    setUsers((currentUsers) =>
-      currentUsers.map((currentUser) =>
-        currentUser.id === user.id
-          ? {
-              ...currentUser,
-              status: nextStatus,
-            }
-          : currentUser
-      )
+  const handleInviteUser = async () => {
+    if (!inviteEmail.trim()) return;
+
+    setIsInviting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("invite-user", {
+        body: {
+          email: inviteEmail.trim(),
+          full_name: inviteFullName.trim() || undefined,
+          role: inviteRole,
+          facility_id: inviteFacility === "none" ? undefined : inviteFacility,
+        },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      toast({
+        title: t("users.inviteSent"),
+        description: `${t("users.inviteSentDesc")} ${inviteEmail}.`,
+      });
+
+      resetInviteForm();
+      setIsInviteDialogOpen(false);
+    } catch (err: any) {
+      toast({
+        title: t("common.error"),
+        description: err.message || t("users.inviteError"),
+        variant: "destructive",
+      });
+    } finally {
+      setIsInviting(false);
+    }
+  };
+
+  const activeCount = users.filter((u) => u.status === "active").length;
+  const adminCount = users.filter((u) => u.roles.includes("administrator")).length;
+  const inactiveCount = users.filter((u) => u.status === "inactive").length;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-64" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-20 rounded-xl" />)}
+        </div>
+        <Skeleton className="h-96 rounded-xl" />
+      </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">User Management</h1>
-          <p className="text-muted-foreground">
-            Manage user accounts and access permissions
-          </p>
+          <h1 className="text-2xl font-bold text-foreground">{t("users.title")}</h1>
+          <p className="text-muted-foreground">{t("users.manageAccess")}</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isInviteDialogOpen} onOpenChange={setIsInviteDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gradient-primary text-primary-foreground">
-              <Plus className="h-4 w-4 mr-2" />
-              Add User
+              <UserPlus className="h-4 w-4 mr-2" />
+              {t("users.inviteUser")}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Add New User</DialogTitle>
+              <DialogTitle>{t("users.inviteNewUser")}</DialogTitle>
               <DialogDescription>
-                Create a new user account with specified role and permissions.
+                {t("users.inviteDesc")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input id="name" placeholder="Enter full name" />
+                <Label htmlFor="invite-email">{t("users.email")} *</Label>
+                <Input
+                  id="invite-email"
+                  type="email"
+                  placeholder="user@company.com"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="user@company.com" />
+                <Label htmlFor="invite-name">{t("users.fullName")}</Label>
+                <Input
+                  id="invite-name"
+                  placeholder={t("users.enterFullName")}
+                  value={inviteFullName}
+                  onChange={(e) => setInviteFullName(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="role">Role</Label>
-                <Select>
+                <Label htmlFor="invite-role">{t("users.role")}</Label>
+                <Select value={inviteRole} onValueChange={(v) => setInviteRole(v as AppRole)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select role" />
+                    <SelectValue placeholder={t("users.selectRole")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {roles.map((role) => (
-                      <SelectItem key={role} value={role.toLowerCase()}>
-                        {role}
-                      </SelectItem>
+                    {allRoles.map((role) => (
+                      <SelectItem key={role} value={role}>{t(roleTranslationKeys[role] as any)}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="facility">Assigned Facility</Label>
-                <Select>
+                <Label htmlFor="invite-facility">{t("users.assignedFacility")}</Label>
+                <Select value={inviteFacility} onValueChange={setInviteFacility}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select facility" />
+                    <SelectValue placeholder={t("users.selectFacility")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Facilities</SelectItem>
-                    <SelectItem value="alpha">Platform Alpha</SelectItem>
-                    <SelectItem value="beta">Platform Beta</SelectItem>
-                    <SelectItem value="gamma">FPSO Gamma</SelectItem>
-                    <SelectItem value="delta">Platform Delta</SelectItem>
+                    <SelectItem value="none">{t("users.allNone")}</SelectItem>
+                    {facilities?.map((f) => (
+                      <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
+              <Button variant="outline" onClick={() => { resetInviteForm(); setIsInviteDialogOpen(false); }}>
+                {t("common.cancel")}
               </Button>
-              <Button className="gradient-primary text-primary-foreground">
-                Create User
+              <Button
+                className="gradient-primary text-primary-foreground"
+                onClick={handleInviteUser}
+                disabled={isInviting || !inviteEmail.trim()}
+              >
+                {isInviting ? t("users.sending") : t("users.sendInvitation")}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
+      {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Edit User</DialogTitle>
-            <DialogDescription>Update user details and access status.</DialogDescription>
+            <DialogTitle>{t("users.editUserTitle")}</DialogTitle>
+            <DialogDescription>{t("users.editUserDesc")}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="edit-name">Full Name</Label>
+              <Label htmlFor="edit-name">{t("users.fullName")}</Label>
               <Input id="edit-name" value={editName} onChange={(e) => setEditName(e.target.value)} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="edit-email">Email</Label>
+              <Label htmlFor="edit-email">{t("users.email")}</Label>
               <Input id="edit-email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="edit-facility">Assigned Facility</Label>
+              <Label htmlFor="edit-facility">{t("users.assignedFacility")}</Label>
               <Select value={editFacility} onValueChange={setEditFacility}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select facility" />
+                  <SelectValue placeholder={t("users.selectFacility")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {facilities.map((facility) => (
-                    <SelectItem key={facility} value={facility}>
-                      {facility}
-                    </SelectItem>
+                  <SelectItem value="none">{t("users.allNone")}</SelectItem>
+                  {facilities?.map((f) => (
+                    <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="edit-status">Status</Label>
-              <Select value={editStatus} onValueChange={(value) => setEditStatus(value as UserStatus)}>
+              <Label htmlFor="edit-status">{t("users.status")}</Label>
+              <Select value={editStatus} onValueChange={setEditStatus}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("users.selectStatus")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Active">Active</SelectItem>
-                  <SelectItem value="Inactive">Inactive</SelectItem>
+                  <SelectItem value="active">{t("users.active")}</SelectItem>
+                  <SelectItem value="inactive">{t("users.inactive")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button className="gradient-primary text-primary-foreground" onClick={saveEditedUser}>
-              Save Changes
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>{t("common.cancel")}</Button>
+            <Button className="gradient-primary text-primary-foreground" onClick={saveEditedUser} disabled={updateProfile.isPending}>
+              {t("users.saveChanges")}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
+      {/* Role Dialog */}
       <Dialog open={isRoleDialogOpen} onOpenChange={setIsRoleDialogOpen}>
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>
-            <DialogTitle>Change Role</DialogTitle>
+            <DialogTitle>{t("users.changeRole")}</DialogTitle>
             <DialogDescription>
-              Select a new role for {selectedUser?.name ?? "the selected user"}.
+              {t("users.changeRoleDesc")} {selectedUser?.full_name ?? t("users.theSelectedUser")}.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-2 py-4">
-            <Label htmlFor="change-role">Role</Label>
-            <Select value={selectedRole} onValueChange={setSelectedRole}>
+            <Label htmlFor="change-role">{t("users.role")}</Label>
+            <Select value={selectedRole} onValueChange={(v) => setSelectedRole(v as AppRole)}>
               <SelectTrigger>
-                <SelectValue placeholder="Select role" />
+                <SelectValue placeholder={t("users.selectRole")} />
               </SelectTrigger>
               <SelectContent>
-                {roles.map((role) => (
-                  <SelectItem key={role} value={role}>
-                    {role}
-                  </SelectItem>
+                {allRoles.map((role) => (
+                  <SelectItem key={role} value={role}>{t(roleTranslationKeys[role] as any)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsRoleDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button className="gradient-primary text-primary-foreground" onClick={saveRoleChange}>
-              Update Role
+            <Button variant="outline" onClick={() => setIsRoleDialogOpen(false)}>{t("common.cancel")}</Button>
+            <Button className="gradient-primary text-primary-foreground" onClick={saveRoleChange} disabled={updateRole.isPending}>
+              {t("users.updateRole")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -409,7 +356,7 @@ export default function UserManagement() {
               <Users className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Users</p>
+              <p className="text-sm text-muted-foreground">{t("users.totalUsers")}</p>
               <p className="text-2xl font-bold text-foreground">{users.length}</p>
             </div>
           </div>
@@ -420,10 +367,8 @@ export default function UserManagement() {
               <Shield className="h-5 w-5 text-success" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Active</p>
-              <p className="text-2xl font-bold text-foreground">
-                {users.filter((u) => u.status === "Active").length}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("users.active")}</p>
+              <p className="text-2xl font-bold text-foreground">{activeCount}</p>
             </div>
           </div>
         </div>
@@ -433,10 +378,8 @@ export default function UserManagement() {
               <Shield className="h-5 w-5 text-warning" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Admins</p>
-              <p className="text-2xl font-bold text-foreground">
-                {users.filter((u) => u.role === "Administrator").length}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("users.admins")}</p>
+              <p className="text-2xl font-bold text-foreground">{adminCount}</p>
             </div>
           </div>
         </div>
@@ -446,10 +389,8 @@ export default function UserManagement() {
               <Users className="h-5 w-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Inactive</p>
-              <p className="text-2xl font-bold text-foreground">
-                {users.filter((u) => u.status === "Inactive").length}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("users.inactive")}</p>
+              <p className="text-2xl font-bold text-foreground">{inactiveCount}</p>
             </div>
           </div>
         </div>
@@ -459,7 +400,7 @@ export default function UserManagement() {
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search users..."
+          placeholder={t("users.searchUsers")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -471,79 +412,95 @@ export default function UserManagement() {
         <Table>
           <TableHeader>
             <TableRow className="border-border hover:bg-transparent">
-              <TableHead className="text-muted-foreground">User</TableHead>
-              <TableHead className="text-muted-foreground">Role</TableHead>
-              <TableHead className="text-muted-foreground">Facility</TableHead>
-              <TableHead className="text-muted-foreground">Status</TableHead>
-              <TableHead className="text-muted-foreground">Last Login</TableHead>
-              <TableHead className="text-muted-foreground text-right">Actions</TableHead>
+              <TableHead className="text-muted-foreground">{t("users.user")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("users.role")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("users.facility")}</TableHead>
+              <TableHead className="text-muted-foreground">{t("users.status")}</TableHead>
+              <TableHead className="text-muted-foreground text-right">{t("moc.actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredUsers.map((user) => (
-              <TableRow key={user.id} className="border-border hover:bg-muted/30">
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-primary/20 text-primary text-sm font-medium">
-                        {getInitials(user.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium text-foreground">{user.name}</p>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Mail className="h-3 w-3" />
-                        {user.email}
-                      </div>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Badge className={getRoleColor(user.role)}>{user.role}</Badge>
-                </TableCell>
-                <TableCell className="text-muted-foreground">{user.facility}</TableCell>
-                <TableCell>
-                  <Badge
-                    className={
-                      user.status === "Active"
-                        ? "bg-success/20 text-success"
-                        : "bg-muted text-muted-foreground"
-                    }
-                  >
-                    {user.status}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-muted-foreground text-sm">
-                  {user.lastLogin}
-                </TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <MoreVertical className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onSelect={() => openEditDialog(user)}>
-                        <Edit className="h-4 w-4 mr-2" />
-                        Edit User
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => openRoleDialog(user)}>
-                        <Shield className="h-4 w-4 mr-2" />
-                        Change Role
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className={user.status === "Active" ? "text-destructive" : "text-success"}
-                        onSelect={() => toggleUserStatus(user)}
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        {user.status === "Active" ? "Deactivate" : "Activate"}
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+            {filteredUsers.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                  {t("users.noUsersFound")}
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              filteredUsers.map((user) => (
+                <TableRow key={user.id} className="border-border hover:bg-muted/30">
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarFallback className="bg-primary/20 text-primary text-sm font-medium">
+                          {getInitials(user.full_name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium text-foreground">{user.full_name ?? "—"}</p>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Mail className="h-3 w-3" />
+                          {user.email}
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {user.roles.length > 0 ? (
+                        user.roles.map((role) => (
+                          <Badge key={role} className={getRoleColor(role)}>
+                            {t(roleTranslationKeys[role] as any) ?? role}
+                          </Badge>
+                        ))
+                      ) : (
+                        <span className="text-muted-foreground text-sm">{t("users.noRole")}</span>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {user.facility_name ?? t("users.all")}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      className={
+                        user.status === "active"
+                          ? "bg-success/20 text-success"
+                          : "bg-muted text-muted-foreground"
+                      }
+                    >
+                      {user.status === "active" ? t("users.active") : t("users.inactive")}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onSelect={() => openEditDialog(user)}>
+                          <Edit className="h-4 w-4 mr-2" />
+                          {t("users.editUser")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => openRoleDialog(user)}>
+                          <Shield className="h-4 w-4 mr-2" />
+                          {t("users.changeRole")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className={user.status === "active" ? "text-destructive" : "text-success"}
+                          onSelect={() => toggleStatus.mutate({ userId: user.id, currentStatus: user.status })}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          {user.status === "active" ? t("users.deactivate") : t("users.activate")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

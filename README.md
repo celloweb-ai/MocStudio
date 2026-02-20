@@ -163,7 +163,10 @@ The project includes a comprehensive set of production-ready UI components:
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `VITE_SUPABASE_URL` | Your Supabase project URL | Yes |
-| `VITE_SUPABASE_ANON_KEY` | Your Supabase anonymous key | Yes |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Your Supabase publishable key | Yes* |
+| `VITE_SUPABASE_ANON_KEY` | Legacy alias for the publishable key (still supported) | Yes* |
+
+\* Provide either `VITE_SUPABASE_PUBLISHABLE_KEY` or `VITE_SUPABASE_ANON_KEY`.
 
 ## 🤝 Contributing
 
