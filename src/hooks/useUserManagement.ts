@@ -137,11 +137,29 @@ export function useUserManagement() {
     },
   });
 
+  const deleteUser = useMutation({
+    mutationFn: async (userId: string) => {
+      const { data, error } = await supabase.functions.invoke("delete-user", {
+        body: { userId },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["managed-users"] });
+      toast({ title: "User Deleted", description: "The user has been permanently deleted." });
+    },
+    onError: (error) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    },
+  });
+
   return {
     users,
     isLoading,
     updateProfile,
     updateRole,
     toggleStatus,
+    deleteUser,
   };
 }
