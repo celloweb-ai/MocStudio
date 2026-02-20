@@ -172,7 +172,7 @@ type ExportMOC = {
   risk_severity: number | null;
   risk_category: string | null;
   facility: { name: string } | null;
-  creator: { full_name: string | null; email: string | null } | null;
+  creator?: { full_name: string | null; email: string | null } | null;
 };
 
 export function generateMOCExportData(mocs: ExportMOC[]) {
