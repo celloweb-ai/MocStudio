@@ -13,6 +13,9 @@ import {
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -58,7 +61,7 @@ const getInitials = (name: string | null) => {
 };
 
 export default function UserManagement() {
-  const { users, isLoading, updateProfile, updateRole, toggleStatus } = useUserManagement();
+  const { users, isLoading, updateProfile, updateRole, toggleStatus, deleteUser } = useUserManagement();
   const { facilities } = useFacilities();
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,6 +70,7 @@ export default function UserManagement() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
@@ -348,6 +352,37 @@ export default function UserManagement() {
         </DialogContent>
       </Dialog>
 
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("users.deleteUser") || "Delete User"}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {"This action cannot be undone. This will permanently delete the user account, profile, and all associated roles."}
+              {selectedUser && (
+                <span className="block mt-2 font-medium text-foreground">
+                  {selectedUser.full_name || selectedUser.email}
+                </span>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (selectedUser) {
+                  deleteUser.mutate(selectedUser.id);
+                }
+                setIsDeleteDialogOpen(false);
+              }}
+            >
+              {t("users.deleteUser") || "Delete User"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="glass-card rounded-xl p-4">
@@ -492,8 +527,17 @@ export default function UserManagement() {
                           className={user.status === "active" ? "text-destructive" : "text-success"}
                           onSelect={() => toggleStatus.mutate({ userId: user.id, currentStatus: user.status })}
                         >
-                          <Trash2 className="h-4 w-4 mr-2" />
                           {user.status === "active" ? t("users.deactivate") : t("users.activate")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onSelect={() => {
+                            setSelectedUser(user);
+                            setIsDeleteDialogOpen(true);
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          {t("users.deleteUser") || "Delete User"}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
