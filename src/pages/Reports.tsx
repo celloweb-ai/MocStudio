@@ -33,15 +33,6 @@ import { toast } from "@/hooks/use-toast";
 
 type PresetRange = "7d" | "30d" | "90d" | "6m" | "1y" | "custom";
 
-const presetRanges: { value: PresetRange; label: string }[] = [
-  { value: "7d", label: "Last 7 days" },
-  { value: "30d", label: "Last 30 days" },
-  { value: "90d", label: "Last 90 days" },
-  { value: "6m", label: "Last 6 months" },
-  { value: "1y", label: "Last year" },
-  { value: "custom", label: "Custom range" },
-];
-
 function getPresetDateRange(preset: PresetRange): DateRange {
   const now = new Date();
   switch (preset) {
@@ -61,10 +52,20 @@ function getPresetDateRange(preset: PresetRange): DateRange {
 }
 
 export default function Reports() {
+  const { t } = useLanguage();
   const [preset, setPreset] = useState<PresetRange>("6m");
   const [dateRange, setDateRange] = useState<DateRange>(getPresetDateRange("6m"));
   const [isExporting, setIsExporting] = useState(false);
   const reportRef = useRef<HTMLDivElement>(null);
+
+  const presetRanges: { value: PresetRange; label: string }[] = [
+    { value: "7d", label: t("reports.last7days") },
+    { value: "30d", label: t("reports.last30days") },
+    { value: "90d", label: t("reports.last90days") },
+    { value: "6m", label: t("reports.last6months") },
+    { value: "1y", label: t("reports.lastYear") },
+    { value: "custom", label: t("reports.customRange") },
+  ];
 
   const {
     mocData,
@@ -90,8 +91,8 @@ export default function Reports() {
   const handleExportCSV = () => {
     if (!mocData || mocData.length === 0) {
       toast({
-        title: "No data to export",
-        description: "There are no MOC requests in the selected date range.",
+        title: t("reports.noDataExport"),
+        description: t("reports.noMOCsInRange"),
         variant: "destructive",
       });
       return;
@@ -102,8 +103,8 @@ export default function Reports() {
     downloadCSV(headers, rows, filename);
     
     toast({
-      title: "Export Complete",
-      description: `Exported ${mocData.length} MOC requests to CSV.`,
+      title: t("reports.exportComplete"),
+      description: `${mocData.length} ${t("reports.exportedMOCs")}`,
     });
   };
 
@@ -111,7 +112,6 @@ export default function Reports() {
     setIsExporting(true);
     
     try {
-      // Dynamic import of html2canvas and jspdf for PDF generation
       const [html2canvasModule, jsPDFModule] = await Promise.all([
         import("html2canvas"),
         import("jspdf"),
@@ -124,7 +124,6 @@ export default function Reports() {
         throw new Error("Report container not found");
       }
 
-      // Create canvas from the report content
       const canvas = await html2canvas(reportRef.current, {
         scale: 2,
         useCORS: true,
@@ -132,7 +131,6 @@ export default function Reports() {
         backgroundColor: "#0f172a",
       });
 
-      // Create PDF
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
         orientation: "portrait",
@@ -146,9 +144,7 @@ export default function Reports() {
       const imgHeight = canvas.height;
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
-      const imgY = 10;
 
-      // Add title
       pdf.setFontSize(20);
       pdf.setTextColor(255, 255, 255);
       pdf.text("MOC Analytics Report", pdfWidth / 2, 15, { align: "center" });
@@ -156,20 +152,18 @@ export default function Reports() {
       pdf.setFontSize(10);
       pdf.setTextColor(150, 150, 150);
       pdf.text(
-        `Period: ${format(dateRange.from, "MMM d, yyyy")} - ${format(dateRange.to, "MMM d, yyyy")}`,
+        `${format(dateRange.from, "MMM d, yyyy")} - ${format(dateRange.to, "MMM d, yyyy")}`,
         pdfWidth / 2,
         22,
         { align: "center" }
       );
 
-      // Calculate if we need multiple pages
       const contentHeight = imgHeight * ratio;
       const availableHeight = pdfHeight - 30;
       
       if (contentHeight <= availableHeight) {
         pdf.addImage(imgData, "PNG", imgX, 30, imgWidth * ratio, imgHeight * ratio);
       } else {
-        // Split across multiple pages
         let position = 30;
         let remainingHeight = contentHeight;
         
@@ -184,19 +178,18 @@ export default function Reports() {
         }
       }
 
-      // Save the PDF
       const filename = `moc-report-${format(dateRange.from, "yyyy-MM-dd")}-to-${format(dateRange.to, "yyyy-MM-dd")}.pdf`;
       pdf.save(filename);
 
       toast({
-        title: "PDF Export Complete",
-        description: "Your report has been downloaded.",
+        title: t("reports.pdfComplete"),
+        description: t("reports.pdfDownloaded"),
       });
     } catch (error) {
       console.error("PDF export error:", error);
       toast({
-        title: "Export Failed",
-        description: "Failed to generate PDF. Please try again.",
+        title: t("reports.exportFailed"),
+        description: t("reports.pdfError"),
         variant: "destructive",
       });
     } finally {
@@ -211,19 +204,18 @@ export default function Reports() {
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <BarChart3 className="h-7 w-7 text-primary" />
-            Reports & Analytics
+            {t("reports.reportsAnalytics")}
           </h1>
           <p className="text-muted-foreground mt-1">
-            Comprehensive MOC performance metrics and insights
+            {t("reports.comprehensiveDesc")}
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Date Range Selector */}
           <Select value={preset} onValueChange={handlePresetChange}>
             <SelectTrigger className="w-[160px]">
               <Calendar className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Select range" />
+              <SelectValue placeholder={t("reports.selectRange")} />
             </SelectTrigger>
             <SelectContent>
               {presetRanges.map((range) => (
@@ -251,7 +243,7 @@ export default function Reports() {
                   />
                 </PopoverContent>
               </Popover>
-              <span className="text-muted-foreground">to</span>
+              <span className="text-muted-foreground">{t("reports.to")}</span>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="sm">
@@ -270,7 +262,6 @@ export default function Reports() {
             </div>
           )}
 
-          {/* Export Buttons */}
           <Button variant="outline" size="sm" onClick={handleExportCSV} disabled={isLoading}>
             <Download className="h-4 w-4 mr-2" />
             CSV
@@ -288,20 +279,18 @@ export default function Reports() {
 
       {/* Report Content */}
       <div ref={reportRef} className="space-y-6">
-        {/* Summary Cards */}
         <ReportsSummaryCards 
           summary={summary} 
           avgApprovalTime={avgApprovalTime} 
           isLoading={isLoading} 
         />
 
-        {/* Tabs for different report views */}
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="status">Status</TabsTrigger>
-            <TabsTrigger value="performance">Performance</TabsTrigger>
-            <TabsTrigger value="tasks">Tasks</TabsTrigger>
+            <TabsTrigger value="overview">{t("reports.overview")}</TabsTrigger>
+            <TabsTrigger value="status">{t("reports.statusTab")}</TabsTrigger>
+            <TabsTrigger value="performance">{t("reports.performance")}</TabsTrigger>
+            <TabsTrigger value="tasks">{t("reports.tasksTab")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -317,14 +306,14 @@ export default function Reports() {
 
           <TabsContent value="status" className="space-y-6">
             <div className="grid gap-6 lg:grid-cols-2">
-              <ReportsStatusChart data={statusDistribution} isLoading={isLoading} title="MOC Status Distribution" />
+              <ReportsStatusChart data={statusDistribution} isLoading={isLoading} title={t("reports.mocStatusDist")} />
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <PieChart className="h-5 w-5 text-primary" />
-                    Change Type Distribution
+                    {t("reports.changeTypeDistribution")}
                   </CardTitle>
-                  <CardDescription>MOCs by type of change</CardDescription>
+                  <CardDescription>{t("reports.mocsByType")}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   {isLoading ? (
@@ -333,7 +322,7 @@ export default function Reports() {
                     </div>
                   ) : changeTypeDistribution.length === 0 ? (
                     <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                      No change type data available
+                      {t("reports.noChangeTypeData")}
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -354,7 +343,7 @@ export default function Reports() {
                 </CardContent>
               </Card>
             </div>
-            <ReportsTrendChart data={trendData} isLoading={isLoading} title="Monthly Status Trends" />
+            <ReportsTrendChart data={trendData} isLoading={isLoading} title={t("reports.monthlyTrends")} />
           </TabsContent>
 
           <TabsContent value="performance" className="space-y-6">
@@ -364,9 +353,9 @@ export default function Reports() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5 text-primary" />
-                    Performance Metrics
+                    {t("reports.performanceMetrics")}
                   </CardTitle>
-                  <CardDescription>Key performance indicators</CardDescription>
+                  <CardDescription>{t("reports.keyPerformance")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
@@ -374,7 +363,7 @@ export default function Reports() {
                       <div className="text-2xl font-bold text-primary">
                         {avgApprovalTime !== null ? `${avgApprovalTime}d` : "—"}
                       </div>
-                      <div className="text-xs text-muted-foreground">Avg. Approval Time</div>
+                      <div className="text-xs text-muted-foreground">{t("reports.avgApprovalTime")}</div>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50">
                       <div className="text-2xl font-bold text-chart-3">
@@ -383,7 +372,7 @@ export default function Reports() {
                           : "—"
                         }
                       </div>
-                      <div className="text-xs text-muted-foreground">Approval Rate</div>
+                      <div className="text-xs text-muted-foreground">{t("reports.approvalRate")}</div>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50">
                       <div className="text-2xl font-bold text-chart-4">
@@ -392,7 +381,7 @@ export default function Reports() {
                           : "—"
                         }
                       </div>
-                      <div className="text-xs text-muted-foreground">Rejection Rate</div>
+                      <div className="text-xs text-muted-foreground">{t("reports.rejectionRate")}</div>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50">
                       <div className="text-2xl font-bold text-chart-5">
@@ -401,13 +390,13 @@ export default function Reports() {
                           : "—"
                         }
                       </div>
-                      <div className="text-xs text-muted-foreground">Task Completion</div>
+                      <div className="text-xs text-muted-foreground">{t("reports.taskCompletion")}</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
-            <ReportsFacilityChart data={facilityDistribution} isLoading={isLoading} title="MOCs by Facility" />
+            <ReportsFacilityChart data={facilityDistribution} isLoading={isLoading} title={t("reports.mocsByFacility")} />
           </TabsContent>
 
           <TabsContent value="tasks" className="space-y-6">
@@ -417,23 +406,23 @@ export default function Reports() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary" />
-                    Task Metrics
+                    {t("reports.taskMetrics")}
                   </CardTitle>
-                  <CardDescription>Task completion and status overview</CardDescription>
+                  <CardDescription>{t("reports.taskMetricsDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 rounded-lg bg-muted/50">
                       <div className="text-2xl font-bold">{summary.totalTasks}</div>
-                      <div className="text-xs text-muted-foreground">Total Tasks</div>
+                      <div className="text-xs text-muted-foreground">{t("reports.totalTasks")}</div>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50">
                       <div className="text-2xl font-bold text-chart-3">{summary.completedTasks}</div>
-                      <div className="text-xs text-muted-foreground">Completed</div>
+                      <div className="text-xs text-muted-foreground">{t("reports.completed")}</div>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50">
                       <div className="text-2xl font-bold text-chart-4">{summary.overdueTasks}</div>
-                      <div className="text-xs text-muted-foreground">Overdue</div>
+                      <div className="text-xs text-muted-foreground">{t("reports.overdue")}</div>
                     </div>
                     <div className="p-4 rounded-lg bg-muted/50">
                       <div className="text-2xl font-bold text-chart-5">
@@ -442,7 +431,7 @@ export default function Reports() {
                           : "—"
                         }
                       </div>
-                      <div className="text-xs text-muted-foreground">Completion Rate</div>
+                      <div className="text-xs text-muted-foreground">{t("reports.completionRate")}</div>
                     </div>
                   </div>
                 </CardContent>

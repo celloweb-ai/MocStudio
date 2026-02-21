@@ -1,6 +1,7 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import { Building2, Loader2 } from "lucide-react";
 import type { FacilityData } from "@/hooks/useReportsData";
 
@@ -10,22 +11,21 @@ interface ReportsFacilityChartProps {
   title?: string;
 }
 
-const chartConfig = {
-  count: {
-    label: "MOCs",
-    color: "hsl(var(--primary))",
-  },
-};
+export function ReportsFacilityChart({ data, isLoading, title }: ReportsFacilityChartProps) {
+  const { t } = useLanguage();
 
-export function ReportsFacilityChart({ data, isLoading, title = "Top Facilities" }: ReportsFacilityChartProps) {
+  const chartConfig = {
+    count: { label: t("reports.mocs"), color: "hsl(var(--primary))" },
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Building2 className="h-5 w-5 text-primary" />
-          {title}
+          {title || t("reports.topFacilities")}
         </CardTitle>
-        <CardDescription>MOCs by facility location</CardDescription>
+        <CardDescription>{t("reports.mocsByLocation")}</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -34,7 +34,7 @@ export function ReportsFacilityChart({ data, isLoading, title = "Top Facilities"
           </div>
         ) : data.length === 0 ? (
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No facility data available
+            {t("reports.noFacilityData")}
           </div>
         ) : (
           <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -46,19 +46,8 @@ export function ReportsFacilityChart({ data, isLoading, title = "Top Facilities"
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" vertical={false} />
-              <XAxis 
-                dataKey="name"
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-                tickLine={{ stroke: "hsl(var(--muted))" }}
-                angle={-45}
-                textAnchor="end"
-                height={60}
-                interval={0}
-              />
-              <YAxis 
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                tickLine={{ stroke: "hsl(var(--muted))" }}
-              />
+              <XAxis dataKey="name" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} tickLine={{ stroke: "hsl(var(--muted))" }} angle={-45} textAnchor="end" height={60} interval={0} />
+              <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} tickLine={{ stroke: "hsl(var(--muted))" }} />
               <ChartTooltip 
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
@@ -66,18 +55,14 @@ export function ReportsFacilityChart({ data, isLoading, title = "Top Facilities"
                     return (
                       <div className="bg-popover border border-border rounded-lg p-2 shadow-lg">
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-muted-foreground">{item.count} MOCs</p>
+                        <p className="text-sm text-muted-foreground">{item.count} {t("reports.mocs")}</p>
                       </div>
                     );
                   }
                   return null;
                 }}
               />
-              <Bar 
-                dataKey="count" 
-                fill="url(#facilityGradient)" 
-                radius={[4, 4, 0, 0]}
-              />
+              <Bar dataKey="count" fill="url(#facilityGradient)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ChartContainer>
         )}

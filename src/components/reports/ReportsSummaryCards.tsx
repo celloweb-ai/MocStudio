@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
   FileText, 
@@ -7,7 +8,6 @@ import {
   ListTodo,
   AlertTriangle,
   TrendingUp,
-  Loader2
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -29,16 +29,18 @@ interface ReportsSummaryCardsProps {
 }
 
 export function ReportsSummaryCards({ summary, avgApprovalTime, isLoading }: ReportsSummaryCardsProps) {
+  const { t } = useLanguage();
+
   const cards = [
     {
-      title: "Total MOCs",
+      title: t("reports.totalMOCs"),
       value: summary.totalMOCs,
       icon: FileText,
       color: "text-primary",
       bgColor: "bg-primary/10",
     },
     {
-      title: "Approved",
+      title: t("reports.approved"),
       value: summary.approved,
       icon: CheckCircle2,
       color: "text-chart-3",
@@ -46,35 +48,35 @@ export function ReportsSummaryCards({ summary, avgApprovalTime, isLoading }: Rep
       suffix: summary.totalMOCs > 0 ? `(${Math.round((summary.approved / summary.totalMOCs) * 100)}%)` : "",
     },
     {
-      title: "Rejected",
+      title: t("reports.rejected"),
       value: summary.rejected,
       icon: XCircle,
       color: "text-chart-4",
       bgColor: "bg-chart-4/10",
     },
     {
-      title: "Pending",
+      title: t("reports.pending"),
       value: summary.pending,
       icon: Clock,
       color: "text-chart-2",
       bgColor: "bg-chart-2/10",
     },
     {
-      title: "Avg. Approval Time",
+      title: t("reports.avgApprovalTime"),
       value: avgApprovalTime !== null ? `${avgApprovalTime}d` : "—",
       icon: TrendingUp,
       color: "text-chart-5",
       bgColor: "bg-chart-5/10",
     },
     {
-      title: "Total Tasks",
+      title: t("reports.totalTasks"),
       value: summary.totalTasks,
       icon: ListTodo,
       color: "text-primary",
       bgColor: "bg-primary/10",
     },
     {
-      title: "Completed Tasks",
+      title: t("reports.completed"),
       value: summary.completedTasks,
       icon: CheckCircle2,
       color: "text-chart-3",
@@ -82,7 +84,7 @@ export function ReportsSummaryCards({ summary, avgApprovalTime, isLoading }: Rep
       suffix: summary.totalTasks > 0 ? `(${Math.round((summary.completedTasks / summary.totalTasks) * 100)}%)` : "",
     },
     {
-      title: "Overdue Tasks",
+      title: t("reports.overdue"),
       value: summary.overdueTasks,
       icon: AlertTriangle,
       color: "text-destructive",

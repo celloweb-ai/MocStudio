@@ -1,6 +1,7 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, AreaChart, Area } from "recharts";
 import { TrendingUp, Loader2 } from "lucide-react";
 import type { TrendDataPoint } from "@/hooks/useReportsData";
 
@@ -10,30 +11,23 @@ interface ReportsTrendChartProps {
   title?: string;
 }
 
-const chartConfig = {
-  created: {
-    label: "Created",
-    color: "hsl(var(--chart-1))",
-  },
-  approved: {
-    label: "Approved",
-    color: "hsl(var(--chart-3))",
-  },
-  rejected: {
-    label: "Rejected",
-    color: "hsl(var(--chart-4))",
-  },
-};
+export function ReportsTrendChart({ data, isLoading, title }: ReportsTrendChartProps) {
+  const { t } = useLanguage();
 
-export function ReportsTrendChart({ data, isLoading, title = "MOC Volume Trends" }: ReportsTrendChartProps) {
+  const chartConfig = {
+    created: { label: t("reports.created"), color: "hsl(var(--chart-1))" },
+    approved: { label: t("reports.approved"), color: "hsl(var(--chart-3))" },
+    rejected: { label: t("reports.rejected"), color: "hsl(var(--chart-4))" },
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="h-5 w-5 text-primary" />
-          {title}
+          {title || t("reports.mocVolumeTrends")}
         </CardTitle>
-        <CardDescription>Monthly MOC request activity</CardDescription>
+        <CardDescription>{t("reports.monthlyActivity")}</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -42,7 +36,7 @@ export function ReportsTrendChart({ data, isLoading, title = "MOC Volume Trends"
           </div>
         ) : data.length === 0 ? (
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No data available for selected period
+            {t("reports.noDataPeriod")}
           </div>
         ) : (
           <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -69,27 +63,9 @@ export function ReportsTrendChart({ data, isLoading, title = "MOC Volume Trends"
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Legend />
-              <Area 
-                type="monotone" 
-                dataKey="created" 
-                stroke="hsl(var(--chart-1))" 
-                fill="url(#createdGradient)"
-                strokeWidth={2}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="approved" 
-                stroke="hsl(var(--chart-3))" 
-                fill="url(#approvedGradient)"
-                strokeWidth={2}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="rejected" 
-                stroke="hsl(var(--chart-4))" 
-                strokeWidth={2}
-                dot={{ fill: "hsl(var(--chart-4))", r: 4 }}
-              />
+              <Area type="monotone" dataKey="created" stroke="hsl(var(--chart-1))" fill="url(#createdGradient)" strokeWidth={2} />
+              <Area type="monotone" dataKey="approved" stroke="hsl(var(--chart-3))" fill="url(#approvedGradient)" strokeWidth={2} />
+              <Line type="monotone" dataKey="rejected" stroke="hsl(var(--chart-4))" strokeWidth={2} dot={{ fill: "hsl(var(--chart-4))", r: 4 }} />
             </AreaChart>
           </ChartContainer>
         )}

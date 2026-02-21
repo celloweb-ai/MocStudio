@@ -1,6 +1,7 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 import { Clock, Loader2 } from "lucide-react";
 import type { ApprovalTimeData } from "@/hooks/useReportsData";
 
@@ -9,14 +10,13 @@ interface ReportsApprovalTimeChartProps {
   isLoading: boolean;
 }
 
-const chartConfig = {
-  avgDays: {
-    label: "Avg. Days",
-    color: "hsl(var(--chart-2))",
-  },
-};
-
 export function ReportsApprovalTimeChart({ data, isLoading }: ReportsApprovalTimeChartProps) {
+  const { t } = useLanguage();
+
+  const chartConfig = {
+    avgDays: { label: t("reports.daysLabel"), color: "hsl(var(--chart-2))" },
+  };
+
   const avgTotal = data.length > 0 
     ? Math.round(data.reduce((sum, d) => sum + d.avgDays, 0) / data.filter(d => d.avgDays > 0).length) || 0
     : 0;
@@ -26,13 +26,13 @@ export function ReportsApprovalTimeChart({ data, isLoading }: ReportsApprovalTim
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Clock className="h-5 w-5 text-primary" />
-          Approval Time Trend
+          {t("reports.approvalTimeTrend")}
         </CardTitle>
         <CardDescription>
-          Average days to approve MOC requests
+          {t("reports.avgDaysToApprove")}
           {avgTotal > 0 && (
             <span className="ml-2 text-primary font-medium">
-              (Overall avg: {avgTotal} days)
+              ({t("reports.overallAvg")}: {avgTotal} {t("reports.days")})
             </span>
           )}
         </CardDescription>
@@ -44,7 +44,7 @@ export function ReportsApprovalTimeChart({ data, isLoading }: ReportsApprovalTim
           </div>
         ) : data.length === 0 ? (
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No approval data available
+            {t("reports.noApprovalData")}
           </div>
         ) : (
           <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -56,21 +56,11 @@ export function ReportsApprovalTimeChart({ data, isLoading }: ReportsApprovalTim
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis 
-                dataKey="month"
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                tickLine={{ stroke: "hsl(var(--muted))" }}
-              />
+              <XAxis dataKey="month" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} tickLine={{ stroke: "hsl(var(--muted))" }} />
               <YAxis 
                 tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
                 tickLine={{ stroke: "hsl(var(--muted))" }}
-                label={{ 
-                  value: "Days", 
-                  angle: -90, 
-                  position: "insideLeft",
-                  fill: "hsl(var(--muted-foreground))",
-                  fontSize: 12
-                }}
+                label={{ value: t("reports.daysLabel"), angle: -90, position: "insideLeft", fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
               />
               <ChartTooltip 
                 content={({ active, payload }) => {
@@ -80,7 +70,7 @@ export function ReportsApprovalTimeChart({ data, isLoading }: ReportsApprovalTim
                       <div className="bg-popover border border-border rounded-lg p-2 shadow-lg">
                         <p className="font-medium">{item.month}</p>
                         <p className="text-sm text-muted-foreground">
-                          {item.avgDays > 0 ? `${item.avgDays} days avg` : "No approvals"}
+                          {item.avgDays > 0 ? `${item.avgDays} ${t("reports.daysAvg")}` : t("reports.noApprovals")}
                         </p>
                       </div>
                     );
@@ -88,14 +78,7 @@ export function ReportsApprovalTimeChart({ data, isLoading }: ReportsApprovalTim
                   return null;
                 }}
               />
-              <Line 
-                type="monotone" 
-                dataKey="avgDays" 
-                stroke="hsl(var(--chart-2))" 
-                strokeWidth={2}
-                dot={{ fill: "hsl(var(--chart-2))", r: 4 }}
-                activeDot={{ r: 6, stroke: "hsl(var(--background))", strokeWidth: 2 }}
-              />
+              <Line type="monotone" dataKey="avgDays" stroke="hsl(var(--chart-2))" strokeWidth={2} dot={{ fill: "hsl(var(--chart-2))", r: 4 }} activeDot={{ r: 6, stroke: "hsl(var(--background))", strokeWidth: 2 }} />
             </LineChart>
           </ChartContainer>
         )}
