@@ -1,6 +1,7 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell } from "recharts";
 import { CheckSquare, Loader2 } from "lucide-react";
 
 interface TaskStatusData {
@@ -15,11 +16,10 @@ interface ReportsTaskChartProps {
 }
 
 export function ReportsTaskChart({ data, isLoading }: ReportsTaskChartProps) {
+  const { t } = useLanguage();
+
   const chartConfig = data.reduce((acc, item) => {
-    acc[item.name.toLowerCase().replace(" ", "_")] = {
-      label: item.name,
-      color: item.color,
-    };
+    acc[item.name.toLowerCase().replace(" ", "_")] = { label: item.name, color: item.color };
     return acc;
   }, {} as Record<string, { label: string; color: string }>);
 
@@ -32,9 +32,9 @@ export function ReportsTaskChart({ data, isLoading }: ReportsTaskChartProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CheckSquare className="h-5 w-5 text-primary" />
-          Task Status Distribution
+          {t("reports.taskStatusDist")}
         </CardTitle>
-        <CardDescription>Action items breakdown by status</CardDescription>
+        <CardDescription>{t("reports.actionItemsBreakdown")}</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -43,22 +43,13 @@ export function ReportsTaskChart({ data, isLoading }: ReportsTaskChartProps) {
           </div>
         ) : data.length === 0 ? (
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No task data available
+            {t("reports.noTaskData")}
           </div>
         ) : (
           <div className="h-[300px] relative">
             <ChartContainer config={chartConfig} className="h-full w-full">
               <PieChart>
-                <Pie
-                  data={data}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={2}
-                  dataKey="value"
-                  nameKey="name"
-                >
+                <Pie data={data} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} dataKey="value" nameKey="name">
                   {data.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
@@ -71,7 +62,7 @@ export function ReportsTaskChart({ data, isLoading }: ReportsTaskChartProps) {
                         <div className="bg-popover border border-border rounded-lg p-2 shadow-lg">
                           <p className="font-medium">{item.name}</p>
                           <p className="text-sm text-muted-foreground">
-                            {item.value} tasks ({((item.value / total) * 100).toFixed(1)}%)
+                            {item.value} {t("reports.tasks")} ({((item.value / total) * 100).toFixed(1)}%)
                           </p>
                         </div>
                       );
@@ -81,26 +72,19 @@ export function ReportsTaskChart({ data, isLoading }: ReportsTaskChartProps) {
                 />
               </PieChart>
             </ChartContainer>
-            {/* Center label */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
               <div className="text-2xl font-bold text-chart-3">{completionRate}%</div>
-              <div className="text-xs text-muted-foreground">Complete</div>
+              <div className="text-xs text-muted-foreground">{t("reports.complete")}</div>
             </div>
           </div>
         )}
 
-        {/* Legend */}
         {!isLoading && data.length > 0 && (
           <div className="flex flex-wrap justify-center gap-4 mt-4">
             {data.map((item) => (
               <div key={item.name} className="flex items-center gap-2">
-                <div 
-                  className="w-3 h-3 rounded-full" 
-                  style={{ backgroundColor: item.color }}
-                />
-                <span className="text-sm text-muted-foreground">
-                  {item.name} ({item.value})
-                </span>
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                <span className="text-sm text-muted-foreground">{item.name} ({item.value})</span>
               </div>
             ))}
           </div>

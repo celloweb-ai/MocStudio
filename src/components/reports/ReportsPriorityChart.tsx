@@ -1,6 +1,7 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell } from "recharts";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from "recharts";
 import { BarChart3, Loader2 } from "lucide-react";
 
 interface PriorityData {
@@ -14,22 +15,21 @@ interface ReportsPriorityChartProps {
   isLoading: boolean;
 }
 
-const chartConfig = {
-  value: {
-    label: "MOCs",
-    color: "hsl(var(--primary))",
-  },
-};
-
 export function ReportsPriorityChart({ data, isLoading }: ReportsPriorityChartProps) {
+  const { t } = useLanguage();
+
+  const chartConfig = {
+    value: { label: t("reports.mocs"), color: "hsl(var(--primary))" },
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BarChart3 className="h-5 w-5 text-primary" />
-          Priority Distribution
+          {t("reports.priorityDistribution")}
         </CardTitle>
-        <CardDescription>MOCs by priority level</CardDescription>
+        <CardDescription>{t("reports.mocsByPriority")}</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -38,24 +38,14 @@ export function ReportsPriorityChart({ data, isLoading }: ReportsPriorityChartPr
           </div>
         ) : data.length === 0 ? (
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No data available
+            {t("reports.noDataAvailable")}
           </div>
         ) : (
           <ChartContainer config={chartConfig} className="h-[300px] w-full">
             <BarChart data={data} layout="vertical" margin={{ top: 10, right: 30, left: 60, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" horizontal={true} vertical={false} />
-              <XAxis 
-                type="number"
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                tickLine={{ stroke: "hsl(var(--muted))" }}
-              />
-              <YAxis 
-                type="category"
-                dataKey="name"
-                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                tickLine={{ stroke: "hsl(var(--muted))" }}
-                width={50}
-              />
+              <XAxis type="number" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} tickLine={{ stroke: "hsl(var(--muted))" }} />
+              <YAxis type="category" dataKey="name" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} tickLine={{ stroke: "hsl(var(--muted))" }} width={50} />
               <ChartTooltip 
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
@@ -63,7 +53,7 @@ export function ReportsPriorityChart({ data, isLoading }: ReportsPriorityChartPr
                     return (
                       <div className="bg-popover border border-border rounded-lg p-2 shadow-lg">
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-muted-foreground">{item.value} MOCs</p>
+                        <p className="text-sm text-muted-foreground">{item.value} {t("reports.mocs")}</p>
                       </div>
                     );
                   }

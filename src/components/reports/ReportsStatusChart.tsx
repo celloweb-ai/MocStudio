@@ -1,6 +1,7 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { PieChart, Pie, Cell } from "recharts";
 import { PieChart as PieChartIcon, Loader2 } from "lucide-react";
 
 interface StatusData {
@@ -15,12 +16,11 @@ interface ReportsStatusChartProps {
   title?: string;
 }
 
-export function ReportsStatusChart({ data, isLoading, title = "Status Distribution" }: ReportsStatusChartProps) {
+export function ReportsStatusChart({ data, isLoading, title }: ReportsStatusChartProps) {
+  const { t } = useLanguage();
+
   const chartConfig = data.reduce((acc, item) => {
-    acc[item.name.toLowerCase().replace(" ", "_")] = {
-      label: item.name,
-      color: item.color,
-    };
+    acc[item.name.toLowerCase().replace(" ", "_")] = { label: item.name, color: item.color };
     return acc;
   }, {} as Record<string, { label: string; color: string }>);
 
@@ -31,9 +31,9 @@ export function ReportsStatusChart({ data, isLoading, title = "Status Distributi
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <PieChartIcon className="h-5 w-5 text-primary" />
-          {title}
+          {title || t("reports.statusDistribution")}
         </CardTitle>
-        <CardDescription>Current MOC status breakdown</CardDescription>
+        <CardDescription>{t("reports.currentBreakdown")}</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -42,7 +42,7 @@ export function ReportsStatusChart({ data, isLoading, title = "Status Distributi
           </div>
         ) : data.length === 0 ? (
           <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            No data available
+            {t("reports.noDataAvailable")}
           </div>
         ) : (
           <div className="h-[300px] relative">
@@ -82,10 +82,9 @@ export function ReportsStatusChart({ data, isLoading, title = "Status Distributi
                 />
               </PieChart>
             </ChartContainer>
-            {/* Center label */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
               <div className="text-3xl font-bold">{total}</div>
-              <div className="text-xs text-muted-foreground">Total</div>
+              <div className="text-xs text-muted-foreground">{t("reports.total")}</div>
             </div>
           </div>
         )}
